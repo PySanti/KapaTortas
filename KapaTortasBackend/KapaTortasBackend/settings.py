@@ -11,8 +11,8 @@ with open(BASE_DIR / 'secrets.json', 'r') as archivo:
 
 SECRET_KEY = secret_data['SECRET_KEY']
 DEBUG = True
-
-ALLOWED_HOSTS = []
+CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = ["*"]
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -28,10 +28,12 @@ PROJECT_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-
+    'rest_framework',
+    'corsheaders'
 ]
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + PROJECT_APPS
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
