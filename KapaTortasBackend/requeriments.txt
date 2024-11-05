@@ -1,0 +1,7 @@
+asgiref==3.8.1
+backports.zoneinfo==0.2.1
+Django==4.2.16
+psycopg2==2.9.10
+psycopg2-binary==2.9.10
+sqlparse==0.5.1
+typing-extensions==4.12.2

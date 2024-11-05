@@ -1,7 +1,15 @@
 from pathlib import Path
+import json  
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure-e08%18zdzx2$l9^hdyr$p@eivq+m6=@d3#%vbcb=&v=q9(zn_h'
+with open(BASE_DIR / 'secrets.json', 'r') as archivo:  
+    # Carga el contenido del archivo en un diccionario de Python  
+    secret_data = json.load(archivo)  
+
+
+SECRET_KEY = secret_data['SECRET_KEY']
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -54,16 +62,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'KapaTortasBackend.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+
+DATABASES = {  
+    'default': {  
+        'ENGINE': 'django.db.backends.postgresql',  
+        'NAME': secret_data['DATABASE_NAME'],  
+        'USER': secret_data['DATABASE_USERNAME'],
+        'PASSWORD': secret_data['DATABASE_PASSWORD'],  
+        'HOST': 'localhost',  # o la dirección IP del servidor  
+        'PORT': '5432',       # por defecto, PostgreSQL usa el puerto 5432  
+    }  
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
