@@ -16,6 +16,7 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     contraseña          = models.CharField(max_length=128)
     numero_telefonico   = models.CharField(unique=True)
     fecha_nacimiento    = models.DateField(null=True, blank=True)
+    link_foto           = models.CharField(blank=True)
     rol                 = models.CharField(choices=[(role.value, role.name) for role in RolEnum], default=RolEnum.CLIENTE)
     is_active           = models.BooleanField(default=False) # para correo confirmado
 
