@@ -26,7 +26,7 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
-    'applications.Usuarios'
+    'applications.Perfiles'
 ]
 
 THIRD_PARTY_APPS = [
@@ -34,7 +34,7 @@ THIRD_PARTY_APPS = [
     'corsheaders'
 ]
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + PROJECT_APPS
-AUTH_USER_MODEL = 'Usuarios.Usuarios' 
+AUTH_USER_MODEL = 'Perfiles.Perfiles' 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
