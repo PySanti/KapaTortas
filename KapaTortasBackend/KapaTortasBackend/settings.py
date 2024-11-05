@@ -14,6 +14,8 @@ DEBUG = True
 CORS_ALLOW_ALL_ORIGINS = True
 ALLOWED_HOSTS = ["*"]
 
+#modelo para usuarios
+
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -24,7 +26,7 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
-
+    'applications.Usuarios'
 ]
 
 THIRD_PARTY_APPS = [
@@ -32,6 +34,7 @@ THIRD_PARTY_APPS = [
     'corsheaders'
 ]
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + PROJECT_APPS
+AUTH_USER_MODEL = 'Usuarios.Usuarios' 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
