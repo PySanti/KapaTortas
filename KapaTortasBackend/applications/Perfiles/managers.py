@@ -16,4 +16,3 @@ class PerfilesManager(BaseUserManager):
         return self._create_user( nombre_completo, password, correo, True, True, **kwargs)
     def create_user(self, nombre_completo, password, correo, **kwargs):
         return self._create_user( nombre_completo, password, correo, False, False, **kwargs)
-
