@@ -56,3 +56,32 @@ Después de haber hecho todo lo anterior, para correr el proyecto, las próximas
 python3 manage.py runserver
 ```
 
+
+
+# Crear super usuario
+
+En django a los administradores se les llama super users. Los super usuarios tienen la capacidad de acceder al CRM con nombre completo y contraseña.
+
+Para crear un super usuario corren el siguiente comando en la terminal al nivel del archivo manage.py y con el entorno virtual activo:
+
+```
+python3 manage.py createsuperuser
+```
+
+Eso les abrira un formulario en la terminal para crear un super usuario
+
+
+# Acceder al administrador
+
+Cuando tengan el proyecto corriendo, entran al link del proyecto, que normalmente es ...
+
+```
+http://127.0.0.1:8000/
+```
+
+Y agregan 'admin' al final, quedaria algo asi ...
+
+```
+http://127.0.0.1:8000/admin
+
+```
