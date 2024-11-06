@@ -19,28 +19,14 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     link_foto           = models.CharField(blank=True)
     rol                 = models.CharField(choices=[(role.value, role.name) for role in RolEnum], default=RolEnum.CLIENTE)
     is_active           = models.BooleanField(default=True) # para correo confirmado
-    is_staff            = models.BooleanField(default=False) # para empelados y admin (administradores)
+    is_staff            = models.BooleanField(default=False) # para empelados y admin (staff)
     
-    # esta configuracion se asigna para evitar conflictos de relaciones con los modelos que incluyan campos
-    # de tipo perfil. 
-    groups = models.ManyToManyField(  
-        'auth.Group',   
-        related_name='perfiles_groups',  
-        blank=True,  
-    )  
-    user_permissions = models.ManyToManyField(  
-        'auth.Permission',   
-        related_name='perfiles_user_permissions',  
-        blank=True,  
-    )  
-
 
     REQUIRED_FIELDS = ['correo']
     USERNAME_FIELD  = 'nombre_completo'
 
     #* MANAGER
     objects         = PerfilesManager()
-
 
     def set_password(self, raw_password):  
         """Establece la contraseña usando el hasheo."""  
@@ -50,7 +36,7 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
         return check_password(raw_password, self.contraseña)  
 
     def __str__(self):
-        return f"{self.rol.capitalize()} : {self.nombre_completo}"
+        return f"{self.rol.split('.')[-1]} : {self.nombre_completo}"
     class Meta:
         verbose_name = 'Perfil'
         verbose_name_plural = 'Perfiles'
