@@ -19,7 +19,20 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     link_foto           = models.CharField(blank=True)
     rol                 = models.CharField(choices=[(role.value, role.name) for role in RolEnum], default=RolEnum.CLIENTE)
     is_active           = models.BooleanField(default=True) # para correo confirmado
-    is_staff            = models.BooleanField(default=False) # para superusuarios (administradores)
+    is_staff            = models.BooleanField(default=False) # para empelados y admin (administradores)
+    
+    # esta configuracion se asigna para evitar conflictos de relaciones con los modelos que incluyan campos
+    # de tipo perfil. 
+    groups = models.ManyToManyField(  
+        'auth.Group',   
+        related_name='perfiles_groups',  
+        blank=True,  
+    )  
+    user_permissions = models.ManyToManyField(  
+        'auth.Permission',   
+        related_name='perfiles_user_permissions',  
+        blank=True,  
+    )  
 
 
     REQUIRED_FIELDS = ['correo']
@@ -35,8 +48,9 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     def check_password(self, raw_password):  
         """Verifica si la contraseña está correcta."""  
         return check_password(raw_password, self.contraseña)  
+
     def __str__(self):
-        return f"{self.rol} : {self.nombre_completo}"
+        return f"{self.rol.capitalize()} : {self.nombre_completo}"
     class Meta:
         verbose_name = 'Perfil'
         verbose_name_plural = 'Perfiles'

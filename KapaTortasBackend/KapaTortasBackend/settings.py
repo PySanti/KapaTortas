@@ -26,7 +26,8 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
-    'applications.Perfiles'
+    'applications.Perfiles',
+    'applications.Clientes'
 ]
 
 THIRD_PARTY_APPS = [

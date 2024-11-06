@@ -13,3 +13,7 @@ class Clientes(AbstractBaseUser, PermissionsMixin):
 
 
     objects         =   ClientesManager()
+
+    class Meta:
+        verbose_name = 'Cliente'
+        verbose_name_plural = 'Clientes'
