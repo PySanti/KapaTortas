@@ -3,7 +3,10 @@ from rest_framework.views import (
     APIView,
 )
 from rest_framework import status
-from .serializers import ConsultarPerfilSerializer
+from .serializers import (
+ConsultarPerfilSerializer,
+CrearPerfilSerializer
+)
 from rest_framework.permissions import (
     IsAuthenticated,
     AllowAny
@@ -26,6 +29,19 @@ class ConsultarPerfilAPI(APIView):
                 return JsonResponse({"perfil":{k:v for k,v in profile_dict.items() if k in BASE_PROFILE_SHOWABLE_FIELDS}}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"error":"no_profile"}, status=status.HTTP_200_OK)
+        else:
+            return BASE_SERIALIZER_ERROR_RESPONSE
+
+
+class CrearPerfilAPI(APIView):
+    serializer_class        = CrearPerfilSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        serialized_data = self.serializer_class(data=request.data)
+        if serialized_data.is_valid():
+            serialized_data = serialized_data.data
+            pass
         else:
             return BASE_SERIALIZER_ERROR_RESPONSE
 

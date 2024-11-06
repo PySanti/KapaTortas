@@ -2,12 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models  
 from .managers import PerfilesManager
 from django.contrib.auth.hashers import make_password, check_password  
-from enum import Enum  
-
-class RolEnum(Enum):  
-    ADMIN = 'administrador'  
-    EMPLEADO = 'empleado'  
-    CLIENTE = 'cliente'
+from KapaTortasBackend.utils.constants import RolEnum
 
 
 class Perfiles(AbstractBaseUser, PermissionsMixin):  
