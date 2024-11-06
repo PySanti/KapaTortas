@@ -28,7 +28,7 @@ class ConsultarPerfilAPI(APIView):
                 profile_dict = perfil[0].__dict__.copy() if type(perfil[0])!=Clientes else perfil[0].perfil.__dict__.copy()
                 return JsonResponse({"perfil":{k:v for k,v in profile_dict.items() if k in BASE_PROFILE_SHOWABLE_FIELDS}}, status=status.HTTP_200_OK)
             else:
-                return JsonResponse({"error":"no_profile"}, status=status.HTTP_200_OK)
+                return JsonResponse({"error":"no_profile"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return BASE_SERIALIZER_ERROR_RESPONSE
 
@@ -41,7 +41,20 @@ class CrearPerfilAPI(APIView):
         serialized_data = self.serializer_class(data=request.data)
         if serialized_data.is_valid():
             serialized_data = serialized_data.data
-            pass
+            if error_msg:=Perfiles.objects.user_exists(serialized_data['nombre_completo'], serialized_data['correo'], serialized_data['numero_telefonico'])
+                return JsonResponse({"error":error_msg}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                try:
+                        Perfiles.objects.crear_perfil(
+                            nombre_completo = serialized_data['nombre_completo'],
+                            password = serialized_data['password'],
+                            correo = serialized_data['email'],
+                            numero_telefonico = serialized_data['numero_telefonico'],
+                            fecha_nacimiento = serialized_data['fecha_nacimiento'],
+                            rol = serialized_data['rol'],
+                        )
+                except:
+                    return JsonResponse({"error":"unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return BASE_SERIALIZER_ERROR_RESPONSE
 
