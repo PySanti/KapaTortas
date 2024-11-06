@@ -1,11 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
-
+  const p = async ()=>{
+    return axios.post(" http://127.0.0.1:8000/api/perfiles/consultar", {
+      'email' : "sexo@gmail.com"
+    })
+  }
+  useEffect(()=>{
+    (async ()=>{
+      console.log(await p())
+    })()
+  }, [])
   return (
     <>
       <div>
