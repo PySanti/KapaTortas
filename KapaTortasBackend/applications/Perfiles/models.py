@@ -35,3 +35,4 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'Perfil'
         verbose_name_plural = 'Perfiles'
+
