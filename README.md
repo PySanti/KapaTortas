@@ -29,7 +29,7 @@ Agregar archivo secrets.json en la carpeta KapaTortasBackend.
 
 Modificar archivo secrets.json, poniendo usuario y contraseña de postgreSQL en los campos requeridos.
 
-# Paso 6
+# Paso 5
 
 **Activar entorno virtual:** python tiene una metodología de manejo de paquetes llamada 'entorno virtual'. Básicamente, en la carpeta 'dependencies' están todas las dependencias del proyecto, por tanto, para que el proyecto funcione, el entorno virtual debe estar activado. Para activarlo, usan el siguiente comando (al nivel de la carpeta KapaTortasBackend).
 
@@ -38,7 +38,7 @@ source dependencies/bin/activate
 ```
 **Sabrán que el entorno virtual está activo si en el CLI aparece la palabra 'dependencies'.**
 
-# Paso 5
+# Paso 6
 
 Correr migraciones del proyecto. Ejecutar este comando al nivel del archivo manage.py (carpeta KapatortasBackend)
 
