@@ -8,15 +8,29 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
   const p = async ()=>{
-    return axios.post(" http://127.0.0.1:8000/api/perfiles/consultar", {
-      'email' : "sexo@gmail.com"
-    })
+    /*
+        email = serializers.EmailField()
+    nombre_completo = serializers.CharField()
+    password = serializers.CharField()
+    rol = serializers.CharField(choices=[(role.value, role.name) for role in RolEnum], default=RolEnum.CLIENTE)
+    numero_telefonico = serializers.CharField()
+    fecha_nacimiento = serializers.DateField()
+
+
+    */
+   try{
+      console.log(await axios.post(" http://127.0.0.1:8000/api/perfiles/crear", {
+        'email' : 'sexo10@gmail.com',
+        'nombre_completo' : 'sexo10 garcia',
+        'password' : '16102005',
+        'rol' : 'cliente',
+      }).data)
+   } catch (e){
+    console.log(e)
+   }
+
   }
-  useEffect(()=>{
-    (async ()=>{
-      console.log(await p())
-    })()
-  }, [])
+
   return (
     <>
       <div>
@@ -29,7 +43,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={p}>
           count is {count}
         </button>
         <p>
