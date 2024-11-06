@@ -18,7 +18,8 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     fecha_nacimiento    = models.DateField(null=True, blank=True)
     link_foto           = models.CharField(blank=True)
     rol                 = models.CharField(choices=[(role.value, role.name) for role in RolEnum], default=RolEnum.CLIENTE)
-    is_active           = models.BooleanField(default=False) # para correo confirmado
+    is_active           = models.BooleanField(default=True) # para correo confirmado
+    is_staff            = models.BooleanField(default=False) # para superusuarios (administradores)
 
 
     REQUIRED_FIELDS = ['correo']
