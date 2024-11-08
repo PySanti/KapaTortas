@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Productos(models.Model):
-    titulo      = models.CharField()
+    titulo      = models.CharField(unique=True)
     descripcion = models.TextField()
     precio      = models.FloatField()
     stock       = models.IntegerField()
