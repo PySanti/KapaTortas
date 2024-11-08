@@ -1,6 +1,9 @@
 from django.db import models
 
 # Create your models here.
+class Resenia(models.Model):
+    calificacion = models.IntegerField()
+    descripcion = models.TextField()
 
 class Productos(models.Model):
     titulo      = models.CharField(unique=True)
