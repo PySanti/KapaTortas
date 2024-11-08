@@ -30,7 +30,7 @@ class PerfilesManager(BaseUserManager):
             return new_profile
     def user_exists(self, nombre_completo, correo):
         """
-            Retornara false si no existe ningun perfil con el correo, numero_telefonico o nombre_completo indicado
+            Retornara false si no existe ningun perfil con el correo o nombre_completo indicado
             Un mensaje de error en caso de que si
         """
         if self.model.objects.filter(correo=correo):
