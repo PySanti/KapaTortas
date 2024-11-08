@@ -20,7 +20,6 @@ function App() {
     */
    try{
       console.log(await axios.post(" http://127.0.0.1:8000/api/perfiles/consultar", {
-        'email' : 'santiagodeandrade4@gmail.com',
       }).data)
    } catch (e){
     console.log(e)
