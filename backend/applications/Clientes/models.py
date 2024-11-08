@@ -6,7 +6,7 @@ from .managers import ClientesManager
 class DireccionesEnvio(models.Model):
     direccion_1     = models.CharField()
     direccion_2     = models.CharField()
-    pais            = models.CharField()
+    pais            = models.CharField(default="VENEZUELA")
     estado          = models.CharField()
     codigo_postal   = models.IntegerField()
 
@@ -19,8 +19,7 @@ class DireccionesEnvio(models.Model):
 
 class Clientes(models.Model):  
     perfil          =   models.OneToOneField(Perfiles, on_delete=models.CASCADE)
-    direcciones     = models.ManyToManyField(DireccionesEnvio, on_delete=models.DO_NOTHING)
-
+    direcciones     =   models.ManyToManyField(DireccionesEnvio, on_delete=models.DO_NOTHING)
     # ordenes
 
 
