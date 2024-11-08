@@ -14,7 +14,7 @@ class ClientesManager(BaseUserManager):
     def get_client_info(self, cliente):
         from applications.Perfiles.models import Perfiles
         return {
-            'perfil' : Perfiles.get_perfil_dict(cliente.perfil),
+            'perfil' : Perfiles.objects.get_perfil_dict(cliente.perfil),
             'direcciones' : self.get_formated_direcciones_dict(cliente.direcciones.all()),
         }
         
