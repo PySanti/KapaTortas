@@ -5,7 +5,7 @@ from django.db import models
 class Productos(models.Model):
     titulo      = models.CharField(unique=True)
     descripcion = models.TextField()
-    precio      = models.FloatField()
+    precio      = models.DecimalField(max_digits=5,decimal_places=2)
     stock       = models.IntegerField()
 
     def __str__(self):
