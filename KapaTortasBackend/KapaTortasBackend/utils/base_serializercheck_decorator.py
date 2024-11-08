@@ -9,7 +9,7 @@ def base_serializercheck_decorator(api_function):
         request_obj = args[1]
         serialized_data = self_obj.serializer_class(data=request_obj.data)
         if serialized_data.is_valid():
-            return api_function(*args, **kwargs, serialized_data=serialized_data)
+            return api_function(*args, **kwargs, serialized_data=serialized_data.data)
         else:
             return BASE_SERIALIZER_ERROR_RESPONSE
     return wrapper

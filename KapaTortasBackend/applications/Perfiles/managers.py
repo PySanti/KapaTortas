@@ -19,9 +19,7 @@ class PerfilesManager(BaseUserManager):
         return self._create_user( nombre_completo, password, correo, False, False, **kwargs)
     def crear_perfil(self, nombre_completo, password, correo,  rol):
         from applications.Clientes.models import Clientes
-        is_staff = rol in ["administrador", "empleado"]
-        is_superuser = rol == "administrador"
-        new_profile =  self._create_user( nombre_completo, password, correo, is_superuser, is_staff)
+        new_profile =  self._create_user( nombre_completo, password, correo,rol == "administrador" , rol in ["administrador", "empleado"])
         new_profile.rol = rol
         new_profile.save()
         if rol == "cliente":

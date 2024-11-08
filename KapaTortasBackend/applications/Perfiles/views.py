@@ -27,10 +27,6 @@ class ConsultarPerfilAPI(APIView):
         if (perfil:=Clientes.objects.filter(perfil__correo=serialized_data['email'])) or (perfil:=Perfiles.objects.filter(correo=serialized_data['email'])):
             # si es un cliente, el diccionario de su perfil es perfil[0].perfil.__dict__
             # si es un perfil, el diccionario de su perfil es perfil[0].__dict__
-            if (type(perfil[0]) == Clientes):
-                print("Es un cliente")
-            else:
-                print("NO es un cliente")
             profile_dict = perfil[0].__dict__.copy() if type(perfil[0])!=Clientes else perfil[0].perfil.__dict__.copy()
             return JsonResponse({"perfil": Perfiles.objects.get_perfil_dict(profile_dict)}, status=status.HTTP_200_OK)
         else:
