@@ -19,11 +19,8 @@ function App() {
 
     */
    try{
-      console.log(await axios.post(" http://127.0.0.1:8000/api/perfiles/crear", {
-        'email' : 'sexo10@gmail.com',
-        'nombre_completo' : 'sexo10 garcia',
-        'password' : '16102005',
-        'rol' : 'cliente',
+      console.log(await axios.post(" http://127.0.0.1:8000/api/perfiles/consultar", {
+        'email' : 'santiagodeandrade4@gmail.com',
       }).data)
    } catch (e){
     console.log(e)
