@@ -19,7 +19,7 @@ class DireccionesEnvio(models.Model):
 
 class Clientes(models.Model):  
     perfil          =   models.OneToOneField(Perfiles, on_delete=models.CASCADE)
-    direcciones     =   models.ManyToManyField(DireccionesEnvio, on_delete=models.DO_NOTHING)
+    direcciones     =   models.ManyToManyField(DireccionesEnvio)
     # ordenes
 
 
