@@ -6,21 +6,26 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "email": "email dev --dir components/emails"
   },
   "dependencies": {
+    "@react-email/components": "^0.0.28",
+    "next": "14.2.16",
+    "next-auth": "^5.0.0-beta.25",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.16"
+    "react-email": "^3.0.2",
+    "resend": "^4.0.1-alpha.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.16",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.16"
+    "typescript": "^5"
   }
 }
