@@ -18,7 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/", include('applications.Perfiles.urls')),
-    path("api/", include('applications.Productos.urls')),
-
+    path("api/perfiles/", include('applications.Perfiles.urls')),  # Prefijo único para Perfiles
+    path("api/productos/", include('applications.Productos.urls')),  # Prefijo único para Productos
 ]

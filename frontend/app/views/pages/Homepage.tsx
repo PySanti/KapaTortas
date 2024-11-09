@@ -37,19 +37,26 @@ const PerfilTesteo: React.FC = () => {
 
   return (
     <>
-      <h2>Testing del perfil</h2>
-      <input
-        type="text"
-        placeholder="Pon el texto"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button onClick={handleFetchPerfil}>Consulta el perfil</button>
+      <h2 className="text-2xl p-20">Testing del perfil</h2>
+      <div className="p-5">
+        <input
+          type="text"
+          placeholder="Pon el texto"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <button
+          className="bg-green-300 p-5 rounded-lg "
+          onClick={handleFetchPerfil}
+        >
+          Consulta el perfil
+        </button>
+      </div>
 
       {error && <p>{error}</p>}
 
       {perfil ? (
-        <div>
+        <div className="p-20 text-sm">
           <h2>Perfil de {perfil.nombre_completo}</h2>
           <h2>Correo: {perfil.correo}</h2>
         </div>

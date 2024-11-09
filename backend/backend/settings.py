@@ -1,18 +1,22 @@
 from pathlib import Path
-import json  
+import json
 
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-with open(BASE_DIR / 'secrets.json', 'r') as archivo:  
-    # Carga el contenido del archivo en un diccionario de Python  
-    secret_data = json.load(archivo)  
+with open(BASE_DIR / 'secrets.json', 'r') as archivo:
+    # Carga el contenido del archivo en un diccionario de Python
+    secret_data = json.load(archivo)
 
 
 SECRET_KEY = secret_data['SECRET_KEY']
 DEBUG = True
 CORS_ALLOW_ALL_ORIGINS = True
 ALLOWED_HOSTS = ["*"]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # dominio de tu frontend en desarrollo
+]
 
 #modelo para usuarios
 
@@ -37,7 +41,7 @@ THIRD_PARTY_APPS = [
     'corsheaders'
 ]
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + PROJECT_APPS
-AUTH_USER_MODEL = 'Perfiles.Perfiles' 
+AUTH_USER_MODEL = 'Perfiles.Perfiles'
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -72,15 +76,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.postgresql',  
-        'NAME': secret_data['DATABASE_NAME'],  
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': secret_data['DATABASE_NAME'],
         'USER': secret_data['DATABASE_USERNAME'],
-        'PASSWORD': secret_data['DATABASE_PASSWORD'],  
-        'HOST': 'localhost',  # o la dirección IP del servidor  
-        'PORT': '5432',       # por defecto, PostgreSQL usa el puerto 5432  
-    }  
+        'PASSWORD': secret_data['DATABASE_PASSWORD'],
+        'HOST': 'localhost',  # o la dirección IP del servidor
+        'PORT': '5432',       # por defecto, PostgreSQL usa el puerto 5432
+    }
 }
 
 # Password validation

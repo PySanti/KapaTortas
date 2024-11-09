@@ -6,6 +6,6 @@ CrearPerfilAPI
 )
 
 urlpatterns = [
-    path("perfiles/consultar",ConsultarPerfilAPI.as_view()),
-    path("perfiles/crear",CrearPerfilAPI.as_view())
+    path("consultar/", ConsultarPerfilAPI.as_view()),  # Incluye barra final opcional para consistencia
+    path("crear/", CrearPerfilAPI.as_view()),
 ]
