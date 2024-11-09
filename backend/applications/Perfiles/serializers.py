@@ -15,3 +15,6 @@ class CrearPerfilSerializer(serializers.Serializer):
     )  
 
 
+class CheckPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password_attempt = serializers.CharField()
