@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import KapaTortasVerifyEmail from './verification-email';
 import { Perfil } from '@/app/models/Perfil';
-import PerfilAPI from '@/app/controladores/api/users/PerfilAPI';
+import obtenerPerfilPorCorreo from '@/app/utilities/obtenerPerfilPorCorreo';
 
 export default function HomePage({}) {
   return (
@@ -20,17 +20,12 @@ const PerfilTesteo: React.FC = () => {
   const [error, setError] = useState<string | null>();
 
   const handleFetchPerfil = async () => {
-    try {
-      const fetchPerfil = await PerfilAPI.obtenerPerfil(email);
-      if (fetchPerfil) {
-        setPerfil(fetchPerfil);
-        setError(null);
-      } else {
-        setError('Perfil no encontrado');
-      }
-    } catch (err) {
-      console.error('Error intentando filtrar perfil: ', err);
-      setError('Hubo un problema al consultar el perfil.');
+    const fetchPerfil = await obtenerPerfilPorCorreo(email);
+    if (fetchPerfil) {
+      setPerfil(fetchPerfil);
+      setError(null);
+    } else {
+      setError('Perfil no encontrado');
     }
   };
 
