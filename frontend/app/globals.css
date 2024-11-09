@@ -6,6 +6,24 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+h1  {
+  @apply text-4xl font-bold text-primary;
+}
+
+h2 {
+  @apply text-2xl font-bold text-secondary;
+}
+
+h3 {
+  @apply text-xl font-semibold text-primary;
+}
+
+p {
+  @apply text-sm font-light text-secondary;
+}
+
+
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
