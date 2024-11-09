@@ -9,6 +9,7 @@ class Ventas(models.Model):
     productos_asociados     = models.ManyToManyField(Productos, related_name='ventas') # con el related_name podremos ver a cuales ventas pertenece cada producto
     monto_total             = models.DecimalField(max_digits=10,decimal_places=2)
     direccion               = models.ForeignKey(DireccionesEnvio, related_name="ventas", on_delete=models.DO_NOTHING)
+    nota                    = models.TextField(blank=True, null=True)
 
 
     def __str__(self):
