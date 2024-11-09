@@ -20,11 +20,10 @@ class ConsultarPerfilAPI(APIView):
     serializer_class        = ConsultarPerfilSerializer
     authentication_classes  = []
     permission_classes      = [AllowAny]
-    @base_serializercheck_decorator
-    def post(self, request, *args, **kwargs):
+
+    def get(self, request, email_perfil, *args, **kwargs):
         from applications.Clientes.models import Clientes
-        serialized_data = kwargs['serialized_data']
-        if (perfil:=Clientes.objects.filter(perfil__correo=serialized_data['email'])) or (perfil:=Perfiles.objects.filter(correo=serialized_data['email'])):
+        if (perfil:=Clientes.objects.filter(perfil__correo=email_perfil)) or (perfil:=Perfiles.objects.filter(correo=email_perfil)):
             # si es un cliente, el diccionario de su perfil es perfil[0].perfil.__dict__
             # si es un perfil, el diccionario de su perfil es perfil[0].__dict__
             if (type(perfil[0]) == Clientes):

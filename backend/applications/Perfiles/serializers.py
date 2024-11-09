@@ -3,7 +3,7 @@ from backend.utils.constants import RolEnum
 
 
 class ConsultarPerfilSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    pass
 
 
 class CrearPerfilSerializer(serializers.Serializer):
