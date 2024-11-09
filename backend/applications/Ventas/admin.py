@@ -3,6 +3,9 @@ from .models import Ventas
 from django.utils import timezone
 from datetime import timedelta
 from .models import Productos
+from openpyxl import Workbook
+from io import BytesIO  
+from django.http import HttpResponse
 
 
 class FechaVentasFilter(admin.SimpleListFilter):  
@@ -44,6 +47,43 @@ class ProductoFilter(admin.SimpleListFilter):
 class VentasAdmin(admin.ModelAdmin):  
     list_display = ('numero_de_orden', 'fecha', 'monto_total', 'direccion', 'productos')  
     list_filter = (FechaVentasFilter, ProductoFilter)  # Uso del filtro personalizado  
+    actions = ['export_to_excel']  
+
+    def export_to_excel(self, request, queryset):  
+        # Crear un libro de trabajo y una hoja  
+        wb = Workbook()  
+        ws = wb.active  
+        ws.title = 'Ventas'  
+
+        # Definir los encabezados de las columnas  
+        headers = ['Número de Orden', 'Fecha', 'Monto Total', 'Dirección', 'Productos']  
+        ws.append(headers)  
+
+        # Agregar los datos de cada venta al archivo  
+        for venta in queryset:  
+            row = [  
+                venta.numero_de_orden,  
+                venta.fecha,  
+                venta.monto_total,  
+                venta.direccion.codigo_postal,  
+                ", ".join([str(producto) for producto in venta.productos_asociados.all()]),  # Asegúrate de que tienes un método __str__ en el modelo Producto  
+            ]  
+            ws.append(row)  
+
+        # Usar BytesIO para guardar el archivo en memoria  
+        output = BytesIO()  
+        wb.save(output)  
+        output.seek(0)  # Volver al inicio del archivo  
+
+        # Crear una respuesta HTTP  
+        response = HttpResponse(output, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')  
+        response['Content-Disposition'] = 'attachment; filename="ventas.xlsx"'  
+
+        # Devolver el archivo Excel  
+        return response  
+
+    export_to_excel.short_description = "Exportar a Excel"  
+
 
     def productos(self, obj):  
         productos_str = []  
