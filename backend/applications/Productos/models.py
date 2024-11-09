@@ -1,5 +1,6 @@
 from django.db import models
 from applications.Clientes.models import Clientes
+from .managers import ProductosManager
 from django.contrib.postgres.fields import ArrayField  
 
 
@@ -9,6 +10,8 @@ class Productos(models.Model):
     precio      = models.DecimalField(max_digits=5,decimal_places=2)
     stock       = models.IntegerField()
     imagenes    = ArrayField(models.CharField(max_length=200), blank=True, default=list)  
+
+    objects     = ProductosManager()
 
     def __str__(self):
         return f"{self.titulo} : {self.stock}"

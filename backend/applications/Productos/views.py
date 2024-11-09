@@ -19,6 +19,8 @@ class ConsultarProductoAPI(APIView):
 
     @base_serializercheck_decorator
     def get(self, request, *args, **kwargs):
+        # se debe retornar la data basica de cada producto
+        # se debe retornar las reviews asociadas a cada producto
         pass
 
 class ObtenerListaProductosAPI(APIView):
