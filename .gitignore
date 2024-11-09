@@ -1,4 +1,4 @@
-KapaTortasBackend/secrets.json
+backend/secrets.json
 __pycache__/
 *.pyc
 *.pyo
