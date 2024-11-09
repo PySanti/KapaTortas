@@ -4,7 +4,8 @@ from rest_framework.views import (
 from rest_framework import status
 from .serializers import (
 ConsultarPerfilSerializer,
-CrearPerfilSerializer
+CrearPerfilSerializer,
+CheckPasswordSerializer
 )
 from rest_framework.permissions import (
     AllowAny
@@ -12,6 +13,7 @@ from rest_framework.permissions import (
 from django.http import JsonResponse
 from backend.utils.constants import (BASE_SERIALIZER_ERROR_RESPONSE)
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
+from django.contrib.auth.hashers import check_password  
 from applications.Perfiles.models import Perfiles
 
 
@@ -58,4 +60,22 @@ class CrearPerfilAPI(APIView):
                 return JsonResponse({"new_profile": Perfiles.objects.get_perfil_dict(new_profile)}, status=status.HTTP_200_OK)
             except:
                 return JsonResponse({"error":"unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+class CheckPasswordAPI(APIView):
+    serializer_class        = CheckPasswordSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    @base_serializercheck_decorator
+    def post(self, request, *args, **kwargs):
+        serialized_data = kwargs['serialized_data']
+        try:
+            if profile := Perfiles.objects.filter(correo=serialized_data["email"]):
+                return JsonResponse({"valid_password" : profile[0].check_password(serialized_data["password_attempt"])}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error" : "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except:
+            return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
 

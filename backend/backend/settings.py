@@ -73,10 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-PASSWORD_HASHERS = [  
-    'django.contrib.auth.hashers.BCryptPasswordHasher',  
-]  
-
 
 DATABASES = {
     'default': {
