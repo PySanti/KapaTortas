@@ -29,6 +29,15 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     def check_password(self, raw_password):  
         """Verifica si la contraseña está correcta."""  
         return check_password(raw_password, self.contraseña)  
+    def save(self, *args, **kwargs):
+        """
+            Este metodo se ejecuta para guardar los cambios de los registros en la DB
+            Se sobreescribe para evitar problemas de encriptacion de contraseñas por crear perfiles desde el admin
+        """
+        if self.pk is None:  
+            self.set_password(self.contraseña)
+        super().save(*args, **kwargs)  
+
 
     def __str__(self):
         return f"{self.rol.split('.')[-1]} : {self.nombre_completo}"

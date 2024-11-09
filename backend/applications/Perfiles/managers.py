@@ -8,9 +8,9 @@ class PerfilesManager(BaseUserManager):
             correo = correo,
             is_superuser = is_superuser,
             is_staff = is_staff,
+            contraseña = password,
             **kwargs
         )
-        new_user.set_password(password)
         new_user.save(using=self.db)
         return new_user
     def create_superuser(self, nombre_completo, password, correo, **kwargs):
