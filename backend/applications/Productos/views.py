@@ -18,10 +18,18 @@ class ConsultarProductoAPI(APIView):
     permission_classes      = [AllowAny]
 
     @base_serializercheck_decorator
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         # se debe retornar la data basica de cada producto
         # se debe retornar las reviews asociadas a cada producto
-        pass
+        from applications.Productos.models import Productos
+        serialized_data = kwargs["serialized_data"]
+        try:
+            if producto:=Productos.objects.filter(id=serialized_data["id_producto"]):
+                return JsonResponse({'producto' : Productos.objects.get_producto_info(producto[0])}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({'error' : "no_producto_with_id"}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
 
 class ObtenerListaProductosAPI(APIView):
     serializer_class        = ObtenerListaProductosSerializer

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 class ConsultarProductoSerializer(serializers.Serializer):
-    pass
+    id_producto = serializers.IntegerField()
 
 class ObtenerListaProductosSerializer(serializers.Serializer):
     pass
