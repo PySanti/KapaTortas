@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 type ButtonVariant = "primary" | "secondary" | "tertiary";
 
 const baseStyles =
-  "px-8 py-7 rounded-full text-xl font-bold transition-colors duration-200";
+  "px-8 py-6 rounded-full text-lg font-semibold transition-colors duration-200";
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: "bg-primary text-white hover:bg-primary-light",
-  secondary: "bg-secondary text-white",
-  tertiary: "bg-transparent text-primary hover:bg-primary-light",
+  secondary: "bg-secondary-light text-primary hover:bg-secondary",
+  tertiary: "bg-transparent border-2 border-terciary text-primary text-terciary hover:bg-primary-light",
 };
 
 export const MainButton = ({
