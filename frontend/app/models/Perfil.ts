@@ -4,7 +4,7 @@ import { RolEnum } from "./RolEnum";
 export interface Perfil {
   nombre_completo: string;
   correo: string;
-  telefono: string;
+  numero_telefonico: string;
   fecha_nacimiento: string;
   link_foto: string;
   rol: RolEnum;
