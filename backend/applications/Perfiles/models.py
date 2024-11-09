@@ -9,7 +9,7 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     nombre_completo     = models.CharField(unique=True)
     correo              = models.EmailField(unique=True)
     contraseña          = models.CharField(max_length=128)
-    numero_telefonico   = models.CharField(unique=True)
+    numero_telefonico   = models.CharField(unique=True, blank=True, null=True)
     fecha_nacimiento    = models.DateField(null=True, blank=True)
     link_foto           = models.CharField(blank=True)
     rol                 = models.CharField(choices=[(role.value, role.name) for role in RolEnum], default=RolEnum.CLIENTE)
