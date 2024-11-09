@@ -28,7 +28,8 @@ class ConsultarPerfilAPI(APIView):
             # si es un cliente, el diccionario de su perfil es perfil[0].perfil.__dict__
             # si es un perfil, el diccionario de su perfil es perfil[0].__dict__
             if (type(perfil[0]) == Clientes):
-                return JsonResponse({"cliente": Clientes.objects.get_client_info(perfil[0])}, status=status.HTTP_200_OK)
+                client_info = Clientes.objects.get_client_info(perfil[0])
+                return JsonResponse({"perfil": client_info["perfil"], "direcciones" : client_info["direcciones"] }, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"perfil": Perfiles.objects.get_perfil_dict(perfil[0])}, status=status.HTTP_200_OK)
         else:
