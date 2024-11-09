@@ -1,14 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import KapaTortasVerifyEmail from '../components/verification-email';
+import KapaTortasVerifyEmail from './verification-email';
 import { Perfil } from '@/app/models/Perfil';
 import PerfilAPI from '@/app/controladores/api/users/PerfilAPI';
 
 export default function HomePage({}) {
   return (
     <>
-      <h1>Hola</h1>
       <PerfilTesteo />
     </>
   );
@@ -16,9 +15,9 @@ export default function HomePage({}) {
 
 // Esto esta malo, deberiamos traer el Perfil en contexto, es para testear.
 const PerfilTesteo: React.FC = () => {
-  const [perfil, setPerfil] = useState<Perfil | null>(null);
+  const [perfil, setPerfil] = useState<Perfil | null>();
   const [email, setEmail] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>();
 
   const handleFetchPerfil = async () => {
     try {
@@ -54,8 +53,8 @@ const PerfilTesteo: React.FC = () => {
 
       {perfil ? (
         <div className='p-20 text-sm'>
-          <h2>Perfil de {perfil.nombre_completo}</h2>
-          <h2>Correo: {perfil.correo}</h2>
+          <h2 className='text-black text-2xl'>Perfil de {perfil.nombre_completo}</h2>
+          <h2 className='text-black text-2xl'>Correo: {perfil.correo}</h2>
         </div>
       ) : (
         <p>Introduce un correo</p>
