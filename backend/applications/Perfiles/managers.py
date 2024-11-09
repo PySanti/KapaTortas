@@ -17,6 +17,7 @@ class PerfilesManager(BaseUserManager):
         return self._create_user( nombre_completo, password, correo, True, True, **kwargs)
     def create_user(self, nombre_completo, password, correo, **kwargs):
         return self._create_user( nombre_completo, password, correo, False, False, **kwargs)
+
     def crear_perfil(self, nombre_completo, password, correo,  rol):
         from applications.Clientes.models import Clientes
         new_profile =  self._create_user( nombre_completo, password, correo,rol == "administrador" , rol in ["administrador", "empleado"])
@@ -39,7 +40,7 @@ class PerfilesManager(BaseUserManager):
             return False
     def get_perfil_dict(self, perfil):
         """
-            Toma un objeto tipo Perfil y retorna un diccionario a partir de los SHOWABLE_FIELDS, 
+            Toma un objeto tipo Perfil y retorna un diccionario a partir de los SHOWABLE_FIELDS,
             retornable en un JsonResponse
         """
         return {k:v for k,v in perfil.__dict__.items() if k in BASE_PROFILE_SHOWABLE_FIELDS}

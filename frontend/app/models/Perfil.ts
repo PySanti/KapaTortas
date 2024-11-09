@@ -5,7 +5,7 @@ export interface Perfil {
   nombre_completo: string;
   correo: string;
   contraseña: string;
-  telefono: string;
+  numero_telefonico: string;
   fecha_nacimiento: string;
   link_foto: string;
   rol: Role;
