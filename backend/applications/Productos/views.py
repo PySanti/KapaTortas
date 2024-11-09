@@ -30,4 +30,9 @@ class ObtenerListaProductosAPI(APIView):
 
     @base_serializercheck_decorator
     def get(self, request, *args, **kwargs):
-        pass
+        from applications.Productos.models import Productos
+        try:
+            productos = Productos.objects.get_productos_list()
+            return JsonResponse({'productos' : productos}, status=status.HTTP_200_OK)
+        except:
+            return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
