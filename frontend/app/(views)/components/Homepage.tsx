@@ -4,11 +4,13 @@ import { useState } from "react";
 import KapaTortasVerifyEmail from "./verification-email";
 import { Cliente } from "@/app/models/Cliente";
 import ClienteAPI from "@/app/controladores/api/users/ClienteAPI";
+import { MainButton } from "./Button";
 
 export default function HomePage({}) {
   return (
     <>
       <PerfilTesteo />
+      <MainButton onClick={() => console.log("Dani")}>Registrarse</MainButton>
     </>
   );
 }

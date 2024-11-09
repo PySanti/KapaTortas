@@ -10,13 +10,19 @@
     "email": "email dev --dir app/components/emails"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.0",
     "@react-email/components": "^0.0.28",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.456.0",
     "next": "14.2.16",
     "next-auth": "^5.0.0-beta.25",
     "react": "^18",
     "react-dom": "^18",
     "react-email": "^3.0.2",
     "resend": "^4.0.1-alpha.0",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
