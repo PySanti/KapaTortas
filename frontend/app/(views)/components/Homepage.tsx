@@ -5,18 +5,20 @@ import KapaTortasVerifyEmail from './verification-email';
 import { Cliente } from '@/app/models/Cliente';
 import ClienteAPI from '@/app/controladores/api/users/ClienteAPI';
 import { MainButton } from './MainButton';
+import MainHome from './MainHome';
 
 export default function HomePage({}) {
   return (
     <>
-      <PerfilTesteo />
+      {/* <PerfilTesteo />
       <MainButton onClick={() => console.log('Dani')}>Registrarse</MainButton>
       <MainButton variant='secondary' onClick={() => console.log('Dani')}>
         Saber más
       </MainButton>
       <MainButton variant='tertiary' onClick={() => console.log('Dani')}>
         Saber más
-      </MainButton>
+      </MainButton> */}
+      <MainHome />
     </>
   );
 }
