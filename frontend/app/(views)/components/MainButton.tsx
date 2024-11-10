@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 type ButtonVariant = "primary" | "secondary" | "tertiary";
 
 const baseStyles =
-  "px-7 py-7 lg:px-6 lg:py-6 rounded-full text-xl lg:text-lg font-semibold transition-colors duration-200";
+  "px-6 py-6 rounded-full text-lg font-semibold transition-colors duration-200";
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: "bg-primary text-white hover:bg-primary-light",

@@ -8,11 +8,7 @@ import UsernameField from "./FormComponents/UsernameField"
 import EmailField from "./FormComponents/EmailField"
 import PasswordField from "./FormComponents/PasswordField"
 import ConfirmPasswordField from "./FormComponents/ConfirmPasswordField"
-
-
-
-
-
+import { MainButton } from "./MainButton"
 
 
 export default function RegistroClienteForm() {
@@ -56,7 +52,9 @@ export default function RegistroClienteForm() {
                         <EmailField             form={form}/>
                         <PasswordField          form={form}/>
                         <ConfirmPasswordField   form={form}/>
-                        <Button type="submit">Enviar</Button>  
+                        {/* Probar si esto funciona lol */}
+                        <MainButton type="submit">Enviar</MainButton>
+                        {/* <Button type="submit">Enviar</Button>   */}
                     </form>  
                 </Form>  
             </div>

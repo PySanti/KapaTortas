@@ -10,24 +10,28 @@ import { cakes } from "@/app/models/config/marketing";
 export default function HomePage({}) {
   return (
     <>
+
       <MainHome />
-      <div className="relative min-h-screen ">
-        <div className="m-4 md:m-2 p-6 md:p-8 lg:p-10">
-          <h1 className="text-primary text-4xl lg:text-6xl">Nuestras Tortas</h1>
-          {/* <span>-----</span> */}
-        </div>
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col gap-16">
-            {cakes.map((item, index) => {
-              return (
-                <div key={index} className="w-full">
-                  <ProductoHome key={index} item={item} />
-                </div>
-              );
-            })}
+      <section className="w-full mb-20">
+        <div className="relative ">
+          <div className="m-4 md:m-2 p-6 md:p-8 lg:p-10">
+            <h1 className="text-primary text-4xl lg:text-6xl">Nuestras Tortas</h1>
+            {/* <span>-----</span> */}
+          </div>
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col gap-16">
+              {cakes.map((item, index) => {
+                return (
+                  <div key={index} className="w-full">
+                    <ProductoHome key={index} item={item} />
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+    
     </>
   );
 }

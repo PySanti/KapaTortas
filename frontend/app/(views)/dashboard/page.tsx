@@ -1,3 +1,7 @@
+import RegistroClienteForm from "../components/RegistroClienteForm";
+
 export default function DashboardPage() {
-  return <div>Dashboard Content</div>;
+  return (
+    <RegistroClienteForm />
+  );
 }
