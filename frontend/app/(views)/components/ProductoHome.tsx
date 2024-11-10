@@ -28,7 +28,7 @@ export default function ProductoHome({ item }: { item: cakeType }) {
               />
             </div>
 
-            <p className="hidden text-sm md:flex lg:text-lg">
+            <p className="hidden text-sm text-terciary text-left md:flex lg:text-lg">
               {item.description}
             </p>
             <div className="relative sm:flex items-center p-4 space-x-4">
