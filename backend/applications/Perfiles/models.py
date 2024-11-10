@@ -16,8 +16,6 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     stripeCustomerId    = models.CharField(unique=True, blank=True, null=True)
     is_active           = models.BooleanField(default=True) # para correo confirmado
     is_staff            = models.BooleanField(default=False) # para empelados y admin (staff)
-    
-    
 
     REQUIRED_FIELDS = ['correo']
     USERNAME_FIELD  = 'nombre_completo'
