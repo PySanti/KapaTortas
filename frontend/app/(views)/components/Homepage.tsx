@@ -1,24 +1,35 @@
 'use client';
 
 import { useState } from 'react';
-import KapaTortasVerifyEmail from './verification-email';
 import { Cliente } from '@/app/models/Cliente';
 import ClienteAPI from '@/app/controladores/api/users/ClienteAPI';
-import { MainButton } from './MainButton';
 import MainHome from './MainHome';
+import ProductoHome from './ProductoHome';
+import { cakes } from '@/app/models/config/marketing';
 
 export default function HomePage({}) {
   return (
     <>
-      {/* <PerfilTesteo />
-      <MainButton onClick={() => console.log('Dani')}>Registrarse</MainButton>
-      <MainButton variant='secondary' onClick={() => console.log('Dani')}>
-        Saber más
-      </MainButton>
-      <MainButton variant='tertiary' onClick={() => console.log('Dani')}>
-        Saber más
-      </MainButton> */}
       <MainHome />
+      <div className="relative min-h-screen ">  
+        <div className="mt-4 p-4 lg:p-10 mb-4">
+        <h1 className="text-primary text-4xl lg:text-6xl">Nuestras Tortas</h1>
+        <span>-----</span>
+        </div>
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col gap-12">
+          { cakes.map((item, index) => {
+          return (
+            <div key={index} className='w-full'>
+                <ProductoHome key={ index } item={ item } />
+            </div>  
+          )          
+        }) }
+          </div>
+      
+        </div>
+
+      </div>
     </>
   );
 }

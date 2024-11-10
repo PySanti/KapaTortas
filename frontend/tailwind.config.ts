@@ -9,7 +9,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
+      screens: {
+        'xs': '480px',
+        },
+      colors: { 
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

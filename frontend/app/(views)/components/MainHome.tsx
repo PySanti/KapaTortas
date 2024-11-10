@@ -8,7 +8,7 @@ import Eyes from "@/components/images/Eyes";
 
 export default function MainHome() {
     return (
-        <div className="relative min-h-screen">
+        <div className="relative">
             <div className="relative w-full h-[75vh]  mx-auto">
                 <div className="absolute top-0 inset-0 bg-cover">
                         <HomePhoto />
@@ -21,7 +21,7 @@ export default function MainHome() {
             <div className="relative z-10 flex h-full flex-col justify-center pt-10 px-4 sm:px-6 lg:px-8">
                 <div className="mr-auto p-7 md:p-4 lg:p-0 max-w-3xl lg:ml-56"  style={{ left: '60%'}}>
                     <h1 className="mb-6 text-4xl text-center sm:text-5xl md:text-6xl md:text-left">
-                        Cada bocado esta lleno de creatividad
+                        Cada bocado está lleno de creatividad
                     </h1>
                     <p className="mb-8 text-center md:text-left max-w-2xl">
                         Llega Diciembre y sabemos que quieres tener un detalle con 

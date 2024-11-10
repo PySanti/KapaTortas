@@ -8,7 +8,7 @@ const baseStyles =
 const variantStyles: Record<ButtonVariant, string> = {
   primary: "bg-primary text-white hover:bg-primary-light",
   secondary: "bg-secondary-light text-primary hover:bg-secondary",
-  tertiary: "bg-transparent border-2 border-terciary text-primary text-terciary hover:bg-primary-light",
+  tertiary: "bg-transparent border-2 border-terciary text-primary text-terciary hover:bg-secondary",
 };
 
 export const MainButton = ({
