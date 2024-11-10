@@ -10,7 +10,7 @@ export default async function passwordsMatch(email: string, password: string): P
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error, Status: ${response.status}`);
+      throw new Error(`Error, status: ${response.status}`);
     }
 
     const data = await response.json();
