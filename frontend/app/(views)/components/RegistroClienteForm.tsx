@@ -48,15 +48,19 @@ export default function RegistroClienteForm() {
         console.log(values)
     }
     return (  
-        <Form {...form}>  
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">  
-                <UsernameField          form={form}/>
-                <EmailField             form={form}/>
-                <PasswordField          form={form}/>
-                <ConfirmPasswordField   form={form}/>
-                <Button type="submit">Enviar</Button>  
-            </form>  
-        </Form>  
+        <div className="flex items-center justify-center h-screen p-4">  
+            <div className="w-full max-w-md p-8 bg-white rounded-lg border-2 border-primary">  
+                <Form {...form}>  
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">  
+                        <UsernameField          form={form}/>
+                        <EmailField             form={form}/>
+                        <PasswordField          form={form}/>
+                        <ConfirmPasswordField   form={form}/>
+                        <Button type="submit">Enviar</Button>  
+                    </form>  
+                </Form>  
+            </div>
+        </div>
     )
 }
 
