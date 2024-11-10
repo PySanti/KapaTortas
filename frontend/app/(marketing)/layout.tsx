@@ -21,6 +21,7 @@ export default function RootLayout({
         <div className="min-h-screen flex flex-col relative">
         <Navbar />
         <main className="flex-grow pb-[footer-height] relative z-0">{children}</main>
+        <Footer />
         </div>
       </body>
     </html>
