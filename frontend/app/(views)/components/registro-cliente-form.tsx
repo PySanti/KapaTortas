@@ -47,7 +47,7 @@ export default function RegistroClienteForm() {
   } = form;
 
   const onSubmit = async (data: registroType) => {
-    const res = await fetch('http://localhost:8000/api/perfiles/crear', {
+    const res = await fetch('http://localhost:8000/api/perfiles/crear/', {
       method: 'POST',
       body: JSON.stringify({
         nombre_completo: data.nombre,
@@ -131,7 +131,7 @@ export default function RegistroClienteForm() {
               onClick={() => {
                 setShowForm(!showForm);
               }}
-              className='inline-block text-primary text-base font-medium hover:cursor-pointer'
+              className='inline-block text-primary text-sm font-medium hover:cursor-pointer'
             >
               {' '}
               Registrarse con Google?
@@ -146,7 +146,7 @@ export default function RegistroClienteForm() {
             <motion.div className='flex flex-col gap-6' key='buttons'>
               <Button
                 type='button'
-                className='w-full'
+                className='w-full rounded-full'
                 onClick={() => {
                   setShowForm(true);
                 }}
@@ -165,7 +165,7 @@ export default function RegistroClienteForm() {
                 type='button'
                 variant='outline'
                 disabled={isGoogleLoading}
-                className='gap-2'
+                className='gap-2 rounded-full'
                 onClick={() => {
                   setIsGoogleLoading(true);
                   signIn('google', { callbackUrl: '/dashboard' });
@@ -251,7 +251,11 @@ export default function RegistroClienteForm() {
                 />
                 <FormErrorMessage message={errorMsg} />
                 <FormSuccessMessage message={successMsg} />
-                <Button className='bg-primary text-white' disabled={isSubmitting} type='submit'>
+                <Button
+                  className='bg-primary text-white rounded-full'
+                  disabled={isSubmitting}
+                  type='submit'
+                >
                   Enviar
                 </Button>
               </motion.form>

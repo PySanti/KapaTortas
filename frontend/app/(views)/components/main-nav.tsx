@@ -25,7 +25,7 @@ export default function Navbar() {
           <Link href='/catalogo' passHref>
             <MainButton variant='secondary'>Realiza tu Pedido</MainButton>
           </Link>
-          <Link href='/registro'>
+          <Link href='/auth/registro'>
             <MainButton>Registrarse</MainButton>
           </Link>
         </div>
