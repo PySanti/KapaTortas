@@ -1,34 +1,32 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Cliente } from '@/app/models/Cliente';
-import ClienteAPI from '@/app/controladores/api/users/ClienteAPI';
-import MainHome from './MainHome';
-import ProductoHome from './ProductoHome';
-import { cakes } from '@/app/models/config/marketing';
+import { useState } from "react";
+import { Cliente } from "@/app/models/Cliente";
+import ClienteAPI from "@/app/controladores/api/users/ClienteAPI";
+import MainHome from "./MainHome";
+import ProductoHome from "./ProductoHome";
+import { cakes } from "@/app/models/config/marketing";
 
 export default function HomePage({}) {
   return (
     <>
       <MainHome />
-      <div className="relative min-h-screen ">  
-        <div className="mt-4 p-4 lg:p-10 mb-4">
-        <h1 className="text-primary text-4xl lg:text-6xl">Nuestras Tortas</h1>
-        <span>-----</span>
+      <div className="relative min-h-screen ">
+        <div className="m-4 md:m-2 p-6 md:p-8 lg:p-10">
+          <h1 className="text-primary text-4xl lg:text-6xl">Nuestras Tortas</h1>
+          {/* <span>-----</span> */}
         </div>
         <div className="container mx-auto px-4">
-          <div className="flex flex-col gap-12">
-          { cakes.map((item, index) => {
-          return (
-            <div key={index} className='w-full'>
-                <ProductoHome key={ index } item={ item } />
-            </div>  
-          )          
-        }) }
+          <div className="flex flex-col gap-16">
+            {cakes.map((item, index) => {
+              return (
+                <div key={index} className="w-full">
+                  <ProductoHome key={index} item={item} />
+                </div>
+              );
+            })}
           </div>
-      
         </div>
-
       </div>
     </>
   );
@@ -37,7 +35,7 @@ export default function HomePage({}) {
 // Esto esta malo, deberiamos traer el Perfil en contexto, es para testear.
 const PerfilTesteo: React.FC = () => {
   const [cliente, setCliente] = useState<Cliente | null>();
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string | null>();
 
   const getCliente = async () => {
@@ -46,24 +44,24 @@ const PerfilTesteo: React.FC = () => {
       if (cliente) {
         setCliente(cliente);
       } else {
-        setError('Cliente no encontrado');
+        setError("Cliente no encontrado");
       }
     } catch (err) {
-      setError('Hubo un problema al consultar el perfil');
+      setError("Hubo un problema al consultar el perfil");
     }
   };
 
   return (
     <>
-      <h2 className='text-2xl p-20'>Testing del perfil</h2>
-      <div className='p-5'>
+      <h2 className="text-2xl p-20">Testing del perfil</h2>
+      <div className="p-5">
         <input
-          type='text'
-          placeholder='Pon el texto'
+          type="text"
+          placeholder="Pon el texto"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button className='bg-green-300 p-5 rounded-lg ' onClick={getCliente}>
+        <button className="bg-green-300 p-5 rounded-lg " onClick={getCliente}>
           Consulta el perfil
         </button>
       </div>
@@ -71,10 +69,16 @@ const PerfilTesteo: React.FC = () => {
       {error && <p>{error}</p>}
 
       {cliente ? (
-        <div className='p-20 text-sm'>
-          <h2 className='text-black text-2xl'>Perfil de {cliente.perfil.nombre_completo}</h2>
-          <h2 className='text-black text-2xl'>Num: {cliente.perfil.numero_telefonico}</h2>
-          <h2 className='text-black text-2xl'>Correo: {cliente.perfil.nombre_completo}</h2>
+        <div className="p-20 text-sm">
+          <h2 className="text-black text-2xl">
+            Perfil de {cliente.perfil.nombre_completo}
+          </h2>
+          <h2 className="text-black text-2xl">
+            Num: {cliente.perfil.numero_telefonico}
+          </h2>
+          <h2 className="text-black text-2xl">
+            Correo: {cliente.perfil.nombre_completo}
+          </h2>
         </div>
       ) : (
         <p>Introduce un correo</p>
