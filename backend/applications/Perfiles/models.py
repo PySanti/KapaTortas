@@ -13,7 +13,7 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     fecha_nacimiento    = models.DateField(null=True, blank=True)
     link_foto           = models.CharField(blank=True)
     rol                 = models.CharField(choices=[(role.value, role.name) for role in RolEnum], default=RolEnum.CLIENTE)
-    stripeCustomerId    = models.CharField(unique=True, blank=True, null=True)
+    stripeCustomerId    = models.IntegerField(unique=True, blank=True, null=True)
     is_active           = models.BooleanField(default=True) # para correo confirmado
     is_staff            = models.BooleanField(default=False) # para empelados y admin (staff)
 
