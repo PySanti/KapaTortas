@@ -13,8 +13,8 @@ export default function Navbar() {
         <header className="sticky top-0 z-50 w-full border-b bg-secondary">
             <div className="grid grid-cols-3 h-25 items-center px-6 sm:px-8 md:px-12 lg:px-16">
                 <div className="flex items-center space-x-2">
-                    <Menu className="h-6 w-6 text-primary" />
-                    <h3 className="text-lg md:text-xl text-primary">Menú</h3>
+                    <Menu className="h-6 w-6 lg:h-8 lg:w-8 text-primary" />
+                    <h3 className="text-lg lg:text-2xl text-primary">Menú</h3>
                 </div>
 
                 <div className="flex justify-center">
