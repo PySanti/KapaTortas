@@ -6,7 +6,8 @@ from .serializers import (
 ConsultarPerfilSerializer,
 CrearPerfilSerializer,
 CheckPasswordSerializer,
-ActualizarStripeCustomerIdSerializer
+ActualizarStripeCustomerIdSerializer,
+ActivarPerfilSerializer
 )
 from rest_framework.permissions import (
     AllowAny
@@ -97,6 +98,30 @@ class ActualizarStripeCustomerIdAPI(APIView):
 
         except:
             return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+class ActivarPerfilAPI(APIView):
+    serializer_class        = ActivarPerfilSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    @base_serializercheck_decorator
+    def patch(self, request, *args, **kwargs):
+        serialized_data = kwargs['serialized_data']
+        try:
+            if profile := Perfiles.objects.filter(correo=serialized_data["email"]):
+                profile[0].is_active = True
+                profile[0].save()
+                return JsonResponse({"activated" : True}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error" : "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except:
+            return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 
 
 

@@ -23,3 +23,6 @@ class CheckPasswordSerializer(serializers.Serializer):
 class ActualizarStripeCustomerIdSerializer(serializers.Serializer):
     email = serializers.EmailField()
     new_stripeId = serializers.CharField()
+
+class ActivarPerfilSerializer(serializers.Serializer):
+    email = serializers.EmailField()
