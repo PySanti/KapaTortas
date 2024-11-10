@@ -2,17 +2,12 @@
 import { Button } from "@/components/ui/button"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
-import {useState} from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import {Form} from "@/components/ui/form"
+import UsernameField from "./FormComponents/UsernameField"
+import EmailField from "./FormComponents/EmailField"
+import PasswordField from "./FormComponents/PasswordField"
+import ConfirmPasswordField from "./FormComponents/ConfirmPasswordField"
 
 
 
@@ -21,8 +16,6 @@ import { Input } from "@/components/ui/input"
 
 
 export default function RegistroClienteForm() {
-    const [showPassword, setShowPassword] = useState(false);  
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);  
     const formSchema = z.object({  
         username: z.string()  
             .min(5, { message: "El nombre completo debe contener al menos 5 caracteres." })  
@@ -57,90 +50,13 @@ export default function RegistroClienteForm() {
     return (  
         <Form {...form}>  
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">  
-                <FormField  
-                    control={form.control}  
-                    name="username"  
-                    render={({ field }) => (  
-                        <FormItem>  
-                            <FormLabel>Nombre Completo</FormLabel>  
-                            <FormControl>  
-                                <Input placeholder="Tu nombre completo" {...field} />  
-                            </FormControl>  
-                            <FormMessage />  
-                        </FormItem>  
-                    )}  
-                />  
-                
-                <FormField  
-                    control={form.control}  
-                    name="email"  
-                    render={({ field }) => (  
-                        <FormItem>  
-                            <FormLabel>Email</FormLabel>  
-                            <FormControl>  
-                                <Input placeholder="tu-email@ejemplo.com" {...field} />  
-                            </FormControl>  
-                            <FormMessage />  
-                        </FormItem>  
-                    )}  
-                />  
-                <FormField  
-                    control={form.control}  
-                    name="password"  
-                    render={({ field }) => (  
-                    <FormItem>  
-                    <FormLabel>Contraseña</FormLabel>  
-                    <FormControl>  
-                        <div className="relative">  
-                        <Input  
-                            type={showPassword ? "text" : "password"}  
-                            placeholder="Tu contraseña"  
-                            {...field}  
-                        />  
-                        <button  
-                            type="button"  
-                            onClick={() => setShowPassword((prev) => !prev)}  
-                            className="absolute inset-y-0 right-0 flex items-center pr-3"  
-                        >  
-                            {showPassword ? "Ocultar" : "Mostrar"}  
-                        </button>  
-                        </div>  
-                    </FormControl>  
-                    <FormMessage />  
-                    </FormItem>  
-                )}  
-            />  
-
-                <FormField  
-                    control={form.control}  
-                    name="confirmPassword"  
-                    render={({ field }) => (  
-                        <FormItem>  
-                          <FormLabel>Confirmar Contraseña</FormLabel>  
-                          <FormControl>  
-                            <div className="relative">  
-                              <Input  
-                                type={showConfirmPassword ? "text" : "password"}  
-                                placeholder="Confirma tu contraseña"  
-                                {...field}  
-                              />  
-                              <button  
-                                type="button"  
-                                onClick={() => setShowConfirmPassword((prev) => !prev)}  
-                                className="absolute inset-y-0 right-0 flex items-center pr-3"  
-                              >  
-                                {showConfirmPassword ? "Ocultar" : "Mostrar"}  
-                              </button>  
-                            </div>  
-                          </FormControl>  
-                          <FormMessage />  
-                        </FormItem>  
-                    )}  
-                /> 
+                <UsernameField          form={form}/>
+                <EmailField             form={form}/>
+                <PasswordField          form={form}/>
+                <ConfirmPasswordField   form={form}/>
                 <Button type="submit">Enviar</Button>  
             </form>  
         </Form>  
-
     )
 }
 
