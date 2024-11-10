@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import { dashboardConfig } from '@/app/models/config/dashboard';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/main-nav';
 import Sidebar from '../components/sidebar';
 
 export default async function DashboardLayout({
