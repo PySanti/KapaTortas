@@ -1,29 +1,28 @@
 import NextAuth, { User } from 'next-auth';
 import authConfig from '@/auth.config';
-import { Role } from './app/models/RolEnum';
-import type { Adapter } from '@auth/core/adapters';
+import { Rol } from './app/models/RolEnum';
 
 //* Augment the default session, user & JWT Token to include role and stripeCustomerId
 declare module 'next-auth' {
   interface Session {
     user: User & {
-      role: Role;
+      rol: Rol;
       stripeCustomerId: string;
     };
     token: {
-      role: Role;
+      rol: Rol;
       stripeCustomerId: string;
     };
   }
   interface User {
-    role: Role;
+    rol: Rol;
     stripeCustomerId: string;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    role: Role;
+    rol: Rol;
     stripeCustomerId: string;
   }
 }

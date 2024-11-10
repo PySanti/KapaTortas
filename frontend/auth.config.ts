@@ -1,12 +1,11 @@
 import { type Session, type User } from 'next-auth';
 import type { NextAuthConfig } from 'next-auth';
-// import bcrypt from 'bcryptjs';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import type { JWT } from 'next-auth/jwt';
-import passwordsMatch from './app/controladores/utilities/passwordsMatch';
 import ClienteAPI from './app/controladores/api/users/ClienteAPI';
-// import { stripe } from './lib/stripe';
+import { stripe } from './lib/stripe';
+import passwordsMatch from './app/controladores/utilities/passwordsMatch';
 // import { authRoutes, defaultLoginRedirect, publicRoutes } from './config/routes';
 
 export default {
@@ -49,11 +48,6 @@ export default {
           return null;
         }
 
-        // const isPasswordValid = await bcrypt.compare(
-        //   credentials.password as string,
-        //   user.password!
-        // );
-
         const isPasswordValid = await passwordsMatch(
           credentials?.email as string,
           credentials?.password as string
@@ -74,8 +68,8 @@ export default {
         // Create a customer in Stripe
         // if (user.nombre_completo && user.correo && !user.stripeCustomerId) {
         //   const customer = await stripe.customers.create({
-        //     email: user.email,
-        //     name: user.name,
+        //     email: user.correo,
+        //     name: user.nombre_completo,
         //   });
 
         //   // console.log('User created in stripe');
@@ -92,57 +86,86 @@ export default {
         // }
 
         return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image,
-          role: user.role,
-          stripeCustomerId: user.stripeCustomerId || 'lol',
+          id: String(user.id),
+          name: user.nombre_completo,
+          email: user.correo,
+          image: user.link_foto,
+          rol: user.rol,
+          stripeCustomerId: user.stripeCustomerId || 'no-client',
         };
       },
     }),
   ],
   events: {
     //* Create a customer in stripe for the user. This works only for the google provider
-    // createUser: async ({ user }) => {
-    //   // 1. Create a customer in Stripe
-    //   if (user.name && user.email) {
-    //     const customer = await stripe.customers.create({
-    //       email: user.email,
-    //       name: user.name,
-    //     });
-    //     // console.log('User created in stripe');
-    //     // 2. Update the user in Prisma with the Stripe customer id
-    //     await prisma.user.update({
-    //       where: {
-    //         id: user.id,
-    //       },
-    //       data: {
-    //         stripeCustomerId: customer.id,
-    //       },
-    //     });
-    //   }
-    // },
-    // //* Set true emailVerified if the user is created using the google provider
-    // async linkAccount({ user }) {
-    //   await prisma.user.update({
-    //     where: { id: user.id },
-    //     data: { emailVerified: new Date() },
-    //   });
-    // },
+    createUser: async ({ user }) => {
+      // 1. Create a customer in Stripe
+      if (user.name && user.email) {
+        const customer = await stripe.customers.create({
+          email: user.email,
+          name: user.name,
+        });
+
+        // console.log('User created in stripe');
+
+        // 2. Update the user in Prisma with the Stripe customer id
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            stripeCustomerId: customer.id,
+          },
+        });
+      }
+    },
+    //* Set true emailVerified if the user is created using the google provider
+    async linkAccount({ user }) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+    },
   },
   callbacks: {
     async signIn({ user, account }) {
       // Allow oauth users to sign in without verifying their email
       if (account?.provider !== 'credentials') return true;
 
-      const existingUser = await ClienteAPI.obtenerCliente(user.email!);
+      const existingUser = await getUserByEmail(user.email!);
 
       // Prevent sign in if the email is not verified
-      // if (!existingUser?.emailVerified) return false;
+      if (!existingUser?.emailVerified) return false;
 
       return true;
     },
+    // authorized({ auth, request: { nextUrl } }) {
+    //   const { pathname, search } = nextUrl;
+    //   const isLoggedIn = !!auth?.user;
+
+    //   // Check if the user is on an auth page
+    //   const isOnAuthPage = authRoutes.some((page) => pathname.startsWith(page));
+
+    //   // Check if the user is on a public page
+    //   const isOnUnprotectedPage =
+    //     pathname === '/' || // The root page '/'
+    //     publicRoutes.some((page) => pathname.startsWith(page));
+    //   const isProtectedPage = !isOnUnprotectedPage;
+
+    //   if (isOnAuthPage) {
+    //     // Redirect to /dashboard, if logged in and is on an auth page
+    //     if (isLoggedIn) return Response.redirect(new URL(defaultLoginRedirect, nextUrl));
+    //   } else if (isProtectedPage) {
+    //     // Redirect to /login, if not logged in but is on a protected page
+    //     if (!isLoggedIn) {
+    //       const from = encodeURIComponent(pathname + search); // The /login page shall then use this `from` param as a `callbackUrl` upon successful sign in
+    //       return Response.redirect(new URL(`/login?from=${from}`, nextUrl));
+    //     }
+    //   }
+
+    //   // Don't redirect if on an unprotected page, or if logged in and is on a protected page
+    //   return true;
+    // },
     // authorized({ auth, request: { nextUrl } }) {
     //   const { pathname, search } = nextUrl;
     //   const isLoggedIn = !!auth?.user;
@@ -180,7 +203,7 @@ export default {
     //   return true;
     // },
     async jwt({ token, user, session }) {
-      const existingUser = await ClienteAPI.obtenerCliente(token?.email as string);
+      const existingUser = await getUserByEmail(token?.email as string);
 
       // If no user exists
       if (!existingUser) return token;
@@ -188,7 +211,7 @@ export default {
       if (user) {
         return {
           ...token,
-          role: user.role,
+          rol: user.rol,
           // If it's null, set it to an empty string
           stripeCustomerId: user.stripeCustomerId!,
         };
@@ -202,7 +225,7 @@ export default {
           ...session,
           user: {
             ...session.user,
-            role: token.role,
+            rol: token.rol,
             stripeCustomerId: token.stripeCustomerId,
           },
         };
