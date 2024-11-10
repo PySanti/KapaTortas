@@ -6,6 +6,8 @@ import type { JWT } from 'next-auth/jwt';
 import ClienteAPI from './app/controladores/api/users/ClienteAPI';
 import { stripe } from './lib/stripe';
 import passwordsMatch from './app/controladores/utilities/passwordsMatch';
+import crearStripeId from './app/controladores/utilities/crearStripeId';
+import correoVerificado from './app/controladores/utilities/correoVerificado';
 // import { authRoutes, defaultLoginRedirect, publicRoutes } from './config/routes';
 
 export default {
@@ -65,25 +67,18 @@ export default {
 
         //* Create a customer in stripe for the user (if not already created). This works only for the (credentialsProvider)
         //* This is created before the user is logged in for the first time
-        // Create a customer in Stripe
-        // if (user.nombre_completo && user.correo && !user.stripeCustomerId) {
-        //   const customer = await stripe.customers.create({
-        //     email: user.correo,
-        //     name: user.nombre_completo,
-        //   });
 
-        //   // console.log('User created in stripe');
+        if (user.nombre_completo && user.correo && !user.stripeCustomerId) {
+          const customer = await stripe.customers.create({
+            email: user.correo,
+            name: user.nombre_completo,
+          });
 
-        //   // 2. Update the user in Prisma with the Stripe customer id
-        //   await prisma.user.update({
-        //     where: {
-        //       id: user.id,
-        //     },
-        //     data: {
-        //       stripeCustomerId: customer.id,
-        //     },
-        //   });
-        // }
+          // 2. Actualizar el usuario con su id de cliente en Stripe
+          await crearStripeId(user.correo, customer.id);
+
+          console.log('Usuario creado en stripe');
+        }
 
         return {
           id: String(user.id),
@@ -108,23 +103,13 @@ export default {
 
         // console.log('User created in stripe');
 
-        // 2. Update the user in Prisma with the Stripe customer id
-        await prisma.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            stripeCustomerId: customer.id,
-          },
-        });
+        // 2. Actualizar el usuario con su id de cliente en Stripe
+        await crearStripeId(user.email, customer.id);
       }
     },
     //* Set true emailVerified if the user is created using the google provider
     async linkAccount({ user }) {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { emailVerified: new Date() },
-      });
+      await correoVerificado(user.email!);
     },
   },
   callbacks: {
@@ -132,10 +117,17 @@ export default {
       // Allow oauth users to sign in without verifying their email
       if (account?.provider !== 'credentials') return true;
 
-      const existingUser = await getUserByEmail(user.email!);
+      //* Check if user exists
+      const cliente = await ClienteAPI.obtenerCliente(user.email!);
 
-      // Prevent sign in if the email is not verified
-      if (!existingUser?.emailVerified) return false;
+      // Check if user is null
+      if (!cliente || !cliente.perfil) {
+        return false;
+      }
+
+      const { perfil: existingUser } = cliente;
+
+      if (!existingUser?.is_active) return false;
 
       return true;
     },
@@ -203,7 +195,7 @@ export default {
     //   return true;
     // },
     async jwt({ token, user, session }) {
-      const existingUser = await getUserByEmail(token?.email as string);
+      const existingUser = await ClienteAPI.obtenerCliente(token?.email as string);
 
       // If no user exists
       if (!existingUser) return token;
