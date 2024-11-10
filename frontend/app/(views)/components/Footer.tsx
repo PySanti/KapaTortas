@@ -6,19 +6,18 @@ import { SendHorizontal } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "@/components/ui/button";
 import Input from "./Input";
+import { DatePicker } from "./DatePicker";
+import { date } from "zod";
+import { setDate } from "date-fns";
 
 export default function Footer() {
   const [correo, setCorreo] = useState<string>();
-  const [fecha, setFecha] = useState<string>();
+  const [fecha, setFecha] = useState<Date | undefined>();
 
   const handleInputCorreo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCorreo(e.target.value);
   }
-
-  const handleInputFecha = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFecha(e.target.value);
-  }
-
+  
   return (
     <footer className="bg-terciary mt-auto w-full bottom-0 left-0 z-10">
       <div className="container px-4 py-8 mx-auto">
@@ -35,12 +34,8 @@ export default function Footer() {
                   value={correo}
                   inputHandler={ handleInputCorreo }
                 />
-                <Input 
-                  type="date"
-                  placeholder="Fecha de Cumpleaños"
-                  value={fecha}
-                  inputHandler={ handleInputFecha }
-                />
+                <DatePicker date={ fecha } setDate={ setFecha } />
+                
               </form>
               <Button className="rounded-full hover:bg-primary-light">
                <SendHorizontal />
