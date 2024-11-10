@@ -19,15 +19,15 @@ export default function Footer() {
   }
   
   return (
-    <footer className="bg-terciary mt-auto w-full bottom-0 left-0 z-10">
-      <div className="container px-4 py-8 mx-auto">
+    <footer className="bg-terciary mt-auto w-full bottom-0 left-0 z-10 min-h-fit">
+      <div className="container px-4 py-8 mx-auto text-center">
         <div className="grid md:grid-cols-2 gap-2">
           {/* Left */}
-          <div>
+          <div className="text-left space-y-4 p-2">
             <h1 className="text-secondary text-3xl">Invítanos a tu Fiesta</h1>
-            <p>Recibe descuentos especiales el día de tu cumpleaños</p>
+            <p>Recibe descuentos especiales el día de tu cumpleaños.</p>
             <div className="flex p-2">
-              <form className="flex flex-col sm:flex-row gap-2">
+              <form className="flex flex-col sm:flex-row gap-3">
                 <Input 
                   type="text"
                   placeholder="Tu Correo*"
@@ -35,15 +35,14 @@ export default function Footer() {
                   inputHandler={ handleInputCorreo }
                 />
                 <DatePicker date={ fecha } setDate={ setFecha } />
-                
-              </form>
               <Button className="rounded-full hover:bg-primary-light">
-               <SendHorizontal />
+                <SendHorizontal />
               </Button>
+              </form>
             </div>
           </div>
           {/* Right */}
-          <div className="space-y-4 md:text-right">
+          <div className="space-y-4 text-left ml-4 mt-0 md:ml-0 lg:mt-4 md:text-right">
             <nav>
               <Link href="#">
                 <p>Contacto</p>
@@ -60,11 +59,16 @@ export default function Footer() {
             </nav>
           </div>
         </div>
-        <div className="relative text-center">
-          <p>Términos de Servicio</p>
-          <Separator orientation="vertical" />
+        <div className="flex sm:inline-flex justify-between items-center m-4 mb-0 gap-4 mt-8 p-2">
+          <Link href="#" className="hover:text-white">
+            <p className="text-sm">Términos de Servicio</p>
+          </Link>
+            {/* <Separator className="my-4" orientation="vertical" /> */}
+            <span className="text-lg text-secondary">|</span>
           {/* <Divider orientation="vertical" flexItem /> */}
-          <p>@2024 Kapa Tortas</p>
+          <Link href="#" className="hover:text-white">
+            <p className="text-sm" >@2024 Kapa Tortas</p>
+          </Link>
         </div>
       </div>
     </footer>
