@@ -5,7 +5,7 @@ import { Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { MainButton } from "./MainButton"
 
-import Logo from "@/components/ui/Logo"
+import Logo from "@/components/images/Logo"
 
 
 export default function Navbar() {
