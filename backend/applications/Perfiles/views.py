@@ -62,6 +62,7 @@ class CrearPerfilAPI(APIView):
                 )
                 new_profile = new_profile.perfil if serialized_data['rol'] == "cliente" else new_profile
                 verification_token = get_random_string(10)
+                new_profile.verification_token = verification_token
                 send_verification_mail(new_profile.correo, new_profile.nombre_completo, verification_token)
                 return JsonResponse({"new_profile": Perfiles.objects.get_perfil_dict(new_profile)}, status=status.HTTP_200_OK)
             except:
