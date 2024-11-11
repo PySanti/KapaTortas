@@ -1,6 +1,6 @@
 import DashboardContainer from '../../components/dashboard-container';
 import { DashboardHeader } from '../../components/dashboard-header';
-import PedidoHistorial from '../../components/orden-historial';
+import PedidoHistorial from '../../components/pedido-historial';
 
 export default function OrdenesPage() {
   return (

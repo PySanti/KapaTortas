@@ -7,5 +7,5 @@ export default function DashboardContainer({
   title,
   className,
 }: DashboardContainerProps) {
-  return <div className='py-6 md:py-10 space-y-4'>{children}</div>;
+  return <div className='py-6 md:py-10 px-2 space-y-4'>{children}</div>;
 }
