@@ -5,7 +5,8 @@ ConsultarPerfilAPI,
 CrearPerfilAPI,
 CheckPasswordAPI,
 ActualizarStripeCustomerIdAPI,
-ActivarPerfilAPI
+ActivarPerfilAPI,
+ActivarPerfilByTokenAPI
 )
 
 urlpatterns = [
@@ -13,5 +14,6 @@ urlpatterns = [
     path("crear/", CrearPerfilAPI.as_view()),
     path("actualizar_stripeId/", ActualizarStripeCustomerIdAPI.as_view()),
     path("activar_perfil/", ActivarPerfilAPI.as_view()),
+    path("activar_perfil_by_token/", ActivarPerfilByTokenAPI.as_view()),
     path("<str:email_perfil>/", ConsultarPerfilAPI.as_view()),  # Incluye barra final opcional para consistencia
 ]
