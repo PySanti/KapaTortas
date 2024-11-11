@@ -10,7 +10,6 @@ import {
   LogOut,
   MapPin,
   Package,
-  Settings,
   User,
   type LucideIcon,
 } from 'lucide-react';
@@ -18,7 +17,6 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
-  ajustes: Settings,
   ban: Ban,
   booking: ClipboardPenLine,
   calendario: CalendarDays,

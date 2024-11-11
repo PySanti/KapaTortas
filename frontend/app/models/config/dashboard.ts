@@ -24,9 +24,9 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'direccion',
     },
     {
-      title: 'Ajustes',
-      href: '/dashboard/settings',
-      icon: 'ajustes',
+      title: 'Perfil',
+      href: '/dashboard/ajustes',
+      icon: 'usuario',
     },
   ],
 };
