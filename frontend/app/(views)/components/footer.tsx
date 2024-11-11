@@ -11,7 +11,6 @@ export default function Footer() {
   const [correo, setCorreo] = useState<string>();
   const [fecha, setFecha] = useState<Date | undefined>();
 
-  
   return (
     <footer className="bg-terciary mt-auto w-full bottom-0 left-0 z-10 min-h-fit">
       <div className="container px-4 py-8 mx-auto text-center">
@@ -22,21 +21,20 @@ export default function Footer() {
             <p>Recibe descuentos especiales el día de tu cumpleaños. </p>
             <div className="flex p-2">
               <form className="flex flex-col sm:flex-row gap-3">
-                <Input 
+                <Input
                   variant="footer"
                   type="text"
                   placeholder="Tu Correo*"
                   value={correo}
-                  onChange={ (e) => {
+                  onChange={(e) => {
                     setCorreo(e.target.value);
-                    console.log(correo);
-                  } }
+                  }}
                   className="text-secondary-light"
                 />
-                <DatePicker date={ fecha } setDate={ setFecha } />
-              <Button className="rounded-full hover:bg-primary-light">
-                <SendHorizontal />
-              </Button>
+                <DatePicker date={fecha} setDate={setFecha} />
+                <Button className="rounded-full hover:bg-primary-light">
+                  <SendHorizontal />
+                </Button>
               </form>
             </div>
           </div>
@@ -53,7 +51,7 @@ export default function Footer() {
                 <p>Nosotros</p>
               </Link>
               <Link href="#">
-                <h1>+58 424 218 5034</h1>              
+                <h1>+58 424 218 5034</h1>
               </Link>
             </nav>
           </div>
@@ -62,11 +60,11 @@ export default function Footer() {
           <Link href="#" className="hover:text-white">
             <p className="text-sm">Términos de Servicio</p>
           </Link>
-            {/* <Separator className="my-4" orientation="vertical" /> */}
-            <span className="text-lg text-secondary">|</span>
+          {/* <Separator className="my-4" orientation="vertical" /> */}
+          <span className="text-lg text-secondary">|</span>
           {/* <Divider orientation="vertical" flexItem /> */}
           <Link href="#" className="hover:text-white">
-            <p className="text-sm" >@2024 Kapa Tortas</p>
+            <p className="text-sm">@2024 Kapa Tortas</p>
           </Link>
         </div>
       </div>

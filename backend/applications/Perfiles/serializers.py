@@ -26,3 +26,6 @@ class ActualizarStripeCustomerIdSerializer(serializers.Serializer):
 
 class ActivarPerfilSerializer(serializers.Serializer):
     email = serializers.EmailField()
+
+class ActivarPerfilByTokenSerializer(serializers.Serializer):
+    token = serializers.CharField()

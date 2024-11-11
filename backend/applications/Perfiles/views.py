@@ -7,7 +7,8 @@ ConsultarPerfilSerializer,
 CrearPerfilSerializer,
 CheckPasswordSerializer,
 ActualizarStripeCustomerIdSerializer,
-ActivarPerfilSerializer
+ActivarPerfilSerializer,
+ActivarPerfilByTokenSerializer
 )
 from rest_framework.permissions import (
     AllowAny
@@ -18,6 +19,7 @@ from backend.utils.base_serializercheck_decorator import (base_serializercheck_d
 from django.contrib.auth.hashers import check_password  
 from applications.Perfiles.models import Perfiles
 from backend.utils.send_verification_mail import send_verification_mail
+from django.utils.crypto import get_random_string
 
 
 
@@ -60,8 +62,11 @@ class CrearPerfilAPI(APIView):
                     rol = serialized_data['rol'],
                 )
                 new_profile = new_profile.perfil if serialized_data['rol'] == "cliente" else new_profile
-                send_verification_mail(new_profile.correo, new_profile.nombre_completo)
-                return JsonResponse({"new_profile": Perfiles.objects.get_perfil_dict(new_profile)}, status=status.HTTP_200_OK)
+                verification_token = get_random_string(10)
+                new_profile.verification_token = verification_token
+                new_profile.save()
+                send_verification_mail(new_profile.correo, new_profile.nombre_completo, verification_token)
+                return JsonResponse({"new_profile": Perfiles.objects.get_perfil_dict(new_profile)}, status=status.HTTP_201_CREATED)
             except:
                 return JsonResponse({"error":"unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -122,11 +127,21 @@ class ActivarPerfilAPI(APIView):
 
 
 
+class ActivarPerfilByTokenAPI(APIView):
+    serializer_class        = ActivarPerfilByTokenSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
 
-
-
-
-
-
-
+    @base_serializercheck_decorator
+    def patch(self, request, *args, **kwargs):
+        serialized_data = kwargs['serialized_data']
+        try:
+            if profile := Perfiles.objects.filter(verification_token=serialized_data["token"]):
+                profile[0].is_active = True
+                profile[0].save()
+                return JsonResponse({"activated" : True}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error" : "no_profile_with_token"}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
 
