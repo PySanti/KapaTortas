@@ -1,12 +1,12 @@
 import DashboardContainer from '../../components/dashboard-container';
 import { DashboardHeader } from '../../components/dashboard-header';
 
-export default function DireccionesPage() {
+export default function OrdenesPage() {
   return (
     <DashboardContainer>
       <DashboardHeader
-        heading='Direcciones'
-        description='Edita, elimina o establece una dirección de envío predeterminada'
+        heading='Pedidos'
+        description='Revisa el estado de tus pedidos y realiza cambios si es necesario'
       />
     </DashboardContainer>
   );

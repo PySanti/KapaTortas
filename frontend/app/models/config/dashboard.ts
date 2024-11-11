@@ -14,14 +14,14 @@ export const dashboardConfig: DashboardConfig = {
       icon: 'paquete',
     },
     {
-      title: 'Pagos',
-      href: '/dashboard/pagos',
-      icon: 'tarjeta',
-    },
-    {
       title: 'Direcciones',
       href: '/dashboard/direcciones',
       icon: 'direccion',
+    },
+    {
+      title: 'Pagos',
+      href: '/dashboard/pagos',
+      icon: 'tarjeta',
     },
     {
       title: 'Perfil',
