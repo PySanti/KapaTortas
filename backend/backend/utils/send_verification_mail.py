@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.conf import settings
 
-def mail_html_content(title, content):
+def mail_html_content(title):
     return  """
 <html>
     <head>
@@ -19,6 +19,17 @@ def mail_html_content(title, content):
             .subject{
                 font-weight : 400;
             }
+            #activate_button{
+                background-color : #BD681E;
+                border-radius : 9999px;
+                padding-bottom : 10px;
+                padding: 1.5rem;
+                padding-bottom: 1rem;
+                padding-top: 1rem;
+                font-weight: 700;
+                color: #FFFAEE;
+                border : none;
+            }
         </style>
     </head>
     <body>
@@ -26,10 +37,12 @@ def mail_html_content(title, content):
             %s
         </h3>
         <h3 class="subject">
-            %s
+            <a href='http://localhost:3000/'>
+                <button id="activate_button">Activar</button>
+            </a>
         </h3>
     </body>
-</html>""" % ( title, content);
+</html>""" % ( title);
 
 
 
@@ -39,7 +52,7 @@ def send_verification_mail(correo, username):
     """
     return send_mail(
             subject         =   f"Correo de verificación", 
-            html_message    =  mail_html_content(f"Verifica tu correo, {username}", "¡ prueba !"),
+            html_message    =  mail_html_content(f"Activa tu cuenta, {username}"),
             message         =   "", 
             from_email      =   settings.EMAIL_HOST_USER, 
             recipient_list  =   [correo])
