@@ -4,9 +4,11 @@ from .models import (
     Reviews
 )
 
+
+
 @admin.register(Productos)  
 class ProductosAdmin(admin.ModelAdmin):  
-    list_display = ('titulo', 'stock', "precio", "calorias")  # Agrega los campos que deseas mostrar en el admin  
+    list_display = ('titulo', 'stock', "precio", "calorias", "proporciones")  # Agrega los campos que deseas mostrar en el admin  
 
 
 @admin.register(Reviews)

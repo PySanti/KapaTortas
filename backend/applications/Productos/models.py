@@ -2,7 +2,7 @@ from django.db import models
 from applications.Clientes.models import Clientes
 from .managers import ProductosManager
 from django.contrib.postgres.fields import ArrayField  
-
+from backend.utils.constants import ProporcionesEnum
 
 class Productos(models.Model):
     titulo      = models.CharField(unique=True)
@@ -11,6 +11,11 @@ class Productos(models.Model):
     descripcion = models.TextField(default=None, null=True)
     precio      = models.DecimalField(max_digits=5,decimal_places=2)
     calorias      = models.DecimalField(max_digits=5,decimal_places=2, null=True, default=None)
+    proporciones = ArrayField(  
+        models.CharField(max_length=10, choices=[(tag.value, tag.name) for tag in ProporcionesEnum]),  
+        blank=True,  
+        default=list  
+    )  
 
     objects     = ProductosManager()
 

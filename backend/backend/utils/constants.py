@@ -7,6 +7,12 @@ class RolEnum(Enum):
     EMPLEADO = 'empleado'  
     CLIENTE = 'cliente'
 
+class ProporcionesEnum(Enum):
+    PEQUEÑO = "pequeño"
+    MEDIANO = "mediano"
+    GRANDE = "grande"
+
+
 
 BASE_SERIALIZER_ERROR_RESPONSE = Response({'error' : "serializer_error"}, status.HTTP_400_BAD_REQUEST)
 BASE_PROFILE_SHOWABLE_FIELDS = ("nombre_completo", "numero_telefonico", "fecha_nacimiento", "correo", "id", "link_foto", "rol", "contraseña",  "stripeCustomerId")
