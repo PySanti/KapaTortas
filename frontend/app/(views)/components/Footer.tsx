@@ -30,6 +30,7 @@ export default function Footer() {
                     setCorreo(e.target.value);
                     console.log(correo);
                   } }
+                  className="text-secondary-light"
                 />
                 <DatePicker date={ fecha } setDate={ setFecha } />
               <Button className="rounded-full hover:bg-primary-light">
