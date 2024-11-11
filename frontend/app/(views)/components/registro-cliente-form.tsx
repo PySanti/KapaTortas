@@ -31,6 +31,7 @@ export default function RegistroClienteForm() {
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [successMsg, setSuccessMsg] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
   const form = useForm<registroType>({
     resolver: zodResolver(registroSchema),
@@ -106,6 +107,10 @@ export default function RegistroClienteForm() {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const togglePasswordVisibility2 = () => {
+    setShowPassword2(!showPassword2);
   };
 
   const formVariants = {
@@ -272,7 +277,7 @@ export default function RegistroClienteForm() {
                       <FormControl>
                         <div className='relative'>
                           <Input
-                            type={showPassword ? 'text' : 'password'}
+                            type={showPassword2 ? 'text' : 'password'}
                             placeholder='********'
                             className='pr-10'
                             {...field}
@@ -282,10 +287,10 @@ export default function RegistroClienteForm() {
                             variant='ghost'
                             size='icon'
                             className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
-                            onClick={togglePasswordVisibility}
-                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                            onClick={togglePasswordVisibility2}
+                            aria-label={showPassword2 ? 'Hide password' : 'Show password'}
                           >
-                            {showPassword ? (
+                            {showPassword2 ? (
                               <EyeOff className='h-4 w-4 text-gray-500' />
                             ) : (
                               <Eye className='h-4 w-4 text-gray-500' />

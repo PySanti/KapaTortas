@@ -6,7 +6,13 @@ import { MainButton } from './main-button';
 
 import Logo from '@/components/images/Logo';
 
-export default function Navbar() {
+interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
+  // items?: MainNavItem[];
+  children?: React.ReactNode;
+  // user?: Pick<User, 'name' | 'image' | 'email'>;
+}
+
+export default function Navbar({ className, children }: NavbarProps) {
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-secondary'>
       <div className='grid grid-cols-3 h-25 items-center px-6 sm:px-8 md:px-12 lg:px-16'>
