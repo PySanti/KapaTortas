@@ -23,6 +23,7 @@ export default function Footer() {
             <div className="flex p-2">
               <form className="flex flex-col sm:flex-row gap-3">
                 <Input 
+                  variant="footer"
                   type="text"
                   placeholder="Tu Correo*"
                   value={correo}
