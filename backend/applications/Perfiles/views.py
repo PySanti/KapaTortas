@@ -8,7 +8,8 @@ CrearPerfilSerializer,
 CheckPasswordSerializer,
 ActualizarStripeCustomerIdSerializer,
 ActivarPerfilSerializer,
-ActivarPerfilByTokenSerializer
+ActivarPerfilByTokenSerializer,
+GoogleSocialAuthSerializer
 )
 from rest_framework.permissions import (
     AllowAny
@@ -20,6 +21,7 @@ from django.contrib.auth.hashers import check_password
 from applications.Perfiles.models import Perfiles
 from backend.utils.send_verification_mail import send_verification_mail
 from django.utils.crypto import get_random_string
+from rest_framework.response import Response
 
 
 
@@ -144,4 +146,16 @@ class ActivarPerfilByTokenAPI(APIView):
                 return JsonResponse({"error" : "no_profile_with_token"}, status=status.HTTP_400_BAD_REQUEST)
         except:
             return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoogleSocialAuthView(APIView):
+    serializer_class        = GoogleSocialAuthSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = ((serializer.validated_data)['auth_token'])
+        return Response(data, status=status.HTTP_200_OK)
 
