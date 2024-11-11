@@ -23,6 +23,7 @@ class PerfilesManager(BaseUserManager):
         new_profile =  self._create_user( nombre_completo, password, correo,rol == "administrador" , rol in ["administrador", "empleado"])
         new_profile.rol = rol
         new_profile.save()
+
         if rol == "cliente":
             return Clientes.objects.crear_cliente(perfil=new_profile)
         else:
