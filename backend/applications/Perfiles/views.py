@@ -18,6 +18,7 @@ from backend.utils.base_serializercheck_decorator import (base_serializercheck_d
 from django.contrib.auth.hashers import check_password  
 from applications.Perfiles.models import Perfiles
 from backend.utils.send_verification_mail import send_verification_mail
+from django.utils.crypto import get_random_string
 
 
 
@@ -60,7 +61,8 @@ class CrearPerfilAPI(APIView):
                     rol = serialized_data['rol'],
                 )
                 new_profile = new_profile.perfil if serialized_data['rol'] == "cliente" else new_profile
-                send_verification_mail(new_profile.correo, new_profile.nombre_completo)
+                verification_token = get_random_string(10)
+                send_verification_mail(new_profile.correo, new_profile.nombre_completo, verification_token)
                 return JsonResponse({"new_profile": Perfiles.objects.get_perfil_dict(new_profile)}, status=status.HTTP_200_OK)
             except:
                 return JsonResponse({"error":"unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)

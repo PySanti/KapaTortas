@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.conf import settings
 
-def mail_html_content(title):
+def mail_html_content(title, activation_token):
     return  """
 <html>
     <head>
@@ -37,22 +37,22 @@ def mail_html_content(title):
             %s
         </h3>
         <h3 class="subject">
-            <a href='http://localhost:3000/'>
+            <a href='http://localhost:3000/verify-email?token=%s'>
                 <button id="activate_button">Activar</button>
             </a>
         </h3>
     </body>
-</html>""" % ( title);
+</html>""" % ( title, activation_token);
 
 
 
-def send_verification_mail(correo, username):
+def send_verification_mail(correo, username, activation_token):
     """
         Función creada para enviar mails de verificación de los usuarios
     """
     return send_mail(
             subject         =   f"Correo de verificación", 
-            html_message    =  mail_html_content(f"Activa tu cuenta, {username}"),
+            html_message    =  mail_html_content(f"Activa tu cuenta, {username}", activation_token),
             message         =   "", 
             from_email      =   settings.EMAIL_HOST_USER, 
             recipient_list  =   [correo])
