@@ -25,7 +25,7 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
             <Button
             variant={"ghost"}
             className={cn(
-                "w-[240px] justify-start text-left font-light hover:bg-white hover:bg-opacity-10 border-b-2 rounded-none",
+                "w-[240px] justify-start text-left font-light hover:bg-white hover:bg-opacity-10 border-b-2 rounded-md",
                 !date && "text-muted-foreground "
             )}
             >
