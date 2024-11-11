@@ -53,7 +53,7 @@ python manage.py migrate
 Después de haber hecho todo lo anterior, para correr el proyecto, las próximas veces solo necesitarán tener el entorno virtual activo y correr el siguiente comando (al nivel de la carpeta KapaTortasBackend):
 
 ```
-python3 manage.py runserver
+python manage.py runserver
 ```
 
 
@@ -65,7 +65,7 @@ En django a los administradores se les llama super users. Los super usuarios tie
 Para crear un super usuario corren el siguiente comando en la terminal al nivel del archivo manage.py y con el entorno virtual activo:
 
 ```
-python3 manage.py createsuperuser
+python manage.py createsuperuser
 ```
 
 Eso les abrira un formulario en la terminal para crear un super usuario
