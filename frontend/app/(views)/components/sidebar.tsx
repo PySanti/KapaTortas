@@ -20,26 +20,31 @@ export default function Sidebar({ className, items }: SidebarProps) {
 
   return (
     <nav className={cn('pb-12 hidden md:block', className)}>
-      <div className='px-2 space-y-1'>
+      <div className='px-2 space-y-2'>
         {items.map((item, index) => {
           const Icon = Icons[(item.icon as keyof typeof Icons) || 'ban'];
           return (
             item.title && (
               <Link
                 key={index}
-                className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}
+                className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start group')}
                 href={item.disabled ? '/' : item.href}
               >
                 <span
                   className={cn(
-                    'group flex items-center rounded-md py-2 text-sm hover:text-accent-foreground',
+                    'group flex items-center rounded-md py-2 text-base',
                     path === item.href
-                      ? 'text-foreground font-medium'
+                      ? 'text-terciary font-medium'
                       : 'text-muted-foreground font-normal',
-                    item.disabled && 'cursor-not-allowed opacity-80'
+                    item.disabled && 'cursor-not-allowed opacity-80',
+                    'group-hover:text-terciary'
                   )}
                 >
-                  <Icon className='mr-2 h-4 w-4' />
+                  <Icon
+                    className='mr-2'
+                    size={20}
+                    style={{ width: '1.25rem', height: '1.25rem' }}
+                  />
 
                   <span>{item.title}</span>
                 </span>
