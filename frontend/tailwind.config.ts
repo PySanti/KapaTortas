@@ -34,6 +34,7 @@ const config: Config = {
         },
         terciary: {
           DEFAULT: '#202c39',
+          muted: '#596675',
         },
         card: {
           DEFAULT: 'hsl(var(--card))',

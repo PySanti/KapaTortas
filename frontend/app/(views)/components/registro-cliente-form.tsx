@@ -129,10 +129,10 @@ export default function RegistroClienteForm() {
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
 
   return (
-    <Card className='w-[24rem]'>
+    <Card className='w-[24rem] text-terciary'>
       <CardHeader>
         <CardTitle className='text-lg'>Registro</CardTitle>
-        <CardDescription>
+        <CardDescription className='text-terciary-muted'>
           Ya tienes una cuenta?{' '}
           <Link href={'/login'} className='text-primary font-medium'>
             Login

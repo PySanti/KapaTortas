@@ -4,9 +4,9 @@ export const registroSchema = z
   .object({
     nombre: z
       .string()
-      .min(5, { message: 'Por favor, ingresar nombre y apellido' })
-      .regex(/^[^0-9]+$/, { message: 'Nombre completo no puede contener números.' }),
-    email: z.string().email({ message: 'Por favor, ingresar un email válido' }),
+      .min(5, { message: 'Por favor, ingresa nombre y apellido' })
+      .regex(/^[^0-9]+$/, { message: 'El nombre no puede tener números' }),
+    email: z.string().email({ message: 'Por favor, ingresa un email válido' }),
     password: z.string().min(6, { message: 'La contraseña debe tener al menos 6 caractéres' }),
     confirmPassword: z
       .string()
@@ -26,7 +26,7 @@ export const registroSchema = z
 export type registroType = z.infer<typeof registroSchema>;
 
 export const loginSchema = z.object({
-  email: z.string().email({ message: 'Por favor, ingresar un email válido' }),
+  email: z.string().email({ message: 'Por favor, ingresa un email válido' }),
   password: z.string().min(6, { message: 'La contraseña debe tener al menos 6 caractéres' }),
 });
 
