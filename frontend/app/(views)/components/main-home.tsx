@@ -1,5 +1,5 @@
 import Home from '@/app/(marketing)/page';
-import { MainButton } from './main-button';
+import { MainButton } from './MainButton';
 import Logo from '@/components/images/Logo';
 import Link from 'next/link';
 

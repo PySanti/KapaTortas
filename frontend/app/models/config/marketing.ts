@@ -1,3 +1,13 @@
+import { MarketingConfig } from '..';
+
+export const marketingConfig: MarketingConfig = {
+  mainNav: [
+    { title: 'How it works', href: '/#about' },
+    { title: 'Services', href: '/services' },
+    { title: 'Specialists', href: '/specialists' },
+  ],
+};
+
 type imageType = {
   image: string;
   alt: string;
@@ -12,29 +22,29 @@ export type cakeType = {
 
 export const cakes: cakeType[] = [
   {
-    name: "Chocolate Cake",
+    name: 'Chocolate Cake',
     description:
-      "Deliciosa torta de chocolate con 4 capas esponjosas y relleno cremoso, ¡Perfecta para los amantes del chocolate",
+      'Deliciosa torta de chocolate con 4 capas esponjosas y relleno cremoso, ¡Perfecta para los amantes del chocolate',
     image_torta: {
-      image: "/images/Torta-Chocolate.png",
-      alt: "Torta de Chocolate",
+      image: '/images/Torta-Chocolate.png',
+      alt: 'Torta de Chocolate',
     },
     image_migaja: {
-      image: "/images/miga-Chocolate.png",
-      alt: "Migaja Chocolate",
+      image: '/images/miga-Chocolate.png',
+      alt: 'Migaja Chocolate',
     },
   },
   {
-    name: "Festival",
+    name: 'Festival',
     description:
-      "Colorida y deliciosa torta de 4 capas, decorada con chispitas de colores y relleno cremoso. ¡Pura diversión en cada bocado!",
+      'Colorida y deliciosa torta de 4 capas, decorada con chispitas de colores y relleno cremoso. ¡Pura diversión en cada bocado!',
     image_torta: {
-      image: "/images/Torta-Festival.png",
-      alt: "Torta Festival",
+      image: '/images/Torta-Festival.png',
+      alt: 'Torta Festival',
     },
     image_migaja: {
-      image: "/images/miga-festival.png",
-      alt: "Migaja festival",
+      image: '/images/miga-festival.png',
+      alt: 'Migaja festival',
     },
   },
 ];
