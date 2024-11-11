@@ -19,6 +19,9 @@ const config: Config = {
       screens: {
         xs: '480px',
       },
+      maxWidth: {
+        '8xl': '84rem',
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

@@ -28,9 +28,6 @@ export type TestimonialItem = {
 
 export type MarketingConfig = {
   mainNav: mainNavItem[];
-  features: FeatureItem[];
-  stats: StatItem[];
-  testimonials: TestimonialItem[];
 };
 
 export type SidebarNavItem = {
