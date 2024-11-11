@@ -1,17 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Cliente } from '@/app/models/Cliente';
 import ClienteAPI from '@/app/controladores/api/users/ClienteAPI';
 import MainHome from './main-home';
 import ProductoHome from './producto-home';
 import { cakes } from '@/app/models/config/marketing';
+import { useSmoothScroll } from '@/app/controladores/utilities/useSmoothScroll';
 
 export default function HomePage({}) {
+  const sectionCatalogoRef = useRef<HTMLDivElement>(null);
+  const scrollToSection = useSmoothScroll(sectionCatalogoRef);
+
   return (
     <>
-      <MainHome />
-      <section className='w-full mb-20'>
+      <MainHome scrollToSection={ scrollToSection } />
+      <section ref={ sectionCatalogoRef } className='w-full mb-20'>
         <div className='relative '>
           <div className='m-4 md:m-2 p-6 md:p-8 lg:p-10'>
             <h1 className='text-primary text-4xl lg:text-6xl'>Nuestras Tortas</h1>

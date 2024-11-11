@@ -30,8 +30,8 @@ export default function Product({ product }: { product: Producto }) {
   const [size, setSize] = useState<keyof catalogoType>();
 
   return (
-    <div className="">
-      <div className=" max-w-2xl mx-4 px-8 py-16 pt-6 sm:px-6 sm:py-24 sm:pt-6 sm:mx-8 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+    <div>
+      <div className=" max-w-2xl mx-4 px-8 py-16 pt-6 sm:px-6 sm:py-24 sm:pt-6 sm:mx-8 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:max-w-full">
         {/* Detalles del Producto */}
         <div className="lg:max-w-lg lg:self-end">
           <nav>

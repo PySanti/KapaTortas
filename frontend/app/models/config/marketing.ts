@@ -2,9 +2,9 @@ import { MarketingConfig } from '..';
 
 export const marketingConfig: MarketingConfig = {
   mainNav: [
-    { title: 'How it works', href: '/#about' },
-    { title: 'Services', href: '/services' },
-    { title: 'Specialists', href: '/specialists' },
+    { title: 'Perfil', href: '#' },
+    { title: 'Productos', href: '#' },
+    { title: 'Nosotros', href: '#' },
   ],
 };
 

@@ -2,6 +2,7 @@ import { cakeType } from '@/app/models/config/marketing';
 import Torta from '@/components/images/Torta';
 import { MainButton } from './MainButton';
 import Migaja from '@/components/images/Migaja';
+import Link from 'next/link';
 
 export default function ProductoHome({ item }: { item: cakeType }) {
   return (
@@ -34,12 +35,14 @@ export default function ProductoHome({ item }: { item: cakeType }) {
             <div className='relative sm:flex items-center p-4 space-x-4'>
               <MainButton
                 variant='tertiary'
-                className='text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6'
+                className='hidden text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6'
               >
                 Saber Más
               </MainButton>
-              <MainButton className='hidden md:flex px-5 py-5 sm:text-lg md:px-6 md:py-6 '>
-                Realiza tú Pedido
+              <MainButton className=' text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6'>
+                <Link href="/product/producto">
+                  Realiza tú Pedido
+                </Link>
               </MainButton>
             </div>
           </div>

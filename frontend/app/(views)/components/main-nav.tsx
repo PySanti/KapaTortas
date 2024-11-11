@@ -13,7 +13,6 @@ import { usePathname } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import { MainNavItem } from "@/app/models";
 import { User } from "next-auth";
-import UserDropdown from "./user-dropdown";
 import { MainButton } from "./MainButton";
 import Logo from "@/components/images/Logo";
 
@@ -44,7 +43,7 @@ export default function Navbar({
                 className,
               )}
             >
-              <div className="flex h-20 justify-between items-center mx-6">
+              <div className="flex h-20 justify-between items-center mx-0 sm:mx-4">
                 {/* Left Section - Menu Icon */}
                 <div className="flex items-center">
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-brown-600 hover:bg-brown-100 hover:text-brown-700">
@@ -58,7 +57,7 @@ export default function Navbar({
                       />
                     )}
                   </Disclosure.Button>
-                  <span className="ml-2 text-brown-600 font-semibold">
+                  <span className="ml-2 text-brown-600 font-semibold text-primary">
                     Menú
                   </span>
                 </div>
@@ -72,7 +71,7 @@ export default function Navbar({
 
                 {/* Right Section - Buttons */}
                 <div className="hidden lg:flex items-center justify-end space-x-4">
-                  <MainButton asChild variant="secondary">
+                  <MainButton asChild variant="secondary" className="hidden">
                     <Link href="/catalogo" passHref>
                       Realiza tu Pedido
                     </Link>

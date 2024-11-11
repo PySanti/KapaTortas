@@ -6,7 +6,12 @@ import Link from "next/link";
 import HomePhoto from "@/components/images/HomePhoto";
 import Eyes from "@/components/images/Eyes";
 
-export default function MainHome() {
+interface ScrollButtonProps {
+  scrollToSection: () => void;
+}
+
+export default function MainHome({ scrollToSection }: ScrollButtonProps) {
+
   return (
     <div className="relative">
       <div className="relative w-full h-[75vh]  mx-auto">
@@ -38,9 +43,7 @@ export default function MainHome() {
               seres queridos. Prueba nuestros irresistibles nuevos sabores.
             </p>
             <div className="text-center md:text-left">
-              <Link href="/catalogo">
-                <MainButton variant="secondary">Visita el Catálogo</MainButton>
-              </Link>
+                <MainButton variant="secondary" onClick={ scrollToSection }>Visita el Catálogo</MainButton>
             </div>
           </div>
         </div>
