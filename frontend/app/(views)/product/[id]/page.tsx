@@ -1,10 +1,49 @@
 import { Producto } from "@/app/models/Producto";
 import Product from "../../components/product";
+import { Cliente } from "@/app/models/Cliente";
+import { Role } from "@/app/models/RolEnum";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
     const { id } = params;
 
     // ESTO ES SOLO PARA USARLO POR AHORA ANTES DE NEXTAUTH
+    const sampleCliente: Cliente = {
+        perfil: {
+          id: 1,
+          nombre_completo: "Juan Pérez",
+          correo: "juan.perez@example.com",
+          contraseña: "segura123",  // En producción, evita almacenar contraseñas en texto plano.
+          numero_telefonico: "+1234567890",
+          fecha_nacimiento: "1990-05-15",
+          link_foto: "https://example.com/foto-juan.jpg",
+          rol: Role.CLIENTE, // Asume que el tipo Role es un string o enum con valores como "cliente", "admin", etc.
+          stripeCustomerId: "cus_1234567890ABC",
+          is_active: true,
+          is_staff: false
+        },
+        direcciones: [
+          {
+            ciudad: "Ciudad de México",
+            direccion: "Av. Reforma 123, Col. Centro",
+            referencia: "Cerca del monumento",
+            pais: "México",
+            estado: "CDMX",
+            codigo_postal: "06000",
+            esPreferida: true
+          },
+          {
+            ciudad: "Guadalajara",
+            direccion: "Calle Hidalgo 456, Col. Americana",
+            referencia: "A una cuadra de la glorieta",
+            pais: "México",
+            estado: "Jalisco",
+            codigo_postal: "44100",
+            esPreferida: false
+          }
+        ]
+      };
+      
+
     const sample = { 
         titulo: "Chocolate Cake",
         descripcion: {
@@ -20,11 +59,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             "/images/choco-3.jpg"
         ],
         reviews: [
-            { review: "Buenas torticas", puntuacion: 4 },
-            { review: "Buen Choco", puntuacion: 3 },
-            { review: "Buenas Fest", puntuacion: 2 }
+            { cliente: sampleCliente, review: "Buenas torticas AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", puntuacion: 4 },
+            { cliente: sampleCliente, review: "Buen Choco CHOCOLATEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", puntuacion: 3 },
+            { cliente: sampleCliente, review: "Buenas Fest SAQUENME DE AQUIIIIIIIIIIIIIIIIIIIIIII", puntuacion: 2 }
         ]
     };
+
 
     const testProduct: { [key: string]: Producto } = {
         "producto": sample,

@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { Fragment } from "react";
 
 import { Producto } from "@/app/models/Producto";
-import ProductImage from "@/app/(views)/components/images/ProductImage";
-import GalleryImage from "./images/GalleryImage";
 import Gallery from "./gallery";
+import Stars from "./stars";
 
-import { CheckIcon, StarIcon } from "lucide-react";
+import { CheckIcon, User } from "lucide-react";
 import { IoStar } from "react-icons/io5";
 import { RadioGroup, Label, Field, Radio, TabGroup, Tab, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { Button } from "@/app/(views)/components/ui/button";
@@ -51,34 +50,19 @@ export default function Product({ product, rating }: { product: Producto, rating
             <h2 className="sr-only">Información del Producto</h2>
 
 
+            {/* Precio y Estrellas */}
             <div className="flex items-center">
               <p className="text-3xl text-terciary tracking-tight">
                 ${product.precio}
               </p>
 
               <div className="ml-4 border-l border-terciary pl-4">
-                <div className="flex items-center">
-                  <div>
-                    <div className="flex items.center">
-                      {[0, 1, 2, 3, 4].map((item) => (
-                            <IoStar 
-                              key={item}
-                              className={classNames(
-                                stars > item ? "text-yellow-400" : 'text-gray-300',
-                                'h-5, w-5 flex-shrink-0 text-lg'
-                              )}
-                              aria-hidden="true"
-                              />
-                          ))
-                      }
-                      <p className="ml-2 text-base text-terciary">{product.reviews?.length} reviews</p>
-                    </div>
 
-                  </div>
-
-                </div>
+                <Stars rating={ stars } label={ `${product.reviews?.length} reviews` } />                
               </div>
             </div>
+
+            {/* Descripcion del producto */}
 
             <div className="mt-4 space-y-6">
               <p className="text-terciary text-base">
@@ -86,6 +70,7 @@ export default function Product({ product, rating }: { product: Producto, rating
               </p>
             </div>
 
+            {/* Verifica si el producto esta en stock */}
             <div className="mt-6 flex items-center">
               { product.stock > 0  ?  
               <>
@@ -177,6 +162,57 @@ export default function Product({ product, rating }: { product: Producto, rating
 
 
         {/* Reviews */}
+
+        <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
+              <TabGroup as="div">
+                <div className="border-b border-secondary-light" >
+                  <TabList className="-mb-px flex space-x-8">
+                    <Tab
+                      className={({ selected }) => 
+                        classNames(
+                          selected 
+                          ? " border-primary-light text-primary-light"
+                          : "border-transparent text-terciary hover:border-primary-light hover:text-terciary",
+                          "whitespace-nowrap border-b-2 py-6 text-sm font-medium"
+                        )
+                      }
+                    >
+                      Reviews
+                    </Tab>
+                    
+                  </TabList>
+                </div>
+
+
+                  {/* Reviews completas */}
+                <TabPanels as={Fragment}>
+                  <TabPanel className="-mb-10">
+                    <h3 className="sr-only">Reviews</h3>
+                      {product.reviews?.map((item, index) => (
+                        <div key={index} className="flex space-x-4 text-base text-terciary">
+                          {/* Icon */}
+                          <div className="flex-none py-10">
+                            <User className="text-terciary text-lg" />
+                          </div>
+
+                          <div className={classNames(index === 0 ? "" : 'border-t border-primary-light', 'py-10')}>
+                            <h3 className="font-medium text-terciary">{item.cliente.perfil.nombre_completo}</h3>
+                            <Stars rating={ item.puntuacion } label="Puntuación" />
+                            
+                            <div
+                                 className="prose prose-sm mt-4 max-w-none text-gray-500"
+                              dangerouslySetInnerHTML={{ __html: item.review }}
+                            />
+
+                          </div>
+
+                        </div>
+                      ))}
+                  </TabPanel>
+                </TabPanels>
+
+              </TabGroup>
+        </div>
       </div>
     </div>
   );
