@@ -9,7 +9,9 @@ CheckPasswordSerializer,
 ActualizarStripeCustomerIdSerializer,
 ActivarPerfilSerializer,
 ActivarPerfilByTokenSerializer,
-GoogleSocialAuthSerializer
+GoogleSocialAuthSerializer,
+SendVerificationMailSerializer
+
 )
 from rest_framework.permissions import (
     AllowAny
@@ -171,4 +173,26 @@ class GoogleSocialAuthView(APIView):
         serializer.is_valid(raise_exception=True)
         data = ((serializer.validated_data)['auth_token'])
         return Response(data, status=status.HTTP_200_OK)
+
+
+
+class SendVerificationMailAPI(APIView):
+    serializer_class        = SendVerificationMailSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    @base_serializercheck_decorator
+    def post(self, request, *args, **kwargs):
+        serialized_data = kwargs['serialized_data']
+        if cliente:=Clientes.objects.filter(perfil__correo=serialized_data["email"]):
+            try:
+                cliente = cliente[0]
+                cliente.verification_token = VerificationToken.objects.create()
+                cliente.save()
+                send_verification_mail(cliente.perfil.correo, cliente.perfil.nombre_completo, cliente.verification_token.token)
+                return JsonResponse({"email_sent" : True}, status=status.HTTP_200_OK)
+            except:
+                return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return JsonResponse({"error" : "no_cliente_with_email"}, status=status.HTTP_400_BAD_REQUEST)
 

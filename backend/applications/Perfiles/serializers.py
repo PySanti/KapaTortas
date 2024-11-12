@@ -53,3 +53,6 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
         provider = 'google'
         return register_social_user(
             provider=provider, email=email, name=name)
+
+class SendVerificationMailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
