@@ -6,10 +6,15 @@ import { Trash } from 'lucide-react';
 
 interface DireccionEnvioCardProps extends React.HTMLAttributes<HTMLDivElement> {
   nombreCompleto: string;
+  numeroTelefono: string;
   direccion: DireccionEnvio;
 }
 
-export default function DireccionEnvioCard({ nombreCompleto, direccion }: DireccionEnvioCardProps) {
+export default function DireccionEnvioCard({
+  nombreCompleto,
+  numeroTelefono,
+  direccion,
+}: DireccionEnvioCardProps) {
   return (
     <Card className='max-w-xl'>
       <CardHeader>
@@ -24,8 +29,8 @@ export default function DireccionEnvioCard({ nombreCompleto, direccion }: Direcc
       </CardHeader>
       <CardContent className='space-y-2'>
         <p className='text-terciary text-sm'>{nombreCompleto}</p>
-        <p className='text-terciary text-sm'>{`${direccion.direccion_1} ${direccion.direccion_2}, ${direccion.ciudad}, ${direccion.estado}, ${direccion.codigo_postal}`}</p>
-        <p className='text-terciary text-sm'>{direccion.numero_telefono}</p>
+        <p className='text-terciary text-sm'>{`${direccion.direccion} ${direccion.referencia}, ${direccion.ciudad}, ${direccion.estado}, ${direccion.codigo_postal}`}</p>
+        <p className='text-terciary text-sm'>{numeroTelefono}</p>
       </CardContent>
       <CardFooter className='flex items-center gap-x-2'>
         <Button className='bg-white text-terciary hover:bg-gray-50 border-2'>Editar</Button>
