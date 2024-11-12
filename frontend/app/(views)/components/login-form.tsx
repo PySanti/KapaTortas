@@ -63,7 +63,7 @@ export default function LoginForm() {
   return (
     <Card className='w-[24rem]'>
       <CardHeader>
-        <CardTitle>Welcome back</CardTitle>
+        <CardTitle>Bienvenido de vuelta</CardTitle>
         <CardDescription>
           No tienes una cuenta?{' '}
           <Link href={'/register'} className='text-primary font-medium'>
@@ -83,7 +83,7 @@ export default function LoginForm() {
                   <FormControl>
                     <Input
                       type='email'
-                      placeholder='jdoe@gmail.com'
+                      placeholder='lmessi@gmail.com'
                       disabled={isPending}
                       {...field}
                     />
@@ -106,7 +106,7 @@ export default function LoginForm() {
                     className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'px-0 font-sm')}
                     href='/reset-password'
                   >
-                    Forgot password?
+                    Olvidaste tu contraseña?
                   </Link>
                 </FormItem>
               )}
@@ -116,14 +116,14 @@ export default function LoginForm() {
             <FormSuccessMessage message={successMsg} />
             <div className='flex flex-col gap-6'>
               <Button disabled={isPending} type='submit' className='w-full'>
-                Sign in with email
+                Inicia sesión con email
               </Button>
               <div className='relative'>
                 <div className='absolute inset-0 flex items-center'>
                   <span className='w-full border-t' />
                 </div>
                 <div className='relative flex justify-center text-xs uppercase'>
-                  <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
+                  <span className='bg-background px-2 text-muted-foreground'>O continúa con</span>
                 </div>
               </div>
               <Button
