@@ -65,8 +65,7 @@ class CrearPerfilAPI(APIView):
                     rol = serialized_data['rol'],
                 )
                 if (serialized_data["rol"] == "cliente"):
-                    new_profile.verification_token = VerificationToken()
-                    new_profile.verification_token.save()
+                    new_profile.verification_token = VerificationToken.objects.create()
                     new_profile.save()
                     send_verification_mail(new_profile.perfil.correo, new_profile.perfil.nombre_completo, new_profile.verification_token.token)
                 new_profile = new_profile.perfil if serialized_data['rol'] == "cliente" else new_profile
