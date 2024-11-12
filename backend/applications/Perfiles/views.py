@@ -22,6 +22,7 @@ from applications.Perfiles.models import Perfiles
 from backend.utils.send_verification_mail import send_verification_mail
 from rest_framework.response import Response
 from applications.Clientes.models import VerificationToken
+from applications.Clientes.models import Clientes
 
 
 
@@ -138,12 +139,16 @@ class ActivarPerfilByTokenAPI(APIView):
     def patch(self, request, *args, **kwargs):
         serialized_data = kwargs['serialized_data']
         try:
-            if profile := Perfiles.objects.filter(verification_token=serialized_data["token"]):
-                profile[0].is_active = True
-                profile[0].save()
-                return JsonResponse({"activated" : True}, status=status.HTTP_200_OK)
+            if cliente := Clientes.objects.filter(verification_token__token=serialized_data["token"]):
+                if not cliente.verification_token.is_expired():
+                    cliente.perfil.is_active = True
+                    cliente.perfil.save()
+                    cliente.save()
+                    return JsonResponse({"activated" : True}, status=status.HTTP_200_OK)
+                else:
+                    return JsonResponse({"error" : "token_expired"}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return JsonResponse({"error" : "no_profile_with_token"}, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse({"error" : "no_cliente_with_token"}, status=status.HTTP_400_BAD_REQUEST)
         except:
             return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
 
