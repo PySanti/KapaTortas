@@ -10,8 +10,7 @@ def register_social_user(provider, email, name):
     filtered_user_by_email = Clientes.objects.filter(perfil__correo=email)
     if filtered_user_by_email.exists():
         if provider == filtered_user_by_email[0].auth_provider:
-            registered_user = Perfiles.objects.get(correo=email)
-            # que conio es SOCIAL_SECRET
+            registered_user = filtered_user_by_email[0].perfil
             registered_user.check_password(settings.SOCIAL_SECRET) 
             Token.objects.filter(user=registered_user).delete()
             Token.objects.create(user=registered_user)

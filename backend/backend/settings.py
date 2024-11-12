@@ -143,3 +143,8 @@ EMAIL_HOST_USER     = "kapatortas@gmail.com"
 EMAIL_HOST_PASSWORD = secret_data['EMAIL_PASSWORD']
 DEFAULT_FROM_EMAIL = 'kapatortas@gmail.com'  # El correo electrónico que se usará como remitente por defecto  
 
+# GOOGLE CLOUD
+
+GOOGLE_CLIENT_ID = secret_data['GOOGLE_CLOUD_ID']
+SOCIAL_SECRET = secret_data["AUTH_SECRET"]
+AUTH_GOOGLE_SECRET =  secret_data["AUTH_GOOGLE_SECRET"]
