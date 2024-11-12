@@ -16,5 +16,6 @@ class ClientesManager(BaseUserManager):
         return {
             'perfil' : Perfiles.objects.get_perfil_dict(cliente.perfil),
             'direcciones' : self.get_formated_direcciones_dict(cliente.direcciones.all()),
+            'direccion_preferida' : {k:v for k,v in cliente.direccion_preferida.__dict__.items() if k in BASE_DIRECCIONES_SHOWABLE_FIELDS}
         }
         
