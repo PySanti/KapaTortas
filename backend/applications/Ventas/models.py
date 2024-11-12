@@ -11,7 +11,7 @@ from backend.utils.constants import (
 )
 
 class Pedidos(models.Model):
-    numero_de_orden         = models.IntegerField()
+    numero_de_orden         = models.IntegerField(unique=True, blank=False, null=False)
     productos_asociados     = models.ManyToManyField(Productos, related_name='pedidos') # con el related_name podremos ver a cuales ventas pertenece cada producto
     cliente_asociado        = models.ForeignKey(Clientes, on_delete=models.SET_NULL, null=True, related_name="pedidos")
     monto_total             = models.DecimalField(max_digits=7, decimal_places=2)

@@ -10,6 +10,7 @@ from openpyxl import Workbook
 from io import BytesIO  
 from django.http import HttpResponse
 from applications.Productos.models import Productos
+from applications.Clientes.models import Clientes
 
 
 class FechaVentasFilter(admin.SimpleListFilter):  
@@ -46,11 +47,27 @@ class ProductoFilter(admin.SimpleListFilter):
         return queryset  
 
 
+class ClienteFilter(admin.SimpleListFilter):  
+    title = 'Clientes asociados'  
+    parameter_name = 'clientes_asociados'  
+
+    def lookups(self, request, model_admin):  
+        clientes = Clientes.objects.all()  
+        return [(c.id, c.perfil.nombre_completo) for c in clientes]  
+
+    def queryset(self, request, queryset):  
+        if self.value():  
+            return queryset.filter(cliente_asociado__id=self.value())  
+        return queryset  
+
 
 @admin.register(Pedidos)  
 class PedidosAdmin(admin.ModelAdmin):  
-    list_display = ('numero_de_orden',  'monto_total', 'productos', 'metodo_entrega', 'metodo_pago', 'estado')  
-    list_filter = (ProductoFilter,)  
+    list_display = ('numero_de_orden',  'monto_total', 'productos', 'metodo_entrega', 'metodo_pago', 'estado', 'cliente_asociado')  
+    list_filter = (ProductoFilter, ClienteFilter)  
+    def cliente_asociado(self, obj):
+        return obj.cliente_asociado.perfil.nombre_completo
+
     def productos(self, obj):  
         productos_str = []  
         for p in obj.productos_asociados.all():  
