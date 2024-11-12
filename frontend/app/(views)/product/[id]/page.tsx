@@ -18,7 +18,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             "/images/Torta-Chocolate.png"
         ],
         reviews: [
-            "Buenas torticas"
+            { review: "Buenas torticas", puntuacion: 4 },
+            { review: "Buen Choco", puntuacion: 3 },
+            { review: "Buenas Fest", puntuacion: 2 }
         ]
     };
 
@@ -26,6 +28,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         "producto": sample,
     }
     const product: Producto = testProduct[id];
+
+    // Esto debería suceder en el back
+    const rating: number | undefined =  product?.reviews ? product.reviews.reduce((sum, item) => sum + item.puntuacion, 0) / product.reviews.length : undefined;
 
     if(!product) {
         return (
@@ -36,7 +41,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
     return (
         <div className='py-2 md:py-10 space-y-4'>
-            <Product product={ product } />
+            <Product product={ product } rating={ rating } />
         </div>
     )
 }
