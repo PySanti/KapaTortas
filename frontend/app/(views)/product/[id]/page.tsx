@@ -1,7 +1,7 @@
 import { Categoria, Producto } from "@/app/models/Producto";
 import Product from "../../components/product";
 import { Cliente } from "@/app/models/Cliente";
-import { Role } from "@/app/models/RolEnum";
+import { Rol } from "@/app/models/RolEnum";
 
 
     // ESTO ES SOLO PARA USARLO POR AHORA ANTES DE NEXTAUTH
@@ -14,7 +14,7 @@ import { Role } from "@/app/models/RolEnum";
           numero_telefonico: "+1234567890",
           fecha_nacimiento: "1990-05-15",
           link_foto: "https://example.com/foto-juan.jpg",
-          rol: Role.CLIENTE, // Asume que el tipo Role es un string o enum con valores como "cliente", "admin", etc.
+          rol: Rol.CLIENTE, // Asume que el tipo RolEnum es un string o enum con valores como "cliente", "admin", etc.
           stripeCustomerId: "cus_1234567890ABC",
           is_active: true,
           is_staff: false
