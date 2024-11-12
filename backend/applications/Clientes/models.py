@@ -19,10 +19,11 @@ class VerificationToken(models.Model):
 
 
 class DireccionesEnvio(models.Model):
-    direccion_1     = models.CharField()
-    direccion_2     = models.CharField()
     pais            = models.CharField(default="VENEZUELA")
     estado          = models.CharField()
+    ciudad          = models.CharField()
+    direccion       = models.CharField()
+    referencia      = models.CharField(null=True, blank=True)
     codigo_postal   = models.IntegerField()
 
     def __str__(self):
@@ -35,6 +36,7 @@ class DireccionesEnvio(models.Model):
 class Clientes(models.Model):  
     perfil              =   models.OneToOneField(Perfiles, on_delete=models.CASCADE)
     direcciones         =   models.ManyToManyField(DireccionesEnvio)
+    direccion_preferida =   models.ForeignKey(DireccionesEnvio, related_name="clientes_preferidos", on_delete=models.SET_NULL, null=True)
     auth_provider       =   models.CharField(max_length=50, default="google")
     verification_token  =   models.OneToOneField(VerificationToken, on_delete=models.SET_NULL, null=True, blank=True)
 
