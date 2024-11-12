@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { newVerification } from '@/app/controladores/actions/new-verification';
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/controladores/lib/utils';
 import { buttonVariants } from '@/app/(views)/components/ui/button';
 import Link from 'next/link';
 import { Icons } from './icons';
