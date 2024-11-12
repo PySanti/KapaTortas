@@ -1,9 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/app/(views)/components/ui/button';
+import { Input } from '@/app/(views)/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/(views)/components/ui/card';
 import {
   Form,
   FormControl,
@@ -11,9 +11,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/app/(views)/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { registroSchema, registroType } from '@/lib/validations/auth';
+import { registroSchema, registroType } from '@/app/controladores/lib/validations/auth';
 import Link from 'next/link';
 import { Icons } from './icons';
 import { useRouter } from 'next/navigation';

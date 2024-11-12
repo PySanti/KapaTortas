@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/app/(views)/components/ui/dropdown-menu';
 import { User } from 'next-auth';
 import UserAvatar from './user-avatar';
 import Link from 'next/link';

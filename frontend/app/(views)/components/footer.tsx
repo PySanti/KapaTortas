@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { SendHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/(views)/components/ui/button";
 import { DatePicker } from "./date-picker";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/app/(views)/components/ui/input";
 
 export default function Footer() {
   const [correo, setCorreo] = useState<string>();

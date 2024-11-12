@@ -1,4 +1,4 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/app/(views)/components/ui/tooltip';
 import { ChevronDown } from 'lucide-react';
 
 interface DisplayOnHoverProps extends React.HTMLAttributes<HTMLDivElement> {

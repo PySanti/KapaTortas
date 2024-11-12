@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/controladores/lib/utils";
 import {
   Disclosure,
   DisclosurePanel,
@@ -10,11 +10,11 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/app/(views)/components/ui/button";
 import { MainNavItem } from "@/app/models";
 import { User } from "next-auth";
 import { MainButton } from "./MainButton";
-import Logo from "@/components/images/Logo";
+import Logo from "@/app/(views)/components/images/Logo";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: MainNavItem[];

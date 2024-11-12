@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/(views)/components/ui/button";
 
 type ButtonVariant = "primary" | "secondary" | "tertiary";
 

@@ -1,10 +1,10 @@
 import Home from "@/app/(marketing)/page";
 import { MainButton } from "./MainButton";
-import Logo from "@/components/images/Logo";
+import Logo from "@/app/(views)/components/images/Logo";
 import Link from "next/link";
 
-import HomePhoto from "@/components/images/HomePhoto";
-import Eyes from "@/components/images/Eyes";
+import HomePhoto from "@/app/(views)/components/images/HomePhoto";
+import Eyes from "@/app/(views)/components/images/Eyes";
 
 interface ScrollButtonProps {
   scrollToSection: () => void;

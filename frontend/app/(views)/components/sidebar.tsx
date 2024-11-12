@@ -1,7 +1,7 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/app/controladores/lib/utils';
+import { buttonVariants } from '@/app/(views)/components/ui/button';
 import { SidebarNavItem } from '@/app/models';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';

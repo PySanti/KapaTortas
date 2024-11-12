@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { buttonVariants } from '@/app/(views)/components/ui/button';
+import { cn } from '@/app/controladores/lib/utils';
 import { Icons } from '../components/icons';
 
 export default function AuthLayout({

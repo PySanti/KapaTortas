@@ -1,7 +1,7 @@
 import { cakeType } from '@/app/models/config/marketing';
-import Torta from '@/components/images/Torta';
+import Torta from '@/app/(views)/components/images/Torta';
 import { MainButton } from './MainButton';
-import Migaja from '@/components/images/Migaja';
+import Migaja from '@/app/(views)/components/images/Migaja';
 import Link from 'next/link';
 
 export default function ProductoHome({ item }: { item: cakeType }) {

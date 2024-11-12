@@ -1,7 +1,7 @@
 import { DireccionEnvio } from '@/app/models/Cliente';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader } from '@/app/(views)/components/ui/card';
+import { Separator } from '@/app/(views)/components/ui/separator';
+import { Button } from '@/app/(views)/components/ui/button';
 import { Trash } from 'lucide-react';
 
 interface DireccionEnvioCardProps extends React.HTMLAttributes<HTMLDivElement> {

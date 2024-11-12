@@ -3,10 +3,10 @@
 import { useState } from "react";
 
 import { Producto } from "@/app/models/Producto";
-import ProductImage from "@/components/images/ProductImage";
+import ProductImage from "@/app/(views)/components/images/ProductImage";
 import { CheckIcon } from "lucide-react";
 import { RadioGroup } from "@headlessui/react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/(views)/components/ui/button";
 
 // Funcion para agilizar la puesta de todos los classNames
 function classNames(...classes: (string | undefined | false)[]): string {

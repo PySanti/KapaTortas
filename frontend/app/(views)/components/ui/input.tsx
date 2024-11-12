@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/controladores/lib/utils';
 
 interface InputProps extends React.ComponentProps<'input'> {
   variant?: inputVariant; // Define any variants you want

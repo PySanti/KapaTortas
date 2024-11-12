@@ -1,5 +1,5 @@
 import { User } from 'next-auth';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/app/(views)/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
 type UserAvatarProps = {
