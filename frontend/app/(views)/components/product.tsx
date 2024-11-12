@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 import { Producto } from "@/app/models/Producto";
 import ProductImage from "@/app/(views)/components/images/ProductImage";
 import { CheckIcon, StarIcon } from "lucide-react";
 import { IoStar } from "react-icons/io5";
-import { RadioGroup } from "@headlessui/react";
+import { RadioGroup, Label, Field, Radio, TabGroup, Tab, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { Button } from "@/app/(views)/components/ui/button";
+import { CircleX } from "lucide-react";
+import GalleryImage from "./images/GalleryImage";
 
 // Funcion para agilizar la puesta de todos los classNames
 function classNames(...classes: (string | undefined | false)[]): string {
@@ -70,7 +73,7 @@ export default function Product({ product, rating }: { product: Producto, rating
                               />
                           ))
                       }
-                      <p className="ml-2 text-sm text-terciary">{product.reviews?.length} reviews</p>
+                      <p className="ml-2 text-base text-terciary">{product.reviews?.length} reviews</p>
                     </div>
 
                   </div>
@@ -86,28 +89,82 @@ export default function Product({ product, rating }: { product: Producto, rating
             </div>
 
             <div className="mt-6 flex items-center">
-              <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" />
-              <p className="ml-2 text-sm text-terciary opacity-80">
-                Disponible
-              </p>
+              { product.stock > 0  ?  
+              <>
+                <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" />
+                <p className="ml-2 text-sm text-terciary opacity-80">
+                  Disponible
+                </p>
+              </>
+              : 
+              <>
+              <CircleX className="h-5 w-5 flex-shrink-0 text-red-500" /> 
+                <p className="ml-2 text-sm text-terciary opacity-80">
+                No está Disponible
+                </p> 
+              </>
+              }
             </div>
           </section>
         </div>
 
-        {/* Imagen */}
-        <div className="mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center">
-          <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg">
-            {/* <Image */}
-            <ProductImage
-              path={
-                product.imagenes && product.imagenes.length > 0
-                  ? product.imagenes[0]
-                  : "/images/Torta-Chocolate.png"
-              }
-              alt={product.titulo}
-            />
-          </div>
-        </div>
+         {/* Galeria */}
+
+         <TabGroup 
+        as="div" 
+        className="flex flex-col-reverse lg:col-start-2 lg:col-span-2 lg:row-start-1 lg:row-span-2"
+        >
+            <div className="mx-auto mt-6 w-full max-w-2xl sm:block lg:max-w-none text-center justify-self-center">
+                <TabList 
+                // className="grid grid-cols-3 gap-6"
+                  className={` grid grid-cols-3 gap-6 `}
+                >
+                    { product.imagenes && product.imagenes.length > 0 && product.imagenes.map((image, index) => (
+                      <Tab
+                        key={index}
+                        className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-secondary-light text-sm font-medium uppercase text-terciary hover:bg-opacity-80 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+                      >
+                        {({ selected }) => (
+                          <>
+                            <span className="absolute inset-0 overflow-hidden rounded-md">
+                              <GalleryImage
+                                  path={ image }
+                                  alt={ product?.titulo }
+                                  className="h-full w-full object-cover object-center"
+                              />
+                            </span>
+                            <span
+                              className={ classNames(
+                                selected ? "ring-primary" : 'ring-transparent', 
+                                  'pointer-events-none aboluste inset-0 rounded-md ring-2 ring-offset-2'
+                              )}
+                              aria-hidden="true"
+                            />
+                          </>
+                        ) }
+                        
+                      </Tab>
+                    )) }
+                  </TabList>
+            </div>
+
+            <TabPanels  
+             className="aspect-h-1 aspect-w-1 w-full"
+            >
+              {  product.imagenes && product.imagenes.map((image, index) => (
+                <TabPanel key={index}>
+                  <ProductImage
+                    path={image}
+                    alt={ product?.titulo }
+                    className="h-full w-full sm:rounded-lg"
+                    />
+                </TabPanel>
+              )) }
+            </TabPanels>
+
+
+        </TabGroup>
+
 
         {/* Producto Info */}
         <div className="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
@@ -115,40 +172,40 @@ export default function Product({ product, rating }: { product: Producto, rating
             <form>
               <div className="sm:flex sm:justify-between">
                 <RadioGroup value={size} onChange={setSize}>
-                  <RadioGroup.Label className="block text-sm font-medium">
+                  <Label className="block text-sm font-medium">
                     Size
-                  </RadioGroup.Label>
+                  </Label>
                   <div className="mt-1 grid grid-cols-1 gap-4 items-center sm:grid-cols-2">
                     {product.proporcion.map((size, index) => (
-                      <RadioGroup.Option
+                      <Radio
                         as="div"
                         key={index}
                         value={size}
-                        className={({ active }) =>
+                        className={({ checked }) =>
                           classNames(
-                            active ? "ring-2 ring-indigo-500" : "",
+                            checked ? "ring-2 ring-indigo-500" : "",
                             "relative block cursor-pointer rounded-lg border border-gray-300 p-4 focus:outline-none",
                           )
                         }
                       >
-                        {({ active, checked }) => (
+                        {({ checked, disabled }) => (
                           <>
-                            <RadioGroup.Label
+                            <Label
                               as="p"
                               className="text-base font-medium text-terciary"
                             >
                               {size}
-                            </RadioGroup.Label>
-                            <RadioGroup.Description
+                            </Label>
+                            <Label
                               as="p"
                               className="mt-1 text-sm text-terciary"
                             >
                               {catalogoDefault[size as keyof catalogoType]}
-                            </RadioGroup.Description>
+                            </Label>
                             <div
                               className={classNames(
-                                active ? "border" : "border-2",
-                                checked
+                                checked ? "border" : "border-2",
+                                disabled
                                   ? "border-indigo-500"
                                   : "border-transparent",
                                 "pointer-events-none absolute -inset-px rounded-lg",
@@ -157,7 +214,7 @@ export default function Product({ product, rating }: { product: Producto, rating
                             />
                           </>
                         )}
-                      </RadioGroup.Option>
+                      </Radio>
                     ))}
                   </div>
                 </RadioGroup>
@@ -173,6 +230,9 @@ export default function Product({ product, rating }: { product: Producto, rating
             </form>
           </section>
         </div>
+
+
+        {/* Reviews */}
       </div>
     </div>
   );

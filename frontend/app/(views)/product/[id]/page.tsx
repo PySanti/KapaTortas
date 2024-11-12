@@ -15,7 +15,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         stock: 22,
         proporcion: ['pequeña', "mediana", "grande"],
         imagenes: [
-            "/images/Torta-Chocolate.png"
+            "/images/Torta-Chocolate.png",
+            "/images/choco-2.jpg",
+            "/images/choco-3.jpg"
         ],
         reviews: [
             { review: "Buenas torticas", puntuacion: 4 },
@@ -40,7 +42,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     // ////////////
 
     return (
-        <div className='py-2 md:py-10 space-y-4'>
+        <div className='py-2 md:py-10 space-y-4 '>
             <Product product={ product } rating={ rating } />
         </div>
     )
