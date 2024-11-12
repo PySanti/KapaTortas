@@ -4,7 +4,8 @@ import { useState } from "react";
 
 import { Producto } from "@/app/models/Producto";
 import ProductImage from "@/app/(views)/components/images/ProductImage";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, StarIcon } from "lucide-react";
+import { IoStar } from "react-icons/io5";
 import { RadioGroup } from "@headlessui/react";
 import { Button } from "@/app/(views)/components/ui/button";
 
@@ -26,8 +27,9 @@ const catalogoDefault: catalogoType = {
   grande: "Para compartir con la familia.",
 };
 
-export default function Product({ product }: { product: Producto }) {
+export default function Product({ product, rating }: { product: Producto, rating: number | undefined }) {
   const [size, setSize] = useState<keyof catalogoType>();
+  const stars: number = rating != undefined ? Math.round(rating) : 0;
 
   return (
     <div>
@@ -46,9 +48,36 @@ export default function Product({ product }: { product: Producto }) {
 
           <section aria-labelledby="informacion" className="mt-4">
             <h2 className="sr-only">Información del Producto</h2>
-            <p className="text-3xl text-terciary tracking-tight">
-              ${product.precio}
-            </p>
+
+
+            <div className="flex items-center">
+              <p className="text-3xl text-terciary tracking-tight">
+                ${product.precio}
+              </p>
+
+              <div className="ml-4 border-l border-terciary pl-4">
+                <div className="flex items-center">
+                  <div>
+                    <div className="flex items.center">
+                      {[0, 1, 2, 3, 4].map((item) => (
+                            <IoStar 
+                              key={item}
+                              className={classNames(
+                                stars > item ? "text-yellow-400" : 'text-gray-300',
+                                'h-5, w-5 flex-shrink-0 text-lg'
+                              )}
+                              aria-hidden="true"
+                              />
+                          ))
+                      }
+                      <p className="ml-2 text-sm text-terciary">{product.reviews?.length} reviews</p>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
 
             <div className="mt-4 space-y-6">
               <p className="text-terciary text-base">

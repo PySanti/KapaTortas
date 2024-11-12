@@ -2,6 +2,10 @@ type descType = {
     caracteristicas: string, calorias: number
 }
 
+type Review = {
+    review: string, puntuacion: number,
+}
+
 export interface Producto {
     titulo: string,
     descripcion: descType,
@@ -9,5 +13,5 @@ export interface Producto {
     stock: number,
     proporcion: string[],
     imagenes?: string[],
-    reviews?: string[],
+    reviews?: Review[],
 }
