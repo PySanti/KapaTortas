@@ -1,7 +1,8 @@
 import { DireccionEnvio } from '@/app/models/Cliente';
 import DashboardContainer from '../../components/dashboard-container';
 import { DashboardHeader } from '../../components/dashboard-header';
-import DireccionEnvioCard from '../../components/direccion-envio-card';
+import DireccionEnvioCard from '../../components/dashboard-card';
+import DashboardCard from '../../components/dashboard-card';
 
 const sampleAddress: DireccionEnvio = {
   ciudad: 'Montreal',
@@ -40,36 +41,26 @@ export default function DireccionesPage() {
         heading='Direcciones'
         description='Edita, elimina o establece una dirección de envío predeterminada'
       />
-      <DireccionEnvioCard
-        nombreCompleto={cliente.nombre_completo}
-        direccion={sampleAddress}
-        numeroTelefono={cliente.numeroTelefono}
-      />
-      <DireccionEnvioCard
-        nombreCompleto={cliente2.nombre_completo}
-        direccion={sampleAddress2}
-        numeroTelefono={cliente2.numeroTelefono}
-      />
-      <DireccionEnvioCard
-        nombreCompleto={cliente.nombre_completo}
-        direccion={sampleAddress}
-        numeroTelefono={cliente.numeroTelefono}
-      />
-      <DireccionEnvioCard
-        nombreCompleto={cliente.nombre_completo}
-        direccion={sampleAddress}
-        numeroTelefono={cliente.numeroTelefono}
-      />
-      <DireccionEnvioCard
-        nombreCompleto={cliente.nombre_completo}
-        direccion={sampleAddress}
-        numeroTelefono={cliente.numeroTelefono}
-      />
-      <DireccionEnvioCard
-        nombreCompleto={cliente.nombre_completo}
-        direccion={sampleAddress}
-        numeroTelefono={cliente.numeroTelefono}
-      />
+      <DashboardCard highlight='Dirección de envío preferida' editable deletable>
+        <p className='text-terciary text-sm'>{cliente.nombre_completo}</p>
+        <p className='text-terciary text-sm'>{`${sampleAddress.direccion} ${sampleAddress.referencia}, ${sampleAddress.ciudad}, ${sampleAddress.estado}, ${sampleAddress.codigo_postal}`}</p>
+        <p className='text-terciary text-sm'>{cliente.numeroTelefono}</p>
+      </DashboardCard>
+      <DashboardCard editable deletable>
+        <p className='text-terciary text-sm'>{cliente2.nombre_completo}</p>
+        <p className='text-terciary text-sm'>{`${sampleAddress2.direccion} ${sampleAddress2.referencia}, ${sampleAddress2.ciudad}, ${sampleAddress2.estado}, ${sampleAddress2.codigo_postal}`}</p>
+        <p className='text-terciary text-sm'>{cliente2.numeroTelefono}</p>
+      </DashboardCard>
+      <DashboardCard editable deletable>
+        <p className='text-terciary text-sm'>{cliente.nombre_completo}</p>
+        <p className='text-terciary text-sm'>{`${sampleAddress.direccion} ${sampleAddress.referencia}, ${sampleAddress.ciudad}, ${sampleAddress.estado}, ${sampleAddress.codigo_postal}`}</p>
+        <p className='text-terciary text-sm'>{cliente.numeroTelefono}</p>
+      </DashboardCard>
+      <DashboardCard editable deletable>
+        <p className='text-terciary text-sm'>{cliente2.nombre_completo}</p>
+        <p className='text-terciary text-sm'>{`${sampleAddress2.direccion} ${sampleAddress2.referencia}, ${sampleAddress2.ciudad}, ${sampleAddress2.estado}, ${sampleAddress2.codigo_postal}`}</p>
+        <p className='text-terciary text-sm'>{cliente2.numeroTelefono}</p>
+      </DashboardCard>
     </DashboardContainer>
   );
 }
