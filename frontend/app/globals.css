@@ -6,7 +6,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-h1  {
+h1 {
   @apply text-2xl font-bold text-secondary-light;
 }
 
@@ -19,10 +19,12 @@ h3 {
 }
 
 p {
-  @apply text-lg font-normal text-secondary;
+  @apply text-sm text-terciary;
 }
 
-
+.p-secondary {
+  @apply text-lg font-normal text-secondary;
+}
 
 @layer utilities {
   .text-balance {

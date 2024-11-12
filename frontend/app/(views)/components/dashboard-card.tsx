@@ -38,7 +38,6 @@ export default function DashboardCard({
           </>
         )}
       </CardHeader>
-
       <CardContent className='space-y-2'>{children}</CardContent>
       <CardFooter className='flex items-center gap-x-2'>
         {editable && (

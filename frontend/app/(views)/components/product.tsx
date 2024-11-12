@@ -3,32 +3,25 @@
 import { useState } from "react";
 import { Fragment } from "react";
 
-import { Producto } from "@/app/models/Producto";
+import { Producto, Presentacion } from "@/app/models/Producto";
+
 import Gallery from "./gallery";
 import Stars from "./stars";
+import Selector from "./selector";
 
-import { CheckIcon, User } from "lucide-react";
-import { IoStar } from "react-icons/io5";
+import { CheckIcon, User, Dessert } from "lucide-react";
 import { RadioGroup, Label, Field, Radio, TabGroup, Tab, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { Button } from "@/app/(views)/components/ui/button";
 import { CircleX } from "lucide-react";
 import classNames from "@/app/controladores/utilities/classNames";
 
-// La descripción de los productos
-type catalogoType = {
-  pequeña: string;
-  mediana: string;
-  grande: string;
-};
 
-const catalogoDefault: catalogoType = {
-  pequeña: "Perfecto para un pequeño snack.",
-  mediana: "Perfecto para compartir con tu pareja.",
-  grande: "Para compartir con la familia.",
-};
-
-export default function Product({ product, rating }: { product: Producto, rating: number | undefined }) {
-  const [size, setSize] = useState<keyof catalogoType>();
+export default function Product({ product, extraList, rating }: { product: Producto, extraList: Producto[], rating: number | undefined }) {
+  // Proporcion seleccionada
+  const [present, setPresent] = useState<Presentacion | undefined>(product.presentacion?.[0]);
+  // Extras seleccionados
+  const [extras, setExtras] = useState<Producto[]>([])
+  // Estrellas
   const stars: number = rating != undefined ? Math.round(rating) : 0;
 
   return (
@@ -53,7 +46,7 @@ export default function Product({ product, rating }: { product: Producto, rating
             {/* Precio y Estrellas */}
             <div className="flex items-center">
               <p className="text-3xl text-terciary tracking-tight">
-                ${product.precio}
+                ${present?.precio}
               </p>
 
               <div className="ml-4 border-l border-terciary pl-4">
@@ -66,13 +59,14 @@ export default function Product({ product, rating }: { product: Producto, rating
 
             <div className="mt-4 space-y-6">
               <p className="text-terciary text-base">
-                {product.descripcion.caracteristicas}
+                {product.descripcion}
               </p>
             </div>
+                        
 
             {/* Verifica si el producto esta en stock */}
             <div className="mt-6 flex items-center">
-              { product.stock > 0  ?  
+              { present?.stock && present.stock > 0  ?  
               <>
                 <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" />
                 <p className="ml-2 text-sm text-terciary opacity-80">
@@ -88,8 +82,22 @@ export default function Product({ product, rating }: { product: Producto, rating
               </>
               }
             </div>
+
+            
+        {/* Calorias del productoe */}
+        <div className="mt-6 flex items-center">
+          { present?.calorias && <>
+            <Dessert className="h-5 w-5 flex-shrink-0 text-primary" />
+            <p className="ml-2 text-sm text-terciary opacity-80">
+                  { present.calorias } Calorias
+                </p>
+          </> }
+        </div>
+       
+
           </section>
         </div>
+      
 
          {/* Galeria */}
          <Gallery product={ product } />
@@ -99,20 +107,23 @@ export default function Product({ product, rating }: { product: Producto, rating
         <div className="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
           <section className="items-center">
             <form>
+             {/* Extras */}
+              <Selector extraList={ extraList } selected={ extras } setSelected={ setExtras } type="Extras" />
+
               <div className="sm:flex sm:justify-between">
-                <RadioGroup value={size} onChange={setSize}>
-                  <Label className="block text-sm font-medium">
-                    Size
+                <RadioGroup value={present} onChange={setPresent}>
+                  <Label className="block text-lg font-medium p-2">
+                    Tamaño
                   </Label>
                   <div className="mt-1 grid grid-cols-1 gap-4 items-center sm:grid-cols-2">
-                    {product.proporcion.map((size, index) => (
+                    {product?.presentacion && product.presentacion.map((present, index) => (
                       <Radio
                         as="div"
                         key={index}
-                        value={size}
+                        value={present}
                         className={({ checked }) =>
                           classNames(
-                            checked ? "ring-2 ring-indigo-500" : "",
+                            checked ? "ring-2 ring-primary bg-primary-light bg-opacity-20" : "",
                             "relative block cursor-pointer rounded-lg border border-gray-300 p-4 focus:outline-none",
                           )
                         }
@@ -123,19 +134,19 @@ export default function Product({ product, rating }: { product: Producto, rating
                               as="p"
                               className="text-base font-medium text-terciary"
                             >
-                              {size}
+                              { present.proporcion }
                             </Label>
                             <Label
                               as="p"
                               className="mt-1 text-sm text-terciary"
                             >
-                              {catalogoDefault[size as keyof catalogoType]}
+                              { present.ref }
                             </Label>
                             <div
                               className={classNames(
                                 checked ? "border" : "border-2",
                                 disabled
-                                  ? "border-indigo-500"
+                                  ? "border-primary"
                                   : "border-transparent",
                                 "pointer-events-none absolute -inset-px rounded-lg",
                               )}
@@ -148,6 +159,8 @@ export default function Product({ product, rating }: { product: Producto, rating
                   </div>
                 </RadioGroup>
               </div>
+
+
               <div className="mt-10 text-center">
                 <Button
                   type="button"
