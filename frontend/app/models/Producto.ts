@@ -1,9 +1,11 @@
+import { Cliente } from "./Cliente"
+
 type descType = {
     caracteristicas: string, calorias: number
 }
 
 type Review = {
-    review: string, puntuacion: number,
+    cliente: Cliente, review: string, puntuacion: number,
 }
 
 export interface Producto {

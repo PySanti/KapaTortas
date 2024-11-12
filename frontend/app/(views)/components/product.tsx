@@ -1,18 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { Fragment } from "react";
 
 import { Producto } from "@/app/models/Producto";
-import ProductImage from "@/app/(views)/components/images/ProductImage";
-import { CheckIcon, StarIcon } from "lucide-react";
-import { IoStar } from "react-icons/io5";
-import { RadioGroup } from "@headlessui/react";
-import { Button } from "@/app/(views)/components/ui/button";
+import Gallery from "./gallery";
+import Stars from "./stars";
 
-// Funcion para agilizar la puesta de todos los classNames
-function classNames(...classes: (string | undefined | false)[]): string {
-  return classes.filter(Boolean).join(" ");
-}
+import { CheckIcon, User } from "lucide-react";
+import { IoStar } from "react-icons/io5";
+import { RadioGroup, Label, Field, Radio, TabGroup, Tab, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { Button } from "@/app/(views)/components/ui/button";
+import { CircleX } from "lucide-react";
+import classNames from "@/app/controladores/utilities/classNames";
 
 // La descripción de los productos
 type catalogoType = {
@@ -50,34 +50,19 @@ export default function Product({ product, rating }: { product: Producto, rating
             <h2 className="sr-only">Información del Producto</h2>
 
 
+            {/* Precio y Estrellas */}
             <div className="flex items-center">
               <p className="text-3xl text-terciary tracking-tight">
                 ${product.precio}
               </p>
 
               <div className="ml-4 border-l border-terciary pl-4">
-                <div className="flex items-center">
-                  <div>
-                    <div className="flex items.center">
-                      {[0, 1, 2, 3, 4].map((item) => (
-                            <IoStar 
-                              key={item}
-                              className={classNames(
-                                stars > item ? "text-yellow-400" : 'text-gray-300',
-                                'h-5, w-5 flex-shrink-0 text-lg'
-                              )}
-                              aria-hidden="true"
-                              />
-                          ))
-                      }
-                      <p className="ml-2 text-sm text-terciary">{product.reviews?.length} reviews</p>
-                    </div>
 
-                  </div>
-
-                </div>
+                <Stars rating={ stars } label={ `${product.reviews?.length} reviews` } />                
               </div>
             </div>
+
+            {/* Descripcion del producto */}
 
             <div className="mt-4 space-y-6">
               <p className="text-terciary text-base">
@@ -85,29 +70,30 @@ export default function Product({ product, rating }: { product: Producto, rating
               </p>
             </div>
 
+            {/* Verifica si el producto esta en stock */}
             <div className="mt-6 flex items-center">
-              <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" />
-              <p className="ml-2 text-sm text-terciary opacity-80">
-                Disponible
-              </p>
+              { product.stock > 0  ?  
+              <>
+                <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" />
+                <p className="ml-2 text-sm text-terciary opacity-80">
+                  Disponible
+                </p>
+              </>
+              : 
+              <>
+              <CircleX className="h-5 w-5 flex-shrink-0 text-red-500" /> 
+                <p className="ml-2 text-sm text-terciary opacity-80">
+                No está Disponible
+                </p> 
+              </>
+              }
             </div>
           </section>
         </div>
 
-        {/* Imagen */}
-        <div className="mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center">
-          <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg">
-            {/* <Image */}
-            <ProductImage
-              path={
-                product.imagenes && product.imagenes.length > 0
-                  ? product.imagenes[0]
-                  : "/images/Torta-Chocolate.png"
-              }
-              alt={product.titulo}
-            />
-          </div>
-        </div>
+         {/* Galeria */}
+         <Gallery product={ product } />
+
 
         {/* Producto Info */}
         <div className="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
@@ -115,40 +101,40 @@ export default function Product({ product, rating }: { product: Producto, rating
             <form>
               <div className="sm:flex sm:justify-between">
                 <RadioGroup value={size} onChange={setSize}>
-                  <RadioGroup.Label className="block text-sm font-medium">
+                  <Label className="block text-sm font-medium">
                     Size
-                  </RadioGroup.Label>
+                  </Label>
                   <div className="mt-1 grid grid-cols-1 gap-4 items-center sm:grid-cols-2">
                     {product.proporcion.map((size, index) => (
-                      <RadioGroup.Option
+                      <Radio
                         as="div"
                         key={index}
                         value={size}
-                        className={({ active }) =>
+                        className={({ checked }) =>
                           classNames(
-                            active ? "ring-2 ring-indigo-500" : "",
+                            checked ? "ring-2 ring-indigo-500" : "",
                             "relative block cursor-pointer rounded-lg border border-gray-300 p-4 focus:outline-none",
                           )
                         }
                       >
-                        {({ active, checked }) => (
+                        {({ checked, disabled }) => (
                           <>
-                            <RadioGroup.Label
+                            <Label
                               as="p"
                               className="text-base font-medium text-terciary"
                             >
                               {size}
-                            </RadioGroup.Label>
-                            <RadioGroup.Description
+                            </Label>
+                            <Label
                               as="p"
                               className="mt-1 text-sm text-terciary"
                             >
                               {catalogoDefault[size as keyof catalogoType]}
-                            </RadioGroup.Description>
+                            </Label>
                             <div
                               className={classNames(
-                                active ? "border" : "border-2",
-                                checked
+                                checked ? "border" : "border-2",
+                                disabled
                                   ? "border-indigo-500"
                                   : "border-transparent",
                                 "pointer-events-none absolute -inset-px rounded-lg",
@@ -157,7 +143,7 @@ export default function Product({ product, rating }: { product: Producto, rating
                             />
                           </>
                         )}
-                      </RadioGroup.Option>
+                      </Radio>
                     ))}
                   </div>
                 </RadioGroup>
@@ -172,6 +158,60 @@ export default function Product({ product, rating }: { product: Producto, rating
               </div>
             </form>
           </section>
+        </div>
+
+
+        {/* Reviews */}
+
+        <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
+              <TabGroup as="div">
+                <div className="border-b border-secondary-light" >
+                  <TabList className="-mb-px flex space-x-8">
+                    <Tab
+                      className={({ selected }) => 
+                        classNames(
+                          selected 
+                          ? " border-primary-light text-primary-light"
+                          : "border-transparent text-terciary hover:border-primary-light hover:text-terciary",
+                          "whitespace-nowrap border-b-2 py-6 text-sm font-medium"
+                        )
+                      }
+                    >
+                      Reviews
+                    </Tab>
+                    
+                  </TabList>
+                </div>
+
+
+                  {/* Reviews completas */}
+                <TabPanels as={Fragment}>
+                  <TabPanel className="-mb-10">
+                    <h3 className="sr-only">Reviews</h3>
+                      {product.reviews?.map((item, index) => (
+                        <div key={index} className="flex space-x-4 text-base text-terciary">
+                          {/* Icon */}
+                          <div className="flex-none py-10">
+                            <User className="text-terciary text-lg" />
+                          </div>
+
+                          <div className={classNames(index === 0 ? "" : 'border-t border-primary-light', 'py-10')}>
+                            <h3 className="font-medium text-terciary">{item.cliente.perfil.nombre_completo}</h3>
+                            <Stars rating={ item.puntuacion } label="Puntuación" />
+                            
+                            <div
+                                 className="prose prose-sm mt-4 max-w-none text-gray-500"
+                              dangerouslySetInnerHTML={{ __html: item.review }}
+                            />
+
+                          </div>
+
+                        </div>
+                      ))}
+                  </TabPanel>
+                </TabPanels>
+
+              </TabGroup>
         </div>
       </div>
     </div>
