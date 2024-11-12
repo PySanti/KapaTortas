@@ -9,8 +9,50 @@ from .models import (
 from openpyxl import Workbook
 from io import BytesIO  
 from django.http import HttpResponse
-from applications.Productos.models import Productos
 from applications.Clientes.models import Clientes
+from .models import DescripcionesPedido
+
+
+
+class ClienteFilter(admin.SimpleListFilter):  
+    title = 'Clientes asociados'  
+    parameter_name = 'clientes_asociados'  
+
+    def lookups(self, request, model_admin):  
+        clientes = Clientes.objects.all()  
+        return [(c.id, c.perfil.nombre_completo) for c in clientes]  
+
+    def queryset(self, request, queryset):  
+        if self.value():  
+            return queryset.filter(cliente_asociado__id=self.value())  
+        return queryset  
+
+@admin.register(DescripcionesPedido)  
+class DescripcionesPedidoAdmin(admin.ModelAdmin):
+    list_display = ("cantidad", "producto_asociado", "pedido_asociado")
+    def producto_asociado(self, obj):
+        return obj.producto_asociado.titulo
+    def pedido_asociado(self, obj):
+        return obj.pedido_asociado.numero_de_orden
+    producto_asociado.short_description = "Producto Asociado"
+    pedido_asociado.short_description = "Pedido Asociado"
+
+
+
+@admin.register(Pedidos)  
+class PedidosAdmin(admin.ModelAdmin):  
+    list_display = ('numero_de_orden',  'monto_total',  'metodo_entrega', 'metodo_pago', 'estado', 'cliente_asociado', 'descripciones_pedido')  
+    list_filter = (ClienteFilter,)  
+    def cliente_asociado(self, obj):
+        return obj.cliente_asociado.perfil.nombre_completo
+
+    def descripciones_pedido(self, obj):  
+        descripciones = []  
+        for p in obj.descripciones_pedido.all():  
+            descripciones.append(f"{p.producto_asociado.titulo} ({p.cantidad})")  
+        return " + ".join(descripciones)  
+
+    descripciones_pedido.short_description = 'descripcion'
 
 
 class FechaVentasFilter(admin.SimpleListFilter):  
@@ -32,50 +74,6 @@ class FechaVentasFilter(admin.SimpleListFilter):
         if self.value() == 'mes':  
             return queryset.filter(fecha__gte=timezone.now().date() - timedelta(days=30))  
         return queryset  
-
-class ProductoFilter(admin.SimpleListFilter):  
-    title = 'Productos asociados'  
-    parameter_name = 'producto'  
-
-    def lookups(self, request, model_admin):  
-        productos = Productos.objects.all()  
-        return [(producto.id, producto.titulo) for producto in productos]  
-
-    def queryset(self, request, queryset):  
-        if self.value():  
-            return queryset.filter(productos_asociados__id=self.value())  
-        return queryset  
-
-
-class ClienteFilter(admin.SimpleListFilter):  
-    title = 'Clientes asociados'  
-    parameter_name = 'clientes_asociados'  
-
-    def lookups(self, request, model_admin):  
-        clientes = Clientes.objects.all()  
-        return [(c.id, c.perfil.nombre_completo) for c in clientes]  
-
-    def queryset(self, request, queryset):  
-        if self.value():  
-            return queryset.filter(cliente_asociado__id=self.value())  
-        return queryset  
-
-
-@admin.register(Pedidos)  
-class PedidosAdmin(admin.ModelAdmin):  
-    list_display = ('numero_de_orden',  'monto_total', 'productos', 'metodo_entrega', 'metodo_pago', 'estado', 'cliente_asociado')  
-    list_filter = (ProductoFilter, ClienteFilter)  
-    def cliente_asociado(self, obj):
-        return obj.cliente_asociado.perfil.nombre_completo
-
-    def productos(self, obj):  
-        productos_str = []  
-        for p in obj.productos_asociados.all():  
-            productos_str.append(f"{p.titulo}")  
-        return "-".join(productos_str)  
-
-    productos.short_description = 'productos'
-
 @admin.register(Ventas)  
 class VentasAdmin(admin.ModelAdmin):  
     list_display = ('fecha',  'direccion', 'nota')  

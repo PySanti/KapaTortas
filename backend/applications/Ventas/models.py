@@ -1,5 +1,6 @@
 from django.db import models
 from applications.Productos.models import Productos
+
 from applications.Clientes.models import (
     DireccionesEnvio,
     Clientes
@@ -12,7 +13,6 @@ from backend.utils.constants import (
 
 class Pedidos(models.Model):
     numero_de_orden         = models.IntegerField(unique=True, blank=False, null=False)
-    productos_asociados     = models.ManyToManyField(Productos, related_name='pedidos') # con el related_name podremos ver a cuales ventas pertenece cada producto
     cliente_asociado        = models.ForeignKey(Clientes, on_delete=models.SET_NULL, null=True, related_name="pedidos")
     monto_total             = models.DecimalField(max_digits=7, decimal_places=2)
     estado                  = models.CharField(choices=[(role.value, role.name) for role in EstadoEnum], default=EstadoEnum.PENDIENTE)
@@ -24,6 +24,17 @@ class Pedidos(models.Model):
     class Meta:
         verbose_name = 'Pedido'
         verbose_name_plural = 'Pedidos'
+
+class DescripcionesPedido(models.Model):
+    cantidad                    = models.IntegerField()
+    producto_asociado           = models.ForeignKey(Productos, related_name="descripciones_pedido", on_delete=models.DO_NOTHING)
+    pedido_asociado             = models.ForeignKey(Pedidos, related_name="descripciones_pedido", on_delete=models.DO_NOTHING)
+    def __str__(self):
+        return f"{self.cantidad} : {self.producto_asociado.titulo}"
+    class Meta:
+        verbose_name = 'Descripción de pedido'
+        verbose_name_plural = 'Descripciones de pedidos'
+
 
 
 
