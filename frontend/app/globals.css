@@ -18,6 +18,10 @@ h3 {
   @apply text-xl font-semibold text-primary;
 }
 
+p {
+  @apply text-sm text-terciary;
+}
+
 .p-secondary {
   @apply text-lg font-normal text-secondary;
 }

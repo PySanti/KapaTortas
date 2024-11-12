@@ -34,12 +34,6 @@ export default function PagosPage() {
           <DashboardCard title='Contraseña' editable>
             <p className='p-secondary'>********</p>
           </DashboardCard>
-
-          <DashboardCard editable deletable>
-            <p className='p-secondary'>hola</p>
-            <p className='p-secondary'>sdjfklsdjfds</p>
-            <p className='p-secondary'>asdasdasd</p>
-          </DashboardCard>
         </>
       )}
     </DashboardContainer>
