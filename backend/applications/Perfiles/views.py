@@ -66,12 +66,16 @@ class CrearPerfilAPI(APIView):
                 )
                 if (serialized_data["rol"] == "cliente"):
                     new_profile.verification_token = VerificationToken()
+                    new_profile.verification_token.save()
                     new_profile.save()
-                    send_verification_mail(new_profile.correo, new_profile.nombre_completo, new_profile.verification_token.token)
+                    send_verification_mail(new_profile.perfil.correo, new_profile.perfil.nombre_completo, new_profile.verification_token.token)
                 new_profile = new_profile.perfil if serialized_data['rol'] == "cliente" else new_profile
                 return JsonResponse({"new_profile": Perfiles.objects.get_perfil_dict(new_profile)}, status=status.HTTP_201_CREATED)
             except:
-                return JsonResponse({"error":"unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 class CheckPasswordAPI(APIView):
     serializer_class        = CheckPasswordSerializer
@@ -140,6 +144,7 @@ class ActivarPerfilByTokenAPI(APIView):
         serialized_data = kwargs['serialized_data']
         try:
             if cliente := Clientes.objects.filter(verification_token__token=serialized_data["token"]):
+                cliente = cliente[0]
                 if not cliente.verification_token.is_expired():
                     cliente.perfil.is_active = True
                     cliente.perfil.save()

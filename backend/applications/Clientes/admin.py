@@ -1,10 +1,12 @@
 from django.contrib import admin  
 from .models import (
     Clientes,
-    DireccionesEnvio
+    DireccionesEnvio,
+    VerificationToken
 )
 
 admin.site.register(Clientes) 
+admin.site.register(VerificationToken) 
 
 @admin.register(DireccionesEnvio)  
 class DireccionesEnvioAdmin(admin.ModelAdmin):  

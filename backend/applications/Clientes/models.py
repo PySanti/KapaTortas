@@ -2,15 +2,21 @@ from django.db import models
 from applications.Perfiles.models import Perfiles
 from .managers import ClientesManager
 from backend.utils.get_expiration_date import get_expiration_date
-from django.utils.crypto import get_random_string
+from backend.utils.generate_verification_token import generate_verification_token
 from django.utils import timezone
 
 class VerificationToken(models.Model):
-    token = models.CharField(max_length=10, blank=False, null=False, default=get_random_string)
+    token = models.CharField(max_length=10, blank=False, null=False, default=generate_verification_token)
     expiration_date = models.DateTimeField(default=get_expiration_date)
 
     def is_expired(self):  
         return timezone.now() > self.expiration_date  
+    def __str__(self):
+        return f"{self.token}"
+    class Meta:
+        verbose_name = 'VerificationToken'
+        verbose_name_plural = 'VerificationTokens'
+
 
 class DireccionesEnvio(models.Model):
     direccion_1     = models.CharField()
