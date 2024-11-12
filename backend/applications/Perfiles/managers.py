@@ -1,5 +1,6 @@
 from django.contrib.auth.models import BaseUserManager
 from backend.utils.constants import BASE_PROFILE_SHOWABLE_FIELDS
+from backend.utils.constants import RolEnum
 
 class PerfilesManager(BaseUserManager):
     def _create_user(self, nombre_completo, password, correo, is_superuser, is_staff, **kwargs):
@@ -9,25 +10,24 @@ class PerfilesManager(BaseUserManager):
             is_superuser = is_superuser,
             is_staff = is_staff,
             contraseña = password,
+            is_active = is_staff or is_superuser,
             **kwargs
         )
         new_user.save(using=self.db)
         return new_user
+
     def create_superuser(self, nombre_completo, password, correo, **kwargs):
-        return self._create_user( nombre_completo, password, correo, True, True, **kwargs)
+        return self._create_user( nombre_completo, password, correo, True, True, rol=RolEnum.ADMIN,  **kwargs)
     def create_user(self, nombre_completo, password, correo, **kwargs):
         return self._create_user( nombre_completo, password, correo, False, False, **kwargs)
-
     def crear_perfil(self, nombre_completo, password, correo,  rol):
         from applications.Clientes.models import Clientes
-        new_profile =  self._create_user( nombre_completo, password, correo,rol == "administrador" , rol in ["administrador", "empleado"])
-        new_profile.rol = rol
-        new_profile.save()
-
+        new_profile =  self._create_user( nombre_completo, password, correo,rol == "administrador" , rol in ["administrador", "empleado"], rol=rol)
         if rol == "cliente":
             return Clientes.objects.crear_cliente(perfil=new_profile)
         else:
             return new_profile
+
     def user_exists(self, nombre_completo, correo):
         """
             Retornara false si no existe ningun perfil con el correo o nombre_completo indicado
