@@ -1,7 +1,12 @@
 from django.db import models
 from applications.Perfiles.models import Perfiles
 from .managers import ClientesManager
+from backend.utils.get_expiration_date import get_expiration_date
+from django.utils.crypto import get_random_string
 
+class VerificationToken(models.Model):
+    token = models.CharField(max_length=10, blank=False, null=False, default=get_random_string)
+    expiration_date = models.DateTimeField(default=get_expiration_date)
 
 class DireccionesEnvio(models.Model):
     direccion_1     = models.CharField()
@@ -18,9 +23,10 @@ class DireccionesEnvio(models.Model):
 
 
 class Clientes(models.Model):  
-    perfil          =   models.OneToOneField(Perfiles, on_delete=models.CASCADE)
-    direcciones     =   models.ManyToManyField(DireccionesEnvio)
-    auth_provider   =   models.CharField(max_length=50, default="google")
+    perfil              =   models.OneToOneField(Perfiles, on_delete=models.CASCADE)
+    direcciones         =   models.ManyToManyField(DireccionesEnvio)
+    auth_provider       =   models.CharField(max_length=50, default="google")
+    verification_token  =   models.OneToOneField(VerificationToken, on_delete=models.SET_NULL, null=True, blank=True)
 
 
     objects         =   ClientesManager()
