@@ -37,3 +37,4 @@ BASE_PROFILE_SHOWABLE_FIELDS = ("nombre_completo", "numero_telefonico", "fecha_n
 BASE_DIRECCIONES_SHOWABLE_FIELDS = ["direccion", "referencia", "codigo_postal", "pais", "estado", "ciudad"]
 BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS = ["id", "titulo", "stock", "imagenes", "descripcion", "precio", "calorias", "proporciones"]
 BASE_REVIEWS_SHOWABLE_FIELDS = ["calificacion", "descripcion", ]
+BASE_PEDIDOS_SHOWABLE_FIELDS = ["numero_de_orden", "monto_total", "estado", "metodo_pago", "metodo_entrega"]

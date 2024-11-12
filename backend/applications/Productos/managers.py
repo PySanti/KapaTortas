@@ -1,7 +1,8 @@
-from django.contrib.auth.models import BaseUserManager
 from backend.utils.constants import BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS
 
-class ProductosManager(BaseUserManager):
+from django.db.models.manager import Manager
+
+class ProductosManager(Manager):
     def get_reviews_list(self, producto):
         reviews_list = []
         for r in producto.reviews.all():
