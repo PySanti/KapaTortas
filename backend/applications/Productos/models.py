@@ -3,15 +3,13 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from applications.Clientes.models import Clientes
 from .managers import ProductosManager
 from django.contrib.postgres.fields import ArrayField  
-from backend.utils.constants import ProporcionesEnum
+from backend.utils.constants import CategoriaProducto
 
 class Productos(models.Model):
-    titulo      = models.CharField(unique=True)
-    stock       = models.IntegerField()
-    imagenes    = ArrayField(models.CharField(max_length=200), blank=True, default=list)  
-    descripcion = models.TextField(default=None, null=True)
-    precio      = models.DecimalField(max_digits=5,decimal_places=2)
-    calorias      = models.DecimalField(max_digits=5,decimal_places=2, null=True, default=None)
+    titulo                  = models.CharField(unique=True)
+    categoria               = models.CharField(choices=[(role.value, role.name) for role in CategoriaProducto], default=CategoriaProducto.POSTRE)
+    descripcion             = models.TextField(default=None, null=True)
+    imagenes                = ArrayField(models.CharField(max_length=200), blank=True, default=list)  
 
     objects     = ProductosManager()
 
@@ -20,6 +18,16 @@ class Productos(models.Model):
     class Meta:
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
+
+class Presentaciones(models.Model):
+    ref             = models.TextField()
+    proporcion      = models.CharField()
+    precio          = models.DecimalField(max_digits=6, decimal_places=2)
+    stock           = models.IntegerField()
+    calorias        = models.DecimalField(max_digits=5, decimal_places=2)
+    producto_asociado = models.ForeignKey(Productos, related_name="presentaciones", on_delete=models.DO_NOTHING)
+
+
 
 class Reviews(models.Model):
     calificacion = models.IntegerField(validators=[  

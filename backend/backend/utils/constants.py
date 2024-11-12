@@ -28,6 +28,10 @@ class MetodoEntrega(Enum):
 
 
 
+class CategoriaProducto(Enum):
+    POSTRE = "postre"
+    EXTRA = "extra"
+
 
 
 
