@@ -2,10 +2,14 @@ from django.contrib import admin
 from .models import Ventas
 from django.utils import timezone
 from datetime import timedelta
-from .models import Productos
+from .models import (
+    Pedidos,
+    Ventas
+)
 from openpyxl import Workbook
 from io import BytesIO  
 from django.http import HttpResponse
+from applications.Productos.models import Productos
 
 
 class FechaVentasFilter(admin.SimpleListFilter):  
@@ -43,10 +47,22 @@ class ProductoFilter(admin.SimpleListFilter):
 
 
 
+@admin.register(Pedidos)  
+class PedidosAdmin(admin.ModelAdmin):  
+    list_display = ('numero_de_orden',  'monto_total', 'productos', 'metodo_entrega', 'metodo_pago', 'estado')  
+    list_filter = (ProductoFilter,)  
+    def productos(self, obj):  
+        productos_str = []  
+        for p in obj.productos_asociados.all():  
+            productos_str.append(f"{p.titulo}")  
+        return "-".join(productos_str)  
+
+    productos.short_description = 'productos'
+
 @admin.register(Ventas)  
 class VentasAdmin(admin.ModelAdmin):  
-    list_display = ('numero_de_orden', 'fecha', 'monto_total', 'direccion', 'productos')  
-    list_filter = (FechaVentasFilter, ProductoFilter)  # Uso del filtro personalizado  
+    list_display = ('fecha',  'direccion', 'nota')  
+    list_filter = (FechaVentasFilter,)  # Uso del filtro personalizado  
     actions = ['export_to_excel']  
 
     def export_to_excel(self, request, queryset):  
@@ -84,11 +100,3 @@ class VentasAdmin(admin.ModelAdmin):
 
     export_to_excel.short_description = "Exportar a Excel"  
 
-
-    def productos(self, obj):  
-        productos_str = []  
-        for p in obj.productos_asociados.all():  
-            productos_str.append(f"{p.titulo}")  
-        return "-".join(productos_str)  
-
-    productos.short_description = 'productos'  # Título de la columna  

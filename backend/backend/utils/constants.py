@@ -12,6 +12,24 @@ class ProporcionesEnum(Enum):
     MEDIANO = "mediano"
     GRANDE = "grande"
 
+class EstadoEnum(Enum):
+    PENDIENTE = "pendiente"
+    CANCELADO = "cancelado"
+    FINALIZADO = "finalizado"
+
+class MetodoPagoEnum(Enum):
+    ZELLE = "zelle"
+    PAGO_MOVIL = "pago_movil"
+    STRIPE = "stripe"
+
+class MetodoEntrega(Enum):
+    PICKUP = "pickup"
+    DELIVERY = "delivery"
+
+
+
+
+
 
 
 BASE_SERIALIZER_ERROR_RESPONSE = Response({'error' : "serializer_error"}, status.HTTP_400_BAD_REQUEST)
