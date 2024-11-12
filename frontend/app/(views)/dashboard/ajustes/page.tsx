@@ -22,17 +22,17 @@ const usuario: Perfil = {
 export default function PagosPage() {
   return (
     <DashboardContainer>
-      <DashboardHeader heading='Datos Personales' description='Actualiza tu información personal' />
+      <DashboardHeader heading='Datos Personales' />
       {usuario && (
         <>
           <DashboardCard title='Información Personal' editable>
-            <p className='p-secondary'>{usuario.nombre_completo}</p>
+            <p>{usuario.nombre_completo}</p>
           </DashboardCard>
           <DashboardCard title='Correo' editable>
-            <p className='p-secondary'>{usuario.correo}</p>
+            <p>{usuario.correo}</p>
           </DashboardCard>
           <DashboardCard title='Contraseña' editable>
-            <p className='p-secondary'>********</p>
+            <p>********</p>
           </DashboardCard>
         </>
       )}
