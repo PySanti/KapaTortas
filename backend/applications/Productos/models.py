@@ -14,7 +14,7 @@ class Productos(models.Model):
     objects     = ProductosManager()
 
     def __str__(self):
-        return f"{self.titulo} : {self.stock}"
+        return f"{self.titulo}"
     class Meta:
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
@@ -26,6 +26,12 @@ class Presentaciones(models.Model):
     stock           = models.IntegerField()
     calorias        = models.DecimalField(max_digits=5, decimal_places=2)
     producto_asociado = models.ForeignKey(Productos, related_name="presentaciones", on_delete=models.DO_NOTHING)
+    
+    def __str__(self):
+        return f"{self.producto_asociado.titulo} - {self.proporcion}"
+    class Meta:
+        verbose_name = 'Presentación'
+        verbose_name_plural = 'Presentaciones'
 
 
 

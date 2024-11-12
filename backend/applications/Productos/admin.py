@@ -1,14 +1,30 @@
 from django.contrib import admin  
 from .models import (
     Productos,
-    Reviews
+    Reviews,
+    Presentaciones
 )
 
 
 
 @admin.register(Productos)  
 class ProductosAdmin(admin.ModelAdmin):  
-    list_display = ('titulo', "categoria", "descripcion")  # Agrega los campos que deseas mostrar en el admin  
+    list_display = ('titulo', "categoria", "descripcion", "presentaciones")  # Agrega los campos que deseas mostrar en el admin  
+
+
+    def presentaciones(self, obj):
+        presentaciones_str = []
+        for u in obj.presentaciones.all():
+            presentaciones_str.append(u.proporcion)
+        return "/".join(presentaciones_str)
+
+@admin.register(Presentaciones)  
+class PresentacionesAdmin(admin.ModelAdmin):  
+    list_display = ('ref', "proporcion", "precio", "stock", "calorias", "producto")  # Agrega los campos que deseas mostrar en el admin  
+
+
+    def producto(self, obj):
+        return obj.producto_asociado.titulo
 
 
 @admin.register(Reviews)

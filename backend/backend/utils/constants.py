@@ -7,10 +7,6 @@ class RolEnum(Enum):
     EMPLEADO = 'empleado'  
     CLIENTE = 'cliente'
 
-class ProporcionesEnum(Enum):
-    PEQUEÑO = "pequeño"
-    MEDIANO = "mediano"
-    GRANDE = "grande"
 
 class EstadoEnum(Enum):
     PENDIENTE = "pendiente"
