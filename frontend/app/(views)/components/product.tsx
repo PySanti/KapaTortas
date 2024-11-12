@@ -5,17 +5,15 @@ import Image from "next/image";
 
 import { Producto } from "@/app/models/Producto";
 import ProductImage from "@/app/(views)/components/images/ProductImage";
+import GalleryImage from "./images/GalleryImage";
+import Gallery from "./gallery";
+
 import { CheckIcon, StarIcon } from "lucide-react";
 import { IoStar } from "react-icons/io5";
 import { RadioGroup, Label, Field, Radio, TabGroup, Tab, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { Button } from "@/app/(views)/components/ui/button";
 import { CircleX } from "lucide-react";
-import GalleryImage from "./images/GalleryImage";
-
-// Funcion para agilizar la puesta de todos los classNames
-function classNames(...classes: (string | undefined | false)[]): string {
-  return classes.filter(Boolean).join(" ");
-}
+import classNames from "@/app/controladores/utilities/classNames";
 
 // La descripción de los productos
 type catalogoType = {
@@ -109,61 +107,7 @@ export default function Product({ product, rating }: { product: Producto, rating
         </div>
 
          {/* Galeria */}
-
-         <TabGroup 
-        as="div" 
-        className="flex flex-col-reverse lg:col-start-2 lg:col-span-2 lg:row-start-1 lg:row-span-2"
-        >
-            <div className="mx-auto mt-6 w-full max-w-2xl sm:block lg:max-w-none text-center justify-self-center">
-                <TabList 
-                // className="grid grid-cols-3 gap-6"
-                  className={` grid grid-cols-3 gap-6 `}
-                >
-                    { product.imagenes && product.imagenes.length > 0 && product.imagenes.map((image, index) => (
-                      <Tab
-                        key={index}
-                        className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-secondary-light text-sm font-medium uppercase text-terciary hover:bg-opacity-80 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
-                      >
-                        {({ selected }) => (
-                          <>
-                            <span className="absolute inset-0 overflow-hidden rounded-md">
-                              <GalleryImage
-                                  path={ image }
-                                  alt={ product?.titulo }
-                                  className="h-full w-full object-cover object-center"
-                              />
-                            </span>
-                            <span
-                              className={ classNames(
-                                selected ? "ring-primary" : 'ring-transparent', 
-                                  'pointer-events-none aboluste inset-0 rounded-md ring-2 ring-offset-2'
-                              )}
-                              aria-hidden="true"
-                            />
-                          </>
-                        ) }
-                        
-                      </Tab>
-                    )) }
-                  </TabList>
-            </div>
-
-            <TabPanels  
-             className="aspect-h-1 aspect-w-1 w-full"
-            >
-              {  product.imagenes && product.imagenes.map((image, index) => (
-                <TabPanel key={index}>
-                  <ProductImage
-                    path={image}
-                    alt={ product?.titulo }
-                    className="h-full w-full sm:rounded-lg"
-                    />
-                </TabPanel>
-              )) }
-            </TabPanels>
-
-
-        </TabGroup>
+         <Gallery product={ product } />
 
 
         {/* Producto Info */}
