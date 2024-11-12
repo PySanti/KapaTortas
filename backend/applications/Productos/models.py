@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from applications.Clientes.models import Clientes
 from .managers import ProductosManager
 from django.contrib.postgres.fields import ArrayField  
@@ -26,7 +27,11 @@ class Productos(models.Model):
         verbose_name_plural = 'Productos'
 
 class Reviews(models.Model):
-    calificacion = models.IntegerField()
+    calificacion = models.IntegerField(validators=[  
+            MinValueValidator(1),  
+            MaxValueValidator(5)  
+        ]  
+    )
     descripcion = models.TextField()
     # con el campo related_name, podemos acceder a traves de una instancia de cliente a sus reviews asociadas
     cliente_asociado = models.ForeignKey(Clientes, related_name="reviews", on_delete=models.CASCADE) 
