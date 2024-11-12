@@ -4,7 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import type { JWT } from 'next-auth/jwt';
 import ClienteAPI from './app/controladores/api/users/ClienteAPI';
-import { stripe } from './lib/stripe';
+import { stripe } from '@/app/controladores/lib/stripe';
 import passwordsMatch from './app/controladores/utilities/passwordsMatch';
 import crearStripeId from './app/controladores/utilities/crearStripeId';
 import correoVerificado from './app/controladores/utilities/correoVerificado';
