@@ -6,6 +6,8 @@ import { SendHorizontal } from "lucide-react";
 import { Button } from "@/app/(views)/components/ui/button";
 import { DatePicker } from "./date-picker";
 import { Input } from "@/app/(views)/components/ui/input";
+import redirectToWhatsapp from "@/app/controladores/utilities/redirectToWhatsapp";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function Footer() {
   const [correo, setCorreo] = useState<string>();
@@ -40,19 +42,20 @@ export default function Footer() {
           </div>
           {/* Right */}
           <div className="space-y-4 text-left ml-4 mt-0 md:ml-0 lg:mt-4 md:text-right">
-            <nav>
-              <Link href="#">
+            <nav className="space-y-2">
+              <Link href="#" className="block hover:text-secondary-light">
                 <p>Contacto</p>
               </Link>
-              <Link href="#">
+              <Link href="#" className="block hover:text-secondary-light">
                 <p>FAQ</p>
               </Link>
-              <Link href="#">
+              <Link href="#" className="block hover:text-secondary-light">
                 <p>Nosotros</p>
               </Link>
-              <Link href="#">
-                <h1>+58 424 218 5034</h1>
-              </Link>
+              <Button className=" hover:text-secondary-light" onClick={() => redirectToWhatsapp({})}>
+                <FaWhatsapp className="text-secondary-light" />
+                <h3 className="text-secondary-light">+58 424 218 5034</h3>
+              </Button>
             </nav>
           </div>
         </div>
@@ -64,7 +67,7 @@ export default function Footer() {
           <span className="text-lg text-secondary">|</span>
           {/* <Divider orientation="vertical" flexItem /> */}
           <Link href="#" className="hover:text-white">
-            <p className="text-sm">@2024 Kapa Tortas</p>
+              <p className="text-sm">@2024 Kapa Tortas</p>
           </Link>
         </div>
       </div>
