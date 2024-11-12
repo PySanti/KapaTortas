@@ -40,9 +40,7 @@ export default function ProductoHome({ item }: { item: cakeType }) {
                 Saber Más
               </MainButton>
               <MainButton className=' text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6'>
-                <Link href="/product/producto">
-                  Realiza tú Pedido
-                </Link>
+                <Link href='/product/producto'>Realiza tu Pedido</Link>
               </MainButton>
             </div>
           </div>
