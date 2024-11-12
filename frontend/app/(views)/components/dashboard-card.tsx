@@ -38,8 +38,7 @@ export default function DashboardCard({
           </>
         )}
       </CardHeader>
-
-      <CardContent className='space-y-2'>{children}</CardContent>
+      <CardContent className='space-y-2 text-terciary text-s'>{children}</CardContent>
       <CardFooter className='flex items-center gap-x-2'>
         {editable && (
           <Button className='bg-white text-terciary hover:bg-gray-50 border-2'>Editar</Button>

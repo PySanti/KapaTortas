@@ -42,24 +42,24 @@ export default function DireccionesPage() {
         description='Edita, elimina o establece una dirección de envío predeterminada'
       />
       <DashboardCard highlight='Dirección de envío preferida' editable deletable>
-        <p className='text-terciary text-sm'>{cliente.nombre_completo}</p>
-        <p className='text-terciary text-sm'>{`${sampleAddress.direccion} ${sampleAddress.referencia}, ${sampleAddress.ciudad}, ${sampleAddress.estado}, ${sampleAddress.codigo_postal}`}</p>
-        <p className='text-terciary text-sm'>{cliente.numeroTelefono}</p>
+        <p>{cliente.nombre_completo}</p>
+        <p>{`${sampleAddress.direccion} ${sampleAddress.referencia}, ${sampleAddress.ciudad}, ${sampleAddress.estado}, ${sampleAddress.codigo_postal}`}</p>
+        <p>{cliente.numeroTelefono}</p>
       </DashboardCard>
       <DashboardCard editable deletable>
-        <p className='text-terciary text-sm'>{cliente2.nombre_completo}</p>
-        <p className='text-terciary text-sm'>{`${sampleAddress2.direccion} ${sampleAddress2.referencia}, ${sampleAddress2.ciudad}, ${sampleAddress2.estado}, ${sampleAddress2.codigo_postal}`}</p>
-        <p className='text-terciary text-sm'>{cliente2.numeroTelefono}</p>
+        <p>{cliente2.nombre_completo}</p>
+        <p>{`${sampleAddress2.direccion} ${sampleAddress2.referencia}, ${sampleAddress2.ciudad}, ${sampleAddress2.estado}, ${sampleAddress2.codigo_postal}`}</p>
+        <p>{cliente2.numeroTelefono}</p>
       </DashboardCard>
       <DashboardCard editable deletable>
-        <p className='text-terciary text-sm'>{cliente.nombre_completo}</p>
-        <p className='text-terciary text-sm'>{`${sampleAddress.direccion} ${sampleAddress.referencia}, ${sampleAddress.ciudad}, ${sampleAddress.estado}, ${sampleAddress.codigo_postal}`}</p>
-        <p className='text-terciary text-sm'>{cliente.numeroTelefono}</p>
+        <p>{cliente.nombre_completo}</p>
+        <p>{`${sampleAddress.direccion} ${sampleAddress.referencia}, ${sampleAddress.ciudad}, ${sampleAddress.estado}, ${sampleAddress.codigo_postal}`}</p>
+        <p>{cliente.numeroTelefono}</p>
       </DashboardCard>
       <DashboardCard editable deletable>
-        <p className='text-terciary text-sm'>{cliente2.nombre_completo}</p>
-        <p className='text-terciary text-sm'>{`${sampleAddress2.direccion} ${sampleAddress2.referencia}, ${sampleAddress2.ciudad}, ${sampleAddress2.estado}, ${sampleAddress2.codigo_postal}`}</p>
-        <p className='text-terciary text-sm'>{cliente2.numeroTelefono}</p>
+        <p>{cliente2.nombre_completo}</p>
+        <p>{`${sampleAddress2.direccion} ${sampleAddress2.referencia}, ${sampleAddress2.ciudad}, ${sampleAddress2.estado}, ${sampleAddress2.codigo_postal}`}</p>
+        <p>{cliente2.numeroTelefono}</p>
       </DashboardCard>
     </DashboardContainer>
   );
