@@ -12,11 +12,6 @@ class Productos(models.Model):
     descripcion = models.TextField(default=None, null=True)
     precio      = models.DecimalField(max_digits=5,decimal_places=2)
     calorias      = models.DecimalField(max_digits=5,decimal_places=2, null=True, default=None)
-    proporciones = ArrayField(  
-        models.CharField(max_length=10, choices=[(tag.value, tag.name) for tag in ProporcionesEnum]),  
-        blank=True,  
-        default=list  
-    )  
 
     objects     = ProductosManager()
 
