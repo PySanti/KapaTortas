@@ -55,6 +55,21 @@ export default function DireccionesPage() {
         direccion={sampleAddress}
         numeroTelefono={cliente.numeroTelefono}
       />
+      <DireccionEnvioCard
+        nombreCompleto={cliente.nombre_completo}
+        direccion={sampleAddress}
+        numeroTelefono={cliente.numeroTelefono}
+      />
+      <DireccionEnvioCard
+        nombreCompleto={cliente.nombre_completo}
+        direccion={sampleAddress}
+        numeroTelefono={cliente.numeroTelefono}
+      />
+      <DireccionEnvioCard
+        nombreCompleto={cliente.nombre_completo}
+        direccion={sampleAddress}
+        numeroTelefono={cliente.numeroTelefono}
+      />
     </DashboardContainer>
   );
 }
