@@ -1,38 +1,50 @@
-import { getVerificationTokenByToken } from '@/hooks/verification-token';
+// import ClienteAPI from "../api/users/ClienteAPI";
+// import conseguirToken from "../utilities/conseguirToken";
 
-export const newVerification = async (token: string) => {
-  const existingToken = await getVerificationTokenByToken(token);
+// export const newVerification = async (token: string) => {
 
-  if (!existingToken) {
-    return {
-      error: 'Token not found',
-    };
-  }
+//   const tokenExistente= await conseguirToken(token);
 
-  const hasExpired = new Date(existingToken.expires) < new Date();
+//   if (!tokenExistente) {
+//     return{
+//       error: 'Token not found',
+//     }
+//   }
 
-  if (hasExpired) {
-    return {
-      error: 'Token has expired',
-    };
-  }
+//   const user = await ClienteAPI.obtenerCliente(tokenExistente.email);
 
-  const user = await getUserByEmail(existingToken.email);
+//   // const existingToken = await getVerificationTokenByToken(token);
 
-  if (!user) {
-    return {
-      error: 'User not found',
-    };
-  }
+//   // if (!existingToken) {
+//   //   return {
+//   //     error: 'Token not found',
+//   //   };
+//   // }
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { emailVerified: new Date(), email: existingToken.email },
-  });
+//   // // const hasExpired = new Date(existingToken.expires) < new Date();
 
-  await prisma.verificationToken.delete({
-    where: { id: existingToken.id },
-  });
+//   // if (hasExpired) {
+//   //   return {
+//   //     error: 'Token has expired',
+//   //   };
+//   // }
 
-  return { success: 'Email verified' };
-};
+//   // const user = await getUserByEmail(existingToken.email);
+
+//   // if (!user) {
+//   //   return {
+//   //     error: 'User not found',
+//   //   };
+//   // }
+
+//   // await prisma.user.update({
+//   //   where: { id: user.id },
+//   //   data: { emailVerified: new Date(), email: existingToken.email },
+//   // });
+
+//   // await prisma.verificationToken.delete({
+//   //   where: { id: existingToken.id },
+//   // });
+
+//   // return { success: 'Email verified' };
+// };
