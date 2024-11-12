@@ -1,19 +1,29 @@
 import { Cliente } from "./Cliente"
 
-type descType = {
-    caracteristicas: string, calorias: number
+export enum Categoria {
+    POSTRE,
+    EXTRA
 }
 
 type Review = {
     cliente: Cliente, review: string, puntuacion: number,
 }
 
-export interface Producto {
-    titulo: string,
-    descripcion: descType,
+export interface Presentacion {
+    presentacion_id: number,
+    ref?: string,
+    proporcion?: string,
     precio: number,
     stock: number,
-    proporcion: string[],
+    calorias?: number
+}
+
+export interface Producto {
+    producto_id: number;
+    titulo: string,
+    categoria: Categoria,
+    descripcion: string,
     imagenes?: string[],
     reviews?: Review[],
+    presentacion?: Presentacion[]
 }

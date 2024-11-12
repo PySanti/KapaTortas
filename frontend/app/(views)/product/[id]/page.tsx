@@ -1,13 +1,11 @@
-import { Producto } from "@/app/models/Producto";
+import { Categoria, Producto } from "@/app/models/Producto";
 import Product from "../../components/product";
 import { Cliente } from "@/app/models/Cliente";
-import { Role } from "@/app/models/RolEnum";
+import { Rol } from "@/app/models/RolEnum";
 
-export default function ProductPage({ params }: { params: { id: string } }) {
-    const { id } = params;
 
     // ESTO ES SOLO PARA USARLO POR AHORA ANTES DE NEXTAUTH
-    const sampleCliente: Cliente = {
+ const sampleCliente: Cliente = {
         perfil: {
           id: 1,
           nombre_completo: "Juan Pérez",
@@ -16,7 +14,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           numero_telefonico: "+1234567890",
           fecha_nacimiento: "1990-05-15",
           link_foto: "https://example.com/foto-juan.jpg",
-          rol: Role.CLIENTE, // Asume que el tipo Role es un string o enum con valores como "cliente", "admin", etc.
+          rol: Rol.CLIENTE, // Asume que el tipo RolEnum es un string o enum con valores como "cliente", "admin", etc.
           stripeCustomerId: "cus_1234567890ABC",
           is_active: true,
           is_staff: false
@@ -41,33 +39,121 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             esPreferida: false
           }
         ]
-      };
+ };
       
 
-    const sample = { 
-        titulo: "Chocolate Cake",
-        descripcion: {
-            caracteristicas: "Deliciosa torta de chocolate con 4 capas esponjosas y relleno cremoso, ¡Perfecta para los amantes del chocolate",
-            calorias: 500,
+const producto1: Producto = {
+    producto_id: 1,
+    titulo: "Torta de Chocolate",
+    categoria: Categoria.POSTRE,
+    descripcion: "Delicioso brownie de chocolate con trozos de nuez.",
+    imagenes: ["/images/choco-2.jpg", "/images/choco-3.jpg"],
+    reviews: [
+        {
+            cliente: sampleCliente,
+            review: "Increíble sabor y textura. Perfecto para los amantes del chocolate.",
+            puntuacion: 5
         },
-        precio: 8,
-        stock: 22,
-        proporcion: ['pequeña', "mediana", "grande"],
-        imagenes: [
-            "/images/Torta-Chocolate.png",
-            "/images/choco-2.jpg",
-            "/images/choco-3.jpg"
-        ],
-        reviews: [
-            { cliente: sampleCliente, review: "Buenas torticas AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", puntuacion: 4 },
-            { cliente: sampleCliente, review: "Buen Choco CHOCOLATEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", puntuacion: 3 },
-            { cliente: sampleCliente, review: "Buenas Fest SAQUENME DE AQUIIIIIIIIIIIIIIIIIIIIIII", puntuacion: 2 }
-        ]
-    };
+        {
+            cliente: sampleCliente,
+            review: "Un poco dulce para mi gusto, pero muy rico.",
+            puntuacion: 4
+        }
+    ],
+    presentacion: [
+        {
+            presentacion_id: 1,
+            ref: "Perfecto para el snack",
+            proporcion: "Pequeña",
+            precio: 3.5,
+            stock: 20,
+            calorias: 250
+        },
+        {
+            presentacion_id: 2,
+            ref: "Para compartir en familia",
+            proporcion: "Grande",
+            precio: 15,
+            stock: 5,
+            calorias: 1000
+        },
+        {
+            presentacion_id: 3,
+            ref: "Para ti brah",
+            proporcion: "Mediana",
+            precio: 7,
+            stock: 20,
+            calorias: 500
+        },
+    ]
+};
 
+const producto2: Producto = {
+    producto_id: 2,
+    titulo: "Salsa de Caramelo",
+    categoria: Categoria.POSTRE,
+    descripcion: "Salsa de caramelo perfecta para acompañar postres.",
+    imagenes: ["caramelo1.jpg"],
+    reviews: [
+        {
+            cliente: sampleCliente,
+            review: "Ideal para acompañar helados. ¡Recomendado!",
+            puntuacion: 5
+        }
+    ],
+    presentacion: [
+        {
+            presentacion_id: 3,
+            ref: "El tamaño pequeño perfecto para ti",
+            proporcion: "Pequeña",
+            precio: 2.5,
+            stock: 15,
+            calorias: 150
+        },
+        {
+            presentacion_id: 4,
+            ref: "Para compartir en familia",
+            proporcion: "Grande",
+            precio: 8,
+            stock: 10,
+            calorias: 500
+        }
+    ]
+};
+
+// EXTRAS
+const producto3: Producto = {
+    producto_id: 3,
+    titulo: "Sirope de Fresa",
+    categoria: Categoria.EXTRA,
+    descripcion: "Sirope de fresa ideal para postres y bebidas.",
+    presentacion: [{
+        presentacion_id: 1,
+        precio: 3,
+        stock: 20,
+    }]
+};
+
+const producto4: Producto = {
+    producto_id: 4,
+    titulo: "Crema Batida",
+    categoria: Categoria.EXTRA,
+    descripcion: "Crema batida lista para usar, perfecta para postres.",
+    presentacion: [{
+        presentacion_id: 1,
+        precio: 2,
+        stock: 20,
+    }]
+};
+
+// This will be extracted from the DB
+const extraList: Producto[] = [producto3, producto4];
+
+export default function ProductPage({ params }: { params: { id: string } }) {
+    const { id } = params;
 
     const testProduct: { [key: string]: Producto } = {
-        "producto": sample,
+        "producto": producto1,
     }
     const product: Producto = testProduct[id];
 
@@ -83,7 +169,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
     return (
         <div className='py-2 md:py-10 space-y-4 '>
-            <Product product={ product } rating={ rating } />
+            <Product product={ product } extraList={extraList} rating={ rating } />
         </div>
     )
 }
