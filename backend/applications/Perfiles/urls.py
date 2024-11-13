@@ -20,7 +20,7 @@ urlpatterns = [
     path("activar_perfil_by_token/", ActivarPerfilByTokenAPI.as_view()),
     path("google_service/", GoogleSocialAuthView.as_view()),
     path("send_verification_mail/", SendVerificationMailAPI.as_view()),
-    path("<str:email_perfil>/", ConsultarPerfilAPI.as_view()), 
     path('check-verified/<str:email_perfil>/', CheckVerifiedAPI.as_view()),
+    path("<str:email_perfil>/", ConsultarPerfilAPI.as_view()), 
       # Incluye barra final opcional para consistencia
 ]
