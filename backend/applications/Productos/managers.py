@@ -12,6 +12,11 @@ class ProductosManager(Manager):
                 "autor_review" : r.cliente_asociado.perfil.nombre_completo,
             })
         return reviews_list
+    def get_presentaciones_list(self, producto):
+        presentaciones = []
+        for u in producto.presentaciones.all():
+            presentaciones.append({})
+        pass
     def get_producto_info(self, producto):
         product_data = {k:v for k,v in producto.__dict__.items() if k in BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS}
         product_data["reviews"] = self.get_reviews_list(producto);

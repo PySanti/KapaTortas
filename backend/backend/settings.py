@@ -38,7 +38,8 @@ PROJECT_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    "rest_framework.authtoken"
 ]
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + PROJECT_APPS
 AUTH_USER_MODEL = 'Perfiles.Perfiles'
