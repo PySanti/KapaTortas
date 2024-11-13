@@ -20,11 +20,11 @@ class Productos(models.Model):
         verbose_name_plural = 'Productos'
 
 class Presentaciones(models.Model):
-    ref             = models.TextField()
-    proporcion      = models.CharField()
+    ref             = models.TextField(null=True, blank=True)
+    proporcion      = models.CharField(null=True, blank=True)
     precio          = models.DecimalField(max_digits=6, decimal_places=2)
     stock           = models.IntegerField()
-    calorias        = models.DecimalField(max_digits=5, decimal_places=2)
+    calorias        = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     producto_asociado = models.ForeignKey(Productos, related_name="presentaciones", on_delete=models.DO_NOTHING)
     
     def __str__(self):
