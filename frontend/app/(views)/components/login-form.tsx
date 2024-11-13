@@ -27,6 +27,7 @@ import { useState, useTransition } from 'react';
 import { login } from '@/app/controladores/actions/login';
 import FormSuccessMessage from './form-success-msg';
 import { cn } from '@/app/controladores/lib/utils';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginForm() {
   const [isPending, startTransition] = useTransition();
@@ -47,6 +48,11 @@ export default function LoginForm() {
 
   const [errorMsg, setErrorMsg] = useState<string | undefined>('');
   const [successMsg, setSuccessMsg] = useState<string | undefined>('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const onSubmit = async (data: loginType) => {
     setErrorMsg('');
@@ -94,6 +100,7 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name='password'
@@ -101,15 +108,36 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Contraseña</FormLabel>
                   <FormControl>
-                    <Input type='password' placeholder='********' disabled={isPending} {...field} />
+                    <div className='relative'>
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder='********'
+                        className='pr-10'
+                        {...field}
+                      />
+                      <Button
+                        type='button'
+                        variant='ghost'
+                        size='icon'
+                        className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
+                        onClick={togglePasswordVisibility}
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? (
+                          <EyeOff className='h-4 w-4 text-gray-500' />
+                        ) : (
+                          <Eye className='h-4 w-4 text-gray-500' />
+                        )}
+                      </Button>
+                    </div>
                   </FormControl>
-                  <FormMessage className='text-[0.8rem]' /> {/* Form error */}
-                  <Link
+                  <FormMessage />
+                  {/* <Link
                     className={cn(buttonVariants({ variant: 'link', size: 'sm' }), 'px-0 font-sm')}
                     href='/reset-password'
                   >
                     Olvidaste tu contraseña?
-                  </Link>
+                  </Link> */}
                 </FormItem>
               )}
             />
