@@ -84,12 +84,12 @@ export default {
         // extend profile type and add auth_token
 
         return {
-          name: user.nombre_completo,
+          name: user.nombre_completo || 'google123',
           email: user.correo,
           image: user.link_foto,
           rol: user.rol,
-          stripeCustomerId: user.stripeCustomerId || 'no-client',
-          // auth_token: user.auth_token || '1234',
+          stripeCustomerId: user.stripeCustomerId,
+          auth_token: user.auth_token,
         };
       },
     }),
@@ -117,31 +117,31 @@ export default {
   },
   callbacks: {
     async signIn({ user, account }) {
-      // // Allow oauth users to sign in without verifying their email
-      // if (account?.provider !== 'credentials') {
-      //   if (user) {
-      //     const idToken = account?.id_token;
+      // Allow oauth users to sign in without verifying their email
+      if (account?.provider === 'google') {
+        if (user) {
+          const idToken = account?.id_token;
 
-      //     const url = `http://localhost:8000/api/perfiles/google_service/`;
+          const url = `http://localhost:8000/api/perfiles/google_service/`;
 
-      //     try {
-      //       const response = await fetch(url, {
-      //         method: 'post',
-      //         headers: { 'Content-Type': 'application/json' },
-      //         body: JSON.stringify({
-      //           auth_token: idToken, // Send id token to backend
-      //         }),
-      //       });
-      //       const data = await response.json();
+          try {
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                auth_token: idToken, // Send id token to backend
+              }),
+            });
+            const data = await response.json();
 
-      //       // Assign the `tokens` field from the API response to `user.auth_token`
-      //       user.auth_token = data.tokens;
-      //       return true;
-      //     } catch (error) {
-      //       return false;
-      //     }
-      //   }
-      // }
+            // Assign the `tokens` field from the API response to `user.auth_token`
+            user.auth_token = data.tokens;
+            return true;
+          } catch (error) {
+            return false;
+          }
+        }
+      }
 
       //* Check if user exists
       const cliente = await ClienteAPI.obtenerCliente(user.email!);
@@ -151,12 +151,11 @@ export default {
         return false;
       }
 
-      const { perfil: existingUser } = cliente;
-
       const verificado = await checkCorreoVerificado(user.email!);
 
       if (!verificado) return false;
 
+      console.log('Google profile data:', cliente.perfil);
       return true;
     },
     // authorized({ auth, request: { nextUrl } }) {
@@ -223,15 +222,17 @@ export default {
     //   return true;
     // },
     async jwt({ token, user, session }) {
+      console.log('jwt callback', { token, user, session });
+
       const existingUser = await ClienteAPI.obtenerCliente(token?.email as string);
 
       // If no user exists
       if (!existingUser) return token;
 
       if (user) {
-        // if (user.auth_token) {
-        //   token.auth_token = user.auth_token; // Add auth_token to token
-        // }
+        if (user.auth_token) {
+          token.auth_token = user.auth_token; // Add auth_token to token
+        }
 
         return {
           ...token,
@@ -244,10 +245,12 @@ export default {
       return token;
     },
     async session({ session, token, user }: { session: Session; token?: JWT; user?: User }) {
+      console.log('session callback', { session, token, user });
+
       if (token) {
-        // if (token.auth_token) {
-        //   session.auth_token = token.auth_token as string;
-        // }
+        if (token.auth_token) {
+          session.auth_token = token.auth_token as string;
+        }
         return {
           ...session,
           user: {

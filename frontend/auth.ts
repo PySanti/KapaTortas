@@ -8,20 +8,20 @@ declare module 'next-auth' {
     user: User & {
       rol: Rol;
       stripeCustomerId: string;
-      // auth_token: string;
+      auth_token: string;
     };
     token: {
       rol: Rol;
       stripeCustomerId: string;
-      // auth_token: string;
+      auth_token: string;
     };
 
-    // auth_token: string;
+    auth_token: string;
   }
   interface User {
     rol: Rol;
     stripeCustomerId: string;
-    // auth_token: string;
+    auth_token: string;
   }
 }
 
