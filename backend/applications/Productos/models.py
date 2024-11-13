@@ -25,11 +25,11 @@ class Presentaciones(models.Model):
     precio          = models.DecimalField(max_digits=6, decimal_places=2)
     stock           = models.IntegerField()
     calorias        = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
-    producto_asociado = models.ForeignKey(Productos, related_name="presentaciones", on_delete=models.DO_NOTHING)
+    producto_asociado = models.ForeignKey(Productos, related_name="presentaciones", on_delete=models.SET_NULL, null=True)
 
 
     def __str__(self):
-        return f"{self.producto_asociado.titulo} - {self.proporcion}"
+        return f"{self.producto_asociado.titulo if self.producto_asociado else '()'} - {self.proporcion}"
     class Meta:
         verbose_name = 'Presentación'
         verbose_name_plural = 'Presentaciones'

@@ -17,9 +17,11 @@ from .managers import (
     PedidosManager,
     DescripcionesPedidosManager
 )
+from backend.utils.get_current_time import get_current_time
 
 class Pedidos(models.Model):
     numero_de_orden         = models.IntegerField(unique=True, blank=False, null=False)
+    fecha_pedido            = models.DateTimeField(null=True, blank=True, default=get_current_time)
     cliente_asociado        = models.ForeignKey(Clientes, on_delete=models.SET_NULL, null=True, related_name="pedidos")
     monto_total             = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     estado                  = models.CharField(choices=[(role.value, role.name) for role in EstadoEnum], default=EstadoEnum.PENDIENTE)
@@ -36,9 +38,9 @@ class Pedidos(models.Model):
 
 class DescripcionesPedido(models.Model):
     cantidad                    = models.IntegerField()
-    producto_asociado           = models.ForeignKey(Productos, related_name="descripciones_pedido", on_delete=models.DO_NOTHING)
-    pedido_asociado             = models.ForeignKey(Pedidos, related_name="descripciones_pedido", on_delete=models.DO_NOTHING)
-    presentacion_asociada       = models.ForeignKey(Presentaciones, related_name="descripciones_pedido", on_delete=models.DO_NOTHING, null=True)
+    producto_asociado           = models.ForeignKey(Productos, related_name="descripciones_pedido", on_delete=models.SET_NULL, null=True)
+    pedido_asociado             = models.ForeignKey(Pedidos, related_name="descripciones_pedido", on_delete=models.SET_NULL, null=True)
+    presentacion_asociada       = models.ForeignKey(Presentaciones, related_name="descripciones_pedido", on_delete=models.SET_NULL, null=True)
 
     objects = DescripcionesPedidosManager()
     def __str__(self):

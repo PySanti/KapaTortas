@@ -46,10 +46,10 @@ class CrearPedidoAPI(APIView):
                         presentacion_asociada=Presentaciones.objects.get(id=d["id_presentacion"]),
                         pedido_asociado=new_pedido
                     )
-                    monto_total += new_descripcion.presentacion_asociada.precio
+                    monto_total += new_descripcion.presentacion_asociada.precio*new_descripcion.cantidad
                 new_pedido.monto_total = monto_total
                 new_pedido.save()
-                return JsonResponse({'pedido' : new_pedido.get_info_dict()}, status=status.HTTP_200_OK)
+                return JsonResponse({'pedido' : Pedidos.objects.get_pedido_json(new_pedido)}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({'error' : "no_cliente_found"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
