@@ -3,7 +3,6 @@ import Product from "../../components/product";
 import { Cliente } from "@/app/models/Cliente";
 import { Rol } from "@/app/models/RolEnum";
 
-
     // ESTO ES SOLO PARA USARLO POR AHORA ANTES DE NEXTAUTH
  const sampleCliente: Cliente = {
         perfil: {

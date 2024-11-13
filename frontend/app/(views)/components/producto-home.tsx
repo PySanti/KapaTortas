@@ -3,16 +3,17 @@ import Torta from '@/app/(views)/components/images/Torta';
 import { MainButton } from './MainButton';
 import Migaja from '@/app/(views)/components/images/Migaja';
 import Link from 'next/link';
+import { Producto } from '@/app/models/Producto';
 
-export default function ProductoHome({ item }: { item: cakeType }) {
+export default function ProductoHome({ product }: { product: Producto }) {
   return (
     <div className='relative items-start bg-primary-light bg-opacity-70 rounded-full mt-2 lg:mt-10 p-4 md:p-6 lg:p-10 space-x-6 max-w-7xl mx-auto'>
       <div className='grid grid-cols-[2fr_3fr] xl:grid-cols-2 items-center'>
         <div>
           <Torta
             className='absolute top-[-8vw] md:top-[-6vw] lg:top-[-4vw]'
-            path={item.image_torta.image}
-            alt={item.image_torta.alt}
+            path={product?.imagenes && product.imagenes.length > 0 ? product.imagenes[1] : "/images/miga-Chocolate.png"}
+            alt={product.titulo}
           />
         </div>
 
@@ -20,17 +21,17 @@ export default function ProductoHome({ item }: { item: cakeType }) {
           <div className='items-center space-x-2'>
             <div className='relative sm:flex items-center mx-4 min-w-36 max-w-sm md:max-w-md lg:max-w-lg'>
               <h1 className='text-terciary text-3xl text-center md:text-5xl md:text-left lg:text-6xl'>
-                {item.name}
+                {product.titulo}
               </h1>
               <Migaja
                 className='hidden sm:flex'
-                path={item.image_migaja.image}
-                alt={item.image_migaja.alt}
+                path={product?.imagenes && product.imagenes.length > 0 ? product.imagenes[0] : "/images/miga-Chocolate.png"}
+                alt={product.titulo}
               />
             </div>
 
             <p className='hidden text-sm text-terciary text-left md:flex lg:text-lg'>
-              {item.description}
+              {product.descripcion}
             </p>
             <div className='relative sm:flex items-center p-4 space-x-4'>
               <MainButton
