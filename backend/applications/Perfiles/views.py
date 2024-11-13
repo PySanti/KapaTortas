@@ -20,7 +20,7 @@ from rest_framework.permissions import (
     AllowAny
 )
 from django.http import JsonResponse
-from backend.utils.constants import (BASE_SERIALIZER_ERROR_RESPONSE)
+from backend.utils.constants import (BASE_PROFILE_SHOWABLE_FIELDS)
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
 from django.contrib.auth.hashers import check_password  
 from applications.Perfiles.models import Perfiles
@@ -28,6 +28,7 @@ from backend.utils.send_verification_mail import send_verification_mail
 from rest_framework.response import Response
 from applications.Clientes.models import VerificationToken
 from applications.Clientes.models import Clientes
+from backend.utils.get_info_dict import get_info_dict
 
 
 
@@ -49,7 +50,7 @@ class ConsultarPerfilAPI(APIView):
                     "direccion_preferida" : client_info["direccion_preferida"],
                     "pedidos" : client_info["pedidos"]}, status=status.HTTP_200_OK)
             else:
-                return JsonResponse({"perfil": Perfiles.objects.get_perfil_dict(perfil[0])}, status=status.HTTP_200_OK)
+                return JsonResponse({"perfil": get_info_dict(perfil[0], BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_200_OK)
         else:
             return JsonResponse({"error":"no_profile"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -78,7 +79,7 @@ class CrearPerfilAPI(APIView):
                     new_profile.save()
                     send_verification_mail(new_profile.perfil.correo, new_profile.verification_token.token)
                 new_profile = new_profile.perfil if serialized_data['rol'] == "cliente" else new_profile
-                return JsonResponse({"new_profile": Perfiles.objects.get_perfil_dict(new_profile)}, status=status.HTTP_201_CREATED)
+                return JsonResponse({"new_profile": get_info_dict(new_profile, BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_201_CREATED)
             except:
                 return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -114,7 +115,7 @@ class ActualizarStripeCustomerIdAPI(APIView):
             if profile := Perfiles.objects.filter(correo=serialized_data["email"]):
                 profile[0].stripeCustomerId = serialized_data["new_stripeId"]
                 profile[0].save()
-                return JsonResponse({"profile" : Perfiles.objects.get_perfil_dict(profile[0])}, status=status.HTTP_200_OK)
+                return JsonResponse({"profile" : get_info_dict(profile[0], BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"error" : "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -245,7 +246,7 @@ class GetClienteDireccionesAPI(APIView):
         try:
             if cliente := Clientes.objects.filter(perfil__correo=email_perfil):
                 return JsonResponse({
-                    "direcciones": Clientes.objects.get_formated_direcciones_dict(cliente[0]),
+                    "direcciones": Clientes.objects.get_direcciones_json(cliente[0]),
                     "direccion_preferida" : Clientes.objects.get_formated_direccion_preferida(cliente[0])}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)

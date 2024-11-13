@@ -26,6 +26,7 @@ class DireccionesEnvio(models.Model):
     referencia      = models.CharField(null=True, blank=True)
     codigo_postal   = models.IntegerField()
 
+
     def __str__(self):
         return f"{self.id} : {self.pais}/{self.codigo_postal}"
     class Meta:

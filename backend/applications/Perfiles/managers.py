@@ -40,9 +40,3 @@ class PerfilesManager(BaseUserManager):
             return "nombre_completo_exists"
         else:
             return False
-    def get_perfil_dict(self, perfil):
-        """
-            Toma un objeto tipo Perfil y retorna un diccionario a partir de los SHOWABLE_FIELDS,
-            retornable en un JsonResponse
-        """
-        return {k:v for k,v in perfil.__dict__.items() if k in BASE_PROFILE_SHOWABLE_FIELDS}

@@ -17,7 +17,6 @@ from .managers import (
     PedidosManager,
     DescripcionesPedidosManager
 )
-from backend.utils.constants import BASE_PEDIDOS_SHOWABLE_FIELDS
 
 class Pedidos(models.Model):
     numero_de_orden         = models.IntegerField(unique=True, blank=False, null=False)
@@ -29,15 +28,6 @@ class Pedidos(models.Model):
 
     objects                 = PedidosManager()
 
-    def get_info_dict(self):
-        pedido_dict = {k:v for k,v in self.__dict__.items() if k in BASE_PEDIDOS_SHOWABLE_FIELDS}
-        pedido_dict["descripciones"] = [{
-            'titulo' : p.producto_asociado.titulo,
-            'presentacion' : p.presentacion_asociada.proporcion,
-            "precio_presentacion" : p.presentacion_asociada.precio,
-            'cantidad' : p.cantidad
-        } for p in self.descripciones_pedido.all()];
-        return pedido_dict
     def __str__(self):
         return f"{self.cliente_asociado.perfil.nombre_completo} : {self.numero_de_orden}"
     class Meta:
