@@ -118,7 +118,7 @@ export default function LoginForm() {
             <FormSuccessMessage message={successMsg} />
             <div className='flex flex-col gap-6'>
               <Button disabled={isPending} type='submit' className='w-full'>
-                Inicia sesión con email
+                Inicia sesión
               </Button>
               <div className='relative'>
                 <div className='absolute inset-0 flex items-center'>

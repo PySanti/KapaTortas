@@ -222,7 +222,7 @@ export default {
     //   return true;
     // },
     async jwt({ token, user, session }) {
-      console.log('jwt callback', { token, user, session });
+      // console.log('jwt callback', { token, user, session });
 
       const existingUser = await ClienteAPI.obtenerCliente(token?.email as string);
 
@@ -245,7 +245,7 @@ export default {
       return token;
     },
     async session({ session, token, user }: { session: Session; token?: JWT; user?: User }) {
-      console.log('session callback', { session, token, user });
+      // console.log('session callback', { session, token, user });
 
       if (token) {
         if (token.auth_token) {
