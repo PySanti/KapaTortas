@@ -13,8 +13,8 @@ class DescripcionesPedidosManager(Manager):
     def get_descripcion_json(self, descripcion):
         return {
             'titulo' : descripcion.producto_asociado.titulo,
-            'presentacion' : descripcion.presentacion_asociada.proporcion,
-            "precio_presentacion" : descripcion.presentacion_asociada.precio,
+            'presentacion' : descripcion.presentacion_asociada.proporcion if descripcion.presentacion_asociada else None,
+            "precio_presentacion" : descripcion.presentacion_asociada.precio if descripcion.presentacion_asociada else None,
             'cantidad' : descripcion.cantidad,
             'imagenes_producto' : descripcion.producto_asociado.imagenes
         }
