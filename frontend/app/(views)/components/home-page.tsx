@@ -4,12 +4,13 @@ import { useRef, useState } from "react";
 import { Cliente } from "@/app/models/Cliente";
 import ClienteAPI from "@/app/controladores/api/users/ClienteAPI";
 import MainHome from "./main-home";
-import ProductoHome from "./producto-home";
+import ItemProducto from "./item-producto";
 import { useSmoothScroll } from "@/app/controladores/utilities/useSmoothScroll";
 
 import { Rol } from "@/app/models/RolEnum";
 import { Categoria } from "@/app/models/Producto";
 import { Producto } from "@/app/models/Producto";
+import ProductHome from "./product-home";
 
 const sampleCliente: Cliente = {
   perfil: {
@@ -135,45 +136,43 @@ const producto2: Producto = {
 export default function HomePage({ productos }: { productos: Producto[] }) {
   const sectionCatalogoRef = useRef<HTMLDivElement>(null);
   const scrollToSection = useSmoothScroll(sectionCatalogoRef);
-  const extrasList = productos && productos.filter(
-    (item) => item.categoria === Categoria.EXTRA,
-  );
-  const productoList = productos && productos.filter(
-    (item) => item.categoria === Categoria.POSTRE,
-  );
 
   if (!Array.isArray(productoList)) {
     console.error(
       "Expected productoList to be an array, received:",
       productoList,
     );
-    return <p>No se pudieron cargar los productoList</p>;
+    return <p>No se pudieron cargar los Productos</p>;
   }
 
   return (
     <>
       <MainHome scrollToSection={scrollToSection} />
-      <section ref={sectionCatalogoRef} className="w-full mb-20">
+      {/* <section ref={sectionCatalogoRef} className="w-full mb-20">
         <div className="relative ">
           <div className="m-4 md:m-2 p-6 md:p-8 lg:p-10">
             <h1 className="text-primary text-4xl lg:text-6xl">
               Nuestras Tortas
             </h1>
-            {/* <span>-----</span> */}
           </div>
           <div className="container mx-auto px-4">
             <div className="flex flex-col gap-16">
               {productoList.map((product, index) => {
                 return (
                   <div key={index} className="w-full">
-                    <ProductoHome key={index} product={product} />
+                    <ItemProducto key={index} product={product} />
                   </div>
                 );
               })}
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <ProductHome
+        sectionCatalogoRef={sectionCatalogoRef}
+        productos={productos}
+      />
     </>
   );
 }

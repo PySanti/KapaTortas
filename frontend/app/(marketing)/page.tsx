@@ -1,19 +1,19 @@
 import HomePage from "../(views)/components/home-page";
 import ProductoAPI from "../controladores/api/ProductoAPI";
 import { Producto } from "../models/Producto";
+import getStaticProps from "@/lib/serverProps";
 
-export default async function Home({}) {
-  let productos: Producto[] = [];
+export default async function Home() {
+  const product = (await getStaticProps()).props.productos;
 
-  try {
-    productos = (await ProductoAPI.obtenerListaProductos()) ?? [];
-  } catch (err) {
-    console.error("Error cargando los productos: ", err);
+  if (!Array.isArray(product)) {
+    console.error("Expected productoList to be an array, received:", product);
+    return <p>Hola</p>;
   }
 
   return (
     <>
-      <HomePage productos={productos} />
+      <HomePage productos={product} />
     </>
   );
 }
