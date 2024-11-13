@@ -34,7 +34,7 @@ export default function Product({ id }: { id: string }) {
   // Extras seleccionados
   const [extras, setExtras] = useState<Producto[]>([]);
   // Proporcion seleccionada
-  const [present, setPresent] = useState<Presentacion | undefined>();
+  const [present, setPresent] = useState<Presentacion>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,8 +43,6 @@ export default function Product({ id }: { id: string }) {
         const productData = await ProductoAPI.obtenerProducto(Number(id));
         if (productData) {
           setProduct(productData);
-          setPresent(productData.presentaciones?.[0]);
-          console.log("este producto: ", productData);
 
           // Calcula el rating de las reviews
           if (productData.reviews && productData.reviews.length > 0) {
@@ -73,6 +71,14 @@ export default function Product({ id }: { id: string }) {
 
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    // When `product` updates, set `presentaciones` if available
+    if (product) {
+      console.log(product.presentaciones);
+      setPresent(product.presentaciones?.[0]);
+    }
+  }, [product]);
 
   if (!product) {
     return <div></div>;
