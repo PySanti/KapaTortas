@@ -1,88 +1,54 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { Fragment } from "react";
-
-import { Producto, Presentacion, Categoria } from "@/app/models/Producto";
+import { Producto, Categoria } from "@/app/models/Producto";
 import ProductoAPI from "@/app/controladores/api/ProductoAPI";
+import DetailProduct from "./detail-product";
 
 import Gallery from "./gallery";
 import Stars from "./stars";
-import Selector from "./selector";
+import ReviewProduct from "./review-product";
 
-import { CheckIcon, User, Dessert } from "lucide-react";
-import {
-  RadioGroup,
-  Label,
-  Radio,
-  TabGroup,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-} from "@headlessui/react";
-import { Button } from "@/app/(views)/components/ui/button";
+import { CheckIcon, Dessert } from "lucide-react";
 import { CircleX } from "lucide-react";
-import classNames from "@/app/controladores/utilities/classNames";
 
-export default function Product({ id }: { id: string }) {
-  const [product, setProduct] = useState<Producto | null>(null);
-  const [rating, setRating] = useState<number | undefined>(undefined);
+export const dynamic = "force-dynamic";
 
-  // Extras Lista completa
-  const [extraList, setExtraList] = useState<Producto[]>([]);
-  // Extras seleccionados
-  const [extras, setExtras] = useState<Producto[]>([]);
-  // Proporcion seleccionada
-  const [present, setPresent] = useState<Presentacion>();
+async function fetchProduct(id: string): Promise<Producto | null> {
+  try {
+    return await ProductoAPI.obtenerProducto(Number(id));
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return null;
+  }
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch Data del producto
-        const productData = await ProductoAPI.obtenerProducto(Number(id));
-        if (productData) {
-          setProduct(productData);
+async function fetchExtras(): Promise<Producto[] | undefined> {
+  try {
+    const products = await ProductoAPI.obtenerListaProductos();
+    return products?.filter((item) => item.categoria === Categoria.EXTRA);
+  } catch (error) {
+    console.error("Error fetching extras:", error);
+    return [];
+  }
+}
 
-          // Calcula el rating de las reviews
-          if (productData.reviews && productData.reviews.length > 0) {
-            const avgRating =
-              productData.reviews.reduce(
-                (sum, item) => sum + item.puntuacion,
-                0,
-              ) / productData.reviews.length;
-            setRating(avgRating);
-          }
-        } else {
-          setProduct(null);
-        }
-
-        // Obtener la lista de productos
-        const extrasData = await ProductoAPI.obtenerListaProductos();
-        if (extrasData) {
-          setExtraList(
-            extrasData.filter((item) => item.categoria === Categoria.EXTRA),
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching product or extras:", error);
-      }
-    };
-
-    fetchData();
-  }, [id]);
-
-  useEffect(() => {
-    // When `product` updates, set `presentaciones` if available
-    if (product) {
-      console.log(product.presentaciones);
-      setPresent(product.presentaciones?.[0]);
-    }
-  }, [product]);
+export default async function Product({ id }: { id: string }) {
+  const product = await fetchProduct(id);
+  const extraList = await fetchExtras();
 
   if (!product) {
-    return <div></div>;
+    return (
+      <div className="text-center text-red-500">Producto no encontrado</div>
+    );
   }
+
+  // Calculate rating
+  const rating =
+    product.reviews?.length > 0
+      ? product.reviews.reduce((sum, item) => sum + item.calificacion, 0) /
+        product.reviews.length
+      : 0;
+
+  // Default selected presentation
+  const present = product.presentaciones?.[0];
   // Estrellas
   const stars: number = rating != undefined ? Math.round(rating) : 0;
 
@@ -160,140 +126,12 @@ export default function Product({ id }: { id: string }) {
         {/* Galeria */}
         <Gallery product={product} />
 
-        {/* Producto Info */}
-        <div className="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
-          <section className="items-center">
-            <form>
-              {/* Extras */}
-              <Selector
-                extraList={extraList}
-                selected={extras}
-                setSelected={setExtras}
-                type="Extras"
-              />
-
-              <div className="sm:flex sm:justify-between">
-                <RadioGroup value={present} onChange={setPresent}>
-                  <Label className="block text-lg font-medium p-2">
-                    Tamaño
-                  </Label>
-                  <div className="mt-1 grid grid-cols-1 gap-4 items-center sm:grid-cols-2">
-                    {product?.presentaciones &&
-                      product.presentaciones.map((present, index) => (
-                        <Radio
-                          as="div"
-                          key={index}
-                          value={present}
-                          className={({ checked }) =>
-                            classNames(
-                              checked
-                                ? "ring-2 ring-primary bg-primary-light bg-opacity-20"
-                                : "",
-                              "relative block cursor-pointer rounded-lg border border-gray-300 p-4 focus:outline-none",
-                            )
-                          }
-                        >
-                          {({ checked, disabled }) => (
-                            <>
-                              <Label
-                                as="p"
-                                className="text-base font-medium text-terciary"
-                              >
-                                {present.proporcion}
-                              </Label>
-                              <Label
-                                as="p"
-                                className="mt-1 text-sm text-terciary"
-                              >
-                                {present.ref}
-                              </Label>
-                              <div
-                                className={classNames(
-                                  checked ? "border" : "border-2",
-                                  disabled
-                                    ? "border-primary"
-                                    : "border-transparent",
-                                  "pointer-events-none absolute -inset-px rounded-lg",
-                                )}
-                                aria-hidden="true"
-                              />
-                            </>
-                          )}
-                        </Radio>
-                      ))}
-                  </div>
-                </RadioGroup>
-              </div>
-
-              <div className="mt-10 text-center">
-                <Button
-                  type="button"
-                  className="text-center text-base py-7 rounded-full"
-                >
-                  Agregar al Carrito
-                </Button>
-              </div>
-            </form>
-          </section>
-        </div>
+        {/* as */}
+        <DetailProduct product={product} extraList={extraList} />
 
         {/* Reviews */}
 
-        <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
-          <TabGroup as="div">
-            <div className="border-b border-secondary-light">
-              <TabList className="-mb-px flex space-x-8">
-                <Tab
-                  className={({ selected }) =>
-                    classNames(
-                      selected
-                        ? " border-primary-light text-primary-light"
-                        : "border-transparent text-terciary hover:border-primary-light hover:text-terciary",
-                      "whitespace-nowrap border-b-2 py-6 text-sm font-medium",
-                    )
-                  }
-                >
-                  Reviews
-                </Tab>
-              </TabList>
-            </div>
-
-            {/* Reviews completas */}
-            <TabPanels as={Fragment}>
-              <TabPanel className="-mb-10">
-                <h3 className="sr-only">Reviews</h3>
-                {product.reviews?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex space-x-4 text-base text-terciary"
-                  >
-                    {/* Icon */}
-                    <div className="flex-none py-10">
-                      <User className="text-terciary text-lg" />
-                    </div>
-
-                    <div
-                      className={classNames(
-                        index === 0 ? "" : "border-t border-primary-light",
-                        "py-10",
-                      )}
-                    >
-                      <h3 className="font-medium text-terciary">
-                        {item.cliente.perfil.nombre_completo}
-                      </h3>
-                      <Stars rating={item.puntuacion} label="Puntuación" />
-
-                      <div
-                        className="prose prose-sm mt-4 max-w-none text-gray-500"
-                        dangerouslySetInnerHTML={{ __html: item.review }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </TabPanel>
-            </TabPanels>
-          </TabGroup>
-        </div>
+        <ReviewProduct product={product} />
       </div>
     </div>
   );

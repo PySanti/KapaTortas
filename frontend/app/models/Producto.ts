@@ -6,9 +6,9 @@ export enum Categoria {
 }
 
 type Review = {
-  cliente: Cliente;
-  review: string;
-  puntuacion: number;
+  autor_review: string;
+  descripcion: string;
+  calificacion: number;
 };
 
 export type Presentacion = {

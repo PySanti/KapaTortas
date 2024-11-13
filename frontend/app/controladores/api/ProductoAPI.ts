@@ -48,7 +48,7 @@ class ProductoAPI {
 
       const data = await response.json();
 
-      return data;
+      return data.producto;
     } catch (err) {
       console.error("Error en la petición del producto: ", err);
       return null;
