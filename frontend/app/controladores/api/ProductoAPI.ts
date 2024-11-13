@@ -17,26 +17,18 @@ class ProductoAPI {
   // Cambiar T por Producto[]
   public async obtenerListaProductos(): Promise<Producto[] | null> {
     const url = `http://localhost:8000/api/productos/todos`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
 
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "applications/json",
-        },
-      });
+    if (!response.ok) throw new Error(`Error: ${response.status}`);
 
-      if (!response.ok) {
-        throw new Error(`Error en la conexión, Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      return data.productos;
-    } catch (err) {
-      console.error("Error en la petición de los productos: ", err);
-      return null;
-    }
+    const data = await response.json();
+    return data.productos;
   }
 
   public async obtenerProducto(id: number): Promise<Producto | null> {
