@@ -24,7 +24,7 @@ class Presentaciones(models.Model):
     proporcion      = models.CharField(null=True, blank=True)
     precio          = models.DecimalField(max_digits=6, decimal_places=2)
     stock           = models.IntegerField()
-    calorias        = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    calorias        = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     producto_asociado = models.ForeignKey(Productos, related_name="presentaciones", on_delete=models.DO_NOTHING)
 
 
