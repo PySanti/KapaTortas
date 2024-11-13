@@ -1,8 +1,15 @@
+import { auth } from '@/auth';
 import DashboardContainer from '../../components/dashboard-container';
 import { DashboardHeader } from '../../components/dashboard-header';
 import PedidoHistorial from '../../components/pedido-historial';
+import PedidoAPI from '@/app/controladores/api/pedido-api';
 
-export default function OrdenesPage() {
+export default async function OrdenesPage() {
+  const session = await auth();
+
+  const pedidos = await PedidoAPI.obtenerPedidos(session?.user.email!);
+  console.log(pedidos);
+
   return (
     <DashboardContainer>
       <DashboardHeader
