@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Fragment } from "react";
 
-import { Producto, Presentacion } from "@/app/models/Producto";
+import { Producto, Presentacion, Categoria } from "@/app/models/Producto";
+import ProductoAPI from "@/app/controladores/api/ProductoAPI";
 
 import Gallery from "./gallery";
 import Stars from "./stars";
@@ -16,16 +17,57 @@ import { CircleX } from "lucide-react";
 import classNames from "@/app/controladores/utilities/classNames";
 
 
-export default function Product({ product, extraList, rating }: { product: Producto, extraList: Producto[], rating: number | undefined }) {
+export default function Product({ id }: { id: string }) {
+  const [product, setProduct] = useState<Producto | null>(null);
+  const [rating, setRating] = useState<number | undefined>(undefined);
+
+    // Extras Lista completa
+    const [extraList, setExtraList] = useState<Producto[]>([]);
+    // Extras seleccionados
+    const [extras, setExtras] = useState<Producto[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch Data del producto
+        const productData = await ProductoAPI.obtenerProducto(Number(id));
+        if (productData) {
+          setProduct(productData);
+
+          // Calcula el rating de las reviews
+          if (productData.reviews && productData.reviews.length > 0) {
+            const avgRating = productData.reviews.reduce((sum, item) => sum + item.puntuacion, 0) / productData.reviews.length;
+            setRating(avgRating);
+          }
+        } else {
+          setProduct(null);
+        }
+
+        // Obtener la lista de productos
+        const extrasData = await ProductoAPI.obtenerListaProductos();
+        if (extrasData) {
+          setExtraList(extrasData.filter((item) => item.categoria === Categoria.EXTRA));
+        }
+      } catch (error) {
+        console.error("Error fetching product or extras:", error);
+      }
+    };
+
+    fetchData();
+     }, [id]);
+
+  if (!product) {
+      return <div>Product not found</div>;
+  }
+
+
   // Proporcion seleccionada
   const [present, setPresent] = useState<Presentacion | undefined>(product.presentacion?.[0]);
-  // Extras seleccionados
-  const [extras, setExtras] = useState<Producto[]>([])
   // Estrellas
   const stars: number = rating != undefined ? Math.round(rating) : 0;
 
   return (
-    <div>
+    <div className='py-2 md:py-10 space-y-4 '>
       <div className=" max-w-2xl mx-4 px-8 py-16 pt-6 sm:px-6 sm:py-24 sm:pt-6 sm:mx-8 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:max-w-full">
         {/* Detalles del Producto */}
         <div className="lg:max-w-lg lg:self-end">

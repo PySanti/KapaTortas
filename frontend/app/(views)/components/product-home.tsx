@@ -9,8 +9,6 @@ export default function ProductHome({
   sectionCatalogoRef: React.RefObject<HTMLDivElement>;
   productos: Producto[];
 }) {
-  const extrasList =
-    productos && productos.filter((item) => item.categoria === Categoria.EXTRA);
 
   return (
     <section ref={sectionCatalogoRef} className="w-full mb-20">
