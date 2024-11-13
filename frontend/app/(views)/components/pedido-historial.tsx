@@ -4,36 +4,6 @@ import DisplayOnHover from './display-on-hover';
 import { Pedido } from '@/app/models/Pedido';
 import Link from 'next/link';
 
-const orders = [
-  {
-    number: 'WU88191111',
-    href: '#',
-    invoiceHref: '#',
-    createdDate: 'Nov 11, 2024',
-    createdDatetime: '2024-11-11',
-    deliveredDate: 'Nov 12, 2024',
-    deliveredDatetime: '2024-12-11',
-    total: '$160.00',
-    shipTo: {
-      name: 'Samuel Palacios',
-      extras: ['Rue de Mentana, Montreal', 'Canada, H2L3R4'],
-    },
-    products: [
-      {
-        id: 1,
-        name: 'Chocolate Cake',
-        description: 'Deliciosa torta de chocolate con 4 capas esponjosas y relleno cremoso',
-        href: '#',
-        price: '$8',
-        imageSrc: '/images/Torta-Chocolate.png',
-        imageAlt: 'Una rica torta de chocolate',
-      },
-      // More products...
-    ],
-  },
-  // More orders...
-];
-
 interface PedidoHistorialProps extends React.HTMLAttributes<HTMLDivElement> {
   pedidos: Pedido[];
   nombreUsuario: string;

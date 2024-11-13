@@ -32,7 +32,7 @@ class PedidoAPI {
 
       const data = await response.json();
 
-      return data;
+      return data.pedidos;
     } catch (err) {
       console.error('Error en la peticion de consultar pedidos: ', err);
       return null;
