@@ -16,6 +16,7 @@ from random import randint
 from applications.Clientes.models import Clientes
 from backend.utils.constants import EstadoEnum
 from .models import DescripcionesPedido
+from applications.Clientes.models import DireccionesEnvio
 
 
 
@@ -36,7 +37,8 @@ class CrearPedidoAPI(APIView):
                     cliente_asociado=cliente[0],
                     metodo_entrega=serialized_data["metodo_entrega"],
                     metodo_pago=serialized_data["metodo_pago"],
-                    estado = "pendiente"
+                    estado = "pendiente",
+                    direccion_entrega=DireccionesEnvio.objects.get(id=serialized_data['direccion_entrega_id'])
                 )
                 monto_total = 0
                 for d in serialized_data["descripciones"]:

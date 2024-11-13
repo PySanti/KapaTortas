@@ -11,6 +11,7 @@ class DescripcionesPedidosSerializer(serializers.Serializer):
 
 class CrearPedidoSerializer(serializers.Serializer):
     cliente_id = serializers.IntegerField()
+    direccion_entrega_id = serializers.IntegerField()
     metodo_pago = serializers.ChoiceField(  
         choices=[(role.value, role.name) for role in MetodoPagoEnum], 
     )  
