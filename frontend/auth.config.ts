@@ -5,10 +5,10 @@ import GoogleProvider from 'next-auth/providers/google';
 import type { JWT } from 'next-auth/jwt';
 import ClienteAPI from './app/controladores/api/users/ClienteAPI';
 import { stripe } from '@/app/controladores/lib/stripe';
-import passwordsMatch from './app/controladores/utilities/passwordsMatch';
-import crearStripeId from './app/controladores/utilities/crearStripeId';
-import correoVerificado from './app/controladores/utilities/correoVerificado';
-import checkCorreoVerificado from './app/controladores/utilities/checkCorreoVerificado';
+import passwordsMatch from './app/controladores/utilities/passwords-match';
+import crearStripeId from './app/controladores/utilities/crear-stripeid';
+import correoVerificado from './app/controladores/utilities/correo-verificado';
+import checkCorreoVerificado from './app/controladores/utilities/check-correo-verificado';
 import { authRoutes, defaultLoginRedirect, publicRoutes } from './app/models/config/routes';
 // import { authRoutes, defaultLoginRedirect, publicRoutes } from './config/routes';
 

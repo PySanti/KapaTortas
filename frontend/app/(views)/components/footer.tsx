@@ -6,7 +6,7 @@ import { SendHorizontal } from 'lucide-react';
 import { Button } from '@/app/(views)/components/ui/button';
 import { DatePicker } from './date-picker';
 import { Input } from '@/app/(views)/components/ui/input';
-import redirectToWhatsapp from '@/app/controladores/utilities/redirectToWhatsapp';
+import redirectToWhatsapp from '@/app/controladores/utilities/redirect-to-whatsapp';
 import { FaWhatsapp } from 'react-icons/fa';
 
 export default function Footer() {

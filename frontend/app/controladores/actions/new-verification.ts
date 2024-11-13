@@ -1,5 +1,5 @@
 import ClienteAPI from '../api/users/ClienteAPI';
-import conseguirToken from '../utilities/conseguirToken';
+import conseguirToken from '../utilities/conseguir-token';
 
 export const newVerification = async (token: string) => {
   const tokenExistente = await conseguirToken(token);
