@@ -36,7 +36,7 @@ class DireccionesEnvio(models.Model):
 class Clientes(models.Model):  
     perfil              =   models.OneToOneField(Perfiles, on_delete=models.CASCADE)
     direcciones         =   models.ManyToManyField(DireccionesEnvio)
-    direccion_preferida =   models.ForeignKey(DireccionesEnvio, related_name="clientes_preferidos", on_delete=models.SET_NULL, null=True)
+    direccion_preferida =   models.ForeignKey(DireccionesEnvio, related_name="clientes_preferidos", on_delete=models.SET_NULL, null=True, blank=True)
     auth_provider       =   models.CharField(max_length=50, default="google")
     verification_token  =   models.OneToOneField(VerificationToken, on_delete=models.SET_NULL, null=True, blank=True)
 

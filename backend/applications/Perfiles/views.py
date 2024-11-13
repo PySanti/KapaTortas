@@ -12,7 +12,8 @@ ActivarPerfilByTokenSerializer,
 GoogleSocialAuthSerializer,
 SendVerificationMailSerializer,
 CheckVerifiedSerializer,
-GetClientePedidosSerializer
+GetClientePedidosSerializer,
+GetClienteDireccionesSerializer
 
 )
 from rest_framework.permissions import (
@@ -230,5 +231,22 @@ class GetClientePedidosAPI(APIView):
             return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
+class GetClienteDireccionesAPI(APIView):
+    serializer_class = GetClienteDireccionesSerializer
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def get(self, request, email_perfil, *args, **kwargs):
+        try:
+            if cliente := Clientes.objects.filter(perfil__correo=email_perfil):
+                return JsonResponse({
+                    "direcciones": Clientes.objects.get_formated_direcciones_dict(cliente[0]),
+                    "direccion_preferida" : Clientes.objects.get_formated_direccion_preferida(cliente[0])}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
