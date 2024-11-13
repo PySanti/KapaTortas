@@ -16,7 +16,7 @@ export default async function OrdenesPage() {
         heading='Pedidos'
         description='Revisa el estado de tus pedidos y realiza cambios si es necesario'
       />
-      <PedidoHistorial />
+      <PedidoHistorial pedidos={pedidos!} nombreUsuario={session?.user.name!} />
     </DashboardContainer>
   );
 }
