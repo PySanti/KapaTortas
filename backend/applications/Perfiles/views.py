@@ -172,10 +172,13 @@ class GoogleSocialAuthView(APIView):
     permission_classes      = [AllowAny]
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        data = ((serializer.validated_data)['auth_token'])
-        return Response(data, status=status.HTTP_200_OK)
+        try:
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            data = ((serializer.validated_data)['auth_token'])
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({"error" : "authentication_failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 

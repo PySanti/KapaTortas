@@ -7,7 +7,6 @@ from rest_framework.exceptions import AuthenticationFailed
 
 
 
-
 class ConsultarPerfilSerializer(serializers.Serializer):
     pass
 
@@ -48,11 +47,7 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
             )
         if user_data['aud'] != settings.GOOGLE_CLIENT_ID:
             raise AuthenticationFailed('oops, who are you?')
-        email = user_data['email']
-        name = user_data['name']
-        provider = 'google'
-        return register_social_user(
-            provider=provider, email=email, name=name)
+        return register_social_user(provider="google", email=user_data["email"], name=user_data["name"])
 
 class SendVerificationMailSerializer(serializers.Serializer):
     email = serializers.EmailField()
