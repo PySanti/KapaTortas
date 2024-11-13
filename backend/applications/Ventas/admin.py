@@ -44,7 +44,7 @@ class DescripcionesPedidoAdmin(admin.ModelAdmin):
 
 @admin.register(Pedidos)  
 class PedidosAdmin(admin.ModelAdmin):  
-    list_display = ('numero_de_orden',  'monto_total',  'metodo_entrega', 'metodo_pago', 'estado', 'cliente_asociado', 'descripciones_pedido')  
+    list_display = ('numero_de_orden',  'monto_total',  'metodo_entrega', 'metodo_pago', 'estado', 'cliente_asociado', 'descripciones_pedido', 'direccion_entrega')  
     list_filter = (ClienteFilter,)  
     def cliente_asociado(self, obj):
         return obj.cliente_asociado.perfil.nombre_completo
@@ -79,7 +79,7 @@ class FechaVentasFilter(admin.SimpleListFilter):
         return queryset  
 @admin.register(Ventas)  
 class VentasAdmin(admin.ModelAdmin):  
-    list_display = ('fecha',  'direccion', 'nota')  
+    list_display = ('fecha',   'nota')  
     list_filter = (FechaVentasFilter,)  # Uso del filtro personalizado  
     actions = ['export_to_excel']  
 

@@ -28,7 +28,7 @@ class DireccionesEnvio(models.Model):
 
 
     def __str__(self):
-        return f"{self.id} : {self.pais}/{self.codigo_postal}"
+        return f"{self.id} : {self.referencia}/{self.codigo_postal}"
     class Meta:
         verbose_name = 'DirecciónEnvío'
         verbose_name_plural = 'DireccionesEnvío'
