@@ -189,7 +189,7 @@ class SendVerificationMailAPI(APIView):
                 cliente = cliente[0]
                 cliente.verification_token = VerificationToken.objects.create()
                 cliente.save()
-                send_verification_mail(cliente.perfil.correo, cliente.perfil.nombre_completo, cliente.verification_token.token)
+                send_verification_mail(cliente.perfil.correo,  cliente.verification_token.token)
                 return JsonResponse({"email_sent" : True}, status=status.HTTP_200_OK)
             except:
                 return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
