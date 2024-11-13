@@ -135,10 +135,10 @@ const producto2: Producto = {
 export default function HomePage({ productos }: { productos: Producto[] }) {
   const sectionCatalogoRef = useRef<HTMLDivElement>(null);
   const scrollToSection = useSmoothScroll(sectionCatalogoRef);
-  const extrasList = productos.filter(
+  const extrasList = productos && productos.filter(
     (item) => item.categoria === Categoria.EXTRA,
   );
-  const productoList = productos.filter(
+  const productoList = productos && productos.filter(
     (item) => item.categoria === Categoria.POSTRE,
   );
 
@@ -149,8 +149,6 @@ export default function HomePage({ productos }: { productos: Producto[] }) {
     );
     return <p>No se pudieron cargar los productoList</p>;
   }
-
-  console.log(productos[0].categoria, Categoria.EXTRA.toLowerCase());
 
   return (
     <>
@@ -179,60 +177,3 @@ export default function HomePage({ productos }: { productos: Producto[] }) {
     </>
   );
 }
-
-// Esto esta malo, deberiamos traer el Perfil en contexto, es para testear.
-const PerfilTesteo: React.FC = () => {
-  const [cliente, setCliente] = useState<Cliente | null>();
-  const [email, setEmail] = useState<string>("");
-  const [error, setError] = useState<string | null>();
-
-  const getCliente = async () => {
-    try {
-      const cliente = await ClienteAPI.obtenerCliente(email);
-      if (cliente) {
-        setCliente(cliente);
-      } else {
-        setError("Cliente no encontrado");
-      }
-    } catch (err) {
-      setError("Hubo un problema al consultar el perfil");
-    }
-  };
-
-  return (
-    <>
-      <h2 className="text-2xl p-20">Testing del perfil</h2>
-      <div className="p-5">
-        <input
-          type="text"
-          placeholder="Pon el texto"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button className="bg-green-300 p-5 rounded-lg " onClick={getCliente}>
-          Consulta el perfil
-        </button>
-      </div>
-
-      {error && <p>{error}</p>}
-
-      {cliente ? (
-        <div className="p-20 text-sm">
-          <h2 className="text-black text-2xl">
-            Perfil de {cliente.perfil.nombre_completo}
-          </h2>
-          <h2 className="text-black text-2xl">
-            Num: {cliente.perfil.numero_telefonico}
-          </h2>
-          <h2 className="text-black text-2xl">
-            Correo: {cliente.perfil.nombre_completo}
-          </h2>
-        </div>
-      ) : (
-        <p>Introduce un correo</p>
-      )}
-    </>
-  );
-};
-
-// export default PerfilTesteo;
