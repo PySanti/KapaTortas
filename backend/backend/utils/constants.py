@@ -18,13 +18,13 @@ class MetodoPagoEnum(Enum):
     PAGO_MOVIL = "pago_movil"
     STRIPE = "stripe"
 
-class MetodoEntrega(Enum):
+class MetodoEntregaEnum(Enum):
     PICKUP = "pickup"
     DELIVERY = "delivery"
 
 
 
-class CategoriaProducto(Enum):
+class CategoriaProductoEnum(Enum):
     POSTRE = "postre"
     EXTRA = "extra"
 

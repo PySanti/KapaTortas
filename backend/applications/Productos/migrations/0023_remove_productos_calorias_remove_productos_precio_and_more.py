@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='productos',
             name='categoria',
-            field=models.CharField(choices=[('postre', 'POSTRE'), ('extra', 'EXTRA')], default=backend.utils.constants.CategoriaProducto['POSTRE']),
+            field=models.CharField(choices=[('postre', 'POSTRE'), ('extra', 'EXTRA')], default=backend.utils.constants.CategoriaProductoEnum['POSTRE']),
         ),
         migrations.CreateModel(
             name='Presentaciones',

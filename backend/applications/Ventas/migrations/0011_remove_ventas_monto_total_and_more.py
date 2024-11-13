@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ('monto_total', models.DecimalField(decimal_places=2, max_digits=7)),
                 ('estado', models.CharField(choices=[('pendiente', 'PENDIENTE'), ('cancelado', 'CANCELADO'), ('finalizado', 'FINALIZADO')], default=backend.utils.constants.EstadoEnum['PENDIENTE'])),
                 ('metodo_pago', models.CharField(choices=[('zelle', 'ZELLE'), ('pago_movil', 'PAGO_MOVIL'), ('stripe', 'STRIPE')], default=backend.utils.constants.MetodoPagoEnum['PAGO_MOVIL'])),
-                ('metodo_entrega', models.CharField(choices=[('pickup', 'PICKUP'), ('delivery', 'DELIVERY')], default=backend.utils.constants.MetodoEntrega['PICKUP'])),
+                ('metodo_entrega', models.CharField(choices=[('pickup', 'PICKUP'), ('delivery', 'DELIVERY')], default=backend.utils.constants.MetodoEntregaEnum['PICKUP'])),
                 ('cliente_asociado', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='pedidos', to='Clientes.clientes')),
                 ('productos_asociados', models.ManyToManyField(related_name='pedidos', to='Productos.productos')),
             ],

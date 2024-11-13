@@ -9,7 +9,7 @@ from .models import (
 
 @admin.register(Productos)  
 class ProductosAdmin(admin.ModelAdmin):  
-    list_display = ('titulo', "categoria", "descripcion", "presentaciones")  # Agrega los campos que deseas mostrar en el admin  
+    list_display = ('id','titulo', "categoria", "descripcion", "presentaciones")  # Agrega los campos que deseas mostrar en el admin  
 
 
     def presentaciones(self, obj):
@@ -20,7 +20,7 @@ class ProductosAdmin(admin.ModelAdmin):
 
 @admin.register(Presentaciones)  
 class PresentacionesAdmin(admin.ModelAdmin):  
-    list_display = ('ref', "proporcion", "precio", "stock", "calorias", "producto")  # Agrega los campos que deseas mostrar en el admin  
+    list_display = ("id",'ref', "proporcion", "precio", "stock", "calorias", "producto")  # Agrega los campos que deseas mostrar en el admin  
 
 
     def producto(self, obj):
