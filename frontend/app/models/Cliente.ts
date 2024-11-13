@@ -5,7 +5,7 @@ export interface Cliente {
   perfil: Perfil;
   direcciones: DireccionEnvio[];
   direccion_preferida: DireccionEnvio;
-  pedidos: Pedido[];
+  pedidos?: Pedido[];
 }
 
 export interface DireccionEnvio {

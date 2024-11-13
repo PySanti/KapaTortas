@@ -7,10 +7,8 @@ import { Producto } from "@/app/models/Producto";
 
 export default function ItemProducto({
   product,
-  extras,
 }: {
   product: Producto;
-  extras: Producto[];
 }) {
   return (
     <div className="relative items-start bg-primary-light bg-opacity-70 rounded-full mt-2 lg:mt-10 p-4 md:p-6 lg:p-10 space-x-6 max-w-7xl mx-auto">
@@ -55,7 +53,7 @@ export default function ItemProducto({
                 Saber Más
               </MainButton>
               <MainButton className=" text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6">
-                <Link href="/product/producto">Realiza tu Pedido</Link>
+                <Link href={`/product/${product.producto_id}`}>Realiza tu Pedido</Link>
               </MainButton>
             </div>
           </div>
