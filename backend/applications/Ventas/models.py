@@ -1,5 +1,8 @@
 from django.db import models
-from applications.Productos.models import Productos
+from applications.Productos.models import (
+    Productos,
+    Presentaciones
+)
 
 from applications.Clientes.models import (
     DireccionesEnvio,
@@ -20,7 +23,7 @@ class Pedidos(models.Model):
     metodo_entrega          = models.CharField(choices=[(role.value, role.name) for role in MetodoEntrega], default=MetodoEntrega.PICKUP)
 
     def __str__(self):
-        return f"{self.numero_de_orden} : {self.monto_total}"
+        return f"{self.cliente_asociado.perfil.nombre_completo} : {self.numero_de_orden}"
     class Meta:
         verbose_name = 'Pedido'
         verbose_name_plural = 'Pedidos'
@@ -29,6 +32,7 @@ class DescripcionesPedido(models.Model):
     cantidad                    = models.IntegerField()
     producto_asociado           = models.ForeignKey(Productos, related_name="descripciones_pedido", on_delete=models.DO_NOTHING)
     pedido_asociado             = models.ForeignKey(Pedidos, related_name="descripciones_pedido", on_delete=models.DO_NOTHING)
+    presentacion_asociada       = models.ForeignKey(Presentaciones, related_name="descripciones_pedido", on_delete=models.DO_NOTHING, null=True)
     def __str__(self):
         return f"{self.cantidad} : {self.producto_asociado.titulo}"
     class Meta:

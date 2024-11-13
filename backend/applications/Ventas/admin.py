@@ -29,12 +29,15 @@ class ClienteFilter(admin.SimpleListFilter):
 
 @admin.register(DescripcionesPedido)  
 class DescripcionesPedidoAdmin(admin.ModelAdmin):
-    list_display = ("cantidad", "producto_asociado", "pedido_asociado")
+    list_display = ("cantidad", "producto_asociado", "presentacion_asociada","pedido_asociado")
     def producto_asociado(self, obj):
         return obj.producto_asociado.titulo
     def pedido_asociado(self, obj):
         return obj.pedido_asociado.numero_de_orden
+    def presentacion_asociada(self, obj):
+        return obj.presentacion_asociada.proporcion
     producto_asociado.short_description = "Producto Asociado"
+    presentacion_asociada.short_description = "Presentación Asociado"
     pedido_asociado.short_description = "Pedido Asociado"
 
 
@@ -49,7 +52,7 @@ class PedidosAdmin(admin.ModelAdmin):
     def descripciones_pedido(self, obj):  
         descripciones = []  
         for p in obj.descripciones_pedido.all():  
-            descripciones.append(f"{p.producto_asociado.titulo} ({p.cantidad})")  
+            descripciones.append(f"{p.producto_asociado.titulo} ({p.presentacion_asociada.proporcion}) ({p.cantidad})")  
         return " + ".join(descripciones)  
 
     descripciones_pedido.short_description = 'descripcion'

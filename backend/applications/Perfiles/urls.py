@@ -9,7 +9,8 @@ ActivarPerfilAPI,
 ActivarPerfilByTokenAPI,
 GoogleSocialAuthView,
 SendVerificationMailAPI,
-CheckVerifiedAPI
+CheckVerifiedAPI,
+GetClientePedidosAPI
 )
 
 urlpatterns = [
@@ -21,6 +22,7 @@ urlpatterns = [
     path("google_service/", GoogleSocialAuthView.as_view()),
     path("send_verification_mail/", SendVerificationMailAPI.as_view()),
     path('check-verified/<str:email_perfil>/', CheckVerifiedAPI.as_view()),
+    path('buscar_pedidos_cliente/<str:email_perfil>', GetClientePedidosAPI.as_view()),
     path("<str:email_perfil>/", ConsultarPerfilAPI.as_view()), 
       # Incluye barra final opcional para consistencia
 ]

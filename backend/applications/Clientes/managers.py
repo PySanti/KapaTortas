@@ -26,6 +26,10 @@ class ClientesManager(Manager):
         pedidos_list = []
         for u in cliente.pedidos.all():
             pedido_dict = {k:v for k,v in u.__dict__.items() if k in BASE_PEDIDOS_SHOWABLE_FIELDS}
-            pedido_dict["productos"] = [p.titulo for p in u.productos_asociados.all()]
+            pedido_dict["descripciones"] = [{
+                'titulo' : p.producto_asociado.titulo,
+                'presentacion' : p.presentacion_asociada.proporcion,
+                'cantidad' : p.cantidad
+            } for p in u.descripciones_pedido.all()];
             pedidos_list.append(pedido_dict)
         return pedidos_list
