@@ -6,7 +6,7 @@ class PedidosManager(Manager):
     def get_pedido_json(self, pedido):
         from .models import DescripcionesPedido
         pedido_dict = get_info_dict(pedido, BASE_PEDIDOS_SHOWABLE_FIELDS)
-        pedido_dict["descripciones"] = [DescripcionesPedido.objects.get_descripcion_json(p) for p in self.descripciones_pedido.all()];
+        pedido_dict["descripciones"] = [DescripcionesPedido.objects.get_descripcion_json(p) for p in pedido.descripciones_pedido.all()];
         return pedido_dict
 
 class DescripcionesPedidosManager(Manager):

@@ -10,8 +10,6 @@ from .models import (
 @admin.register(Productos)  
 class ProductosAdmin(admin.ModelAdmin):  
     list_display = ('id','titulo', "categoria", "descripcion", "presentaciones")  # Agrega los campos que deseas mostrar en el admin  
-
-
     def presentaciones(self, obj):
         presentaciones_str = []
         for u in obj.presentaciones.all():
@@ -24,7 +22,7 @@ class PresentacionesAdmin(admin.ModelAdmin):
 
 
     def producto(self, obj):
-        return obj.producto_asociado.titulo
+        return obj.producto_asociado.titulo if obj.producto_asociado else "-"
 
 
 @admin.register(Reviews)
