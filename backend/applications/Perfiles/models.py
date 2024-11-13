@@ -6,7 +6,7 @@ from backend.utils.constants import RolEnum
 
 
 class Perfiles(AbstractBaseUser, PermissionsMixin):  
-    nombre_completo     = models.CharField(max_length=255)
+    nombre_completo     = models.CharField(unique=True)
     correo              = models.EmailField(unique=True)
     contraseña          = models.CharField(max_length=128)
     numero_telefonico   = models.CharField(unique=True, blank=True, null=True)
