@@ -15,7 +15,7 @@ async function fetchProduct(id: string): Promise<Producto | null> {
   try {
     return await ProductoAPI.obtenerProducto(Number(id));
   } catch (error) {
-    console.error("Error fetching product:", error);
+    console.error("Error Buscando producto:", error);
     return null;
   }
 }
@@ -25,7 +25,7 @@ async function fetchExtras(): Promise<Producto[] | undefined> {
     const products = await ProductoAPI.obtenerListaProductos();
     return products?.filter((item) => item.categoria === Categoria.EXTRA);
   } catch (error) {
-    console.error("Error fetching extras:", error);
+    console.error("Error buscando extras:", error);
     return [];
   }
 }

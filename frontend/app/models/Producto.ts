@@ -1,5 +1,3 @@
-import { Cliente } from "./Cliente";
-
 export enum Categoria {
   POSTRE = "postre",
   EXTRA = "extra",
