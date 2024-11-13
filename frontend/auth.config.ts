@@ -8,7 +8,6 @@ import { stripe } from '@/app/controladores/lib/stripe';
 import passwordsMatch from './app/controladores/utilities/passwords-match';
 import crearStripeId from './app/controladores/utilities/crear-stripeid';
 import correoVerificado from './app/controladores/utilities/correo-verificado';
-import checkCorreoVerificado from './app/controladores/utilities/check-correo-verificado';
 import { authRoutes, defaultLoginRedirect, publicRoutes } from './app/models/config/routes';
 // import { authRoutes, defaultLoginRedirect, publicRoutes } from './config/routes';
 
@@ -152,11 +151,10 @@ export default {
         return false;
       }
 
-      const verificado = await checkCorreoVerificado(user.email!);
+      const isActive = cliente.perfil.is_active;
 
-      if (!verificado) return false;
+      if (!isActive) return false;
 
-      console.log('Google profile data:', cliente.perfil);
       return true;
     },
     authorized({ auth, request: { nextUrl } }) {
