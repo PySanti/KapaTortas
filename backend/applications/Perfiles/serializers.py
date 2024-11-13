@@ -56,3 +56,6 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
 
 class SendVerificationMailSerializer(serializers.Serializer):
     email = serializers.EmailField()
+
+class CheckVerifiedSerializer(serializers.Serializer):
+    pass

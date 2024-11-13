@@ -10,7 +10,8 @@ ActualizarStripeCustomerIdSerializer,
 ActivarPerfilSerializer,
 ActivarPerfilByTokenSerializer,
 GoogleSocialAuthSerializer,
-SendVerificationMailSerializer
+SendVerificationMailSerializer,
+CheckVerifiedSerializer
 
 )
 from rest_framework.permissions import (
@@ -196,3 +197,21 @@ class SendVerificationMailAPI(APIView):
         else:
             return JsonResponse({"error" : "no_cliente_with_email"}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class CheckVerifiedAPI(APIView):
+    serializer_class = CheckVerifiedSerializer
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    @base_serializercheck_decorator
+    def get(self, request, email_perfil, *args, **kwargs):
+        try:
+            # Check if the profile exists by email in the Perfiles model
+            if profile := Perfiles.objects.filter(correo=email_perfil).first():
+                # Return the is_active status of the profile
+                return JsonResponse({"is_active": profile.is_active}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Handle any unexpected errors
+            return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
