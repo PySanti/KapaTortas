@@ -28,9 +28,6 @@ class ProductoAPI {
     if (!response.ok) throw new Error(`Error: ${response.status}`);
 
     const data = await response.json();
-
-    console.log("DBBBB: ", data.productos);
-
     return data.productos;
   }
 
