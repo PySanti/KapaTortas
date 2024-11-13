@@ -1,4 +1,9 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/app/(views)/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/app/(views)/components/ui/tooltip';
 import { ChevronDown } from 'lucide-react';
 
 interface DisplayOnHoverProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -16,7 +21,7 @@ export default function DisplayOnHover({ mainInfo, extraInfo }: DisplayOnHoverPr
             <ChevronDown className='h-4 w-4' />
           </TooltipTrigger>
         </div>
-        <TooltipContent className='max-w-48' side='bottom'>
+        <TooltipContent className='max-w-56' side='bottom'>
           <p className='text-sm font-bold text-terciary'>{mainInfo}</p>
           {extraInfo.map((info, index) => (
             <p key={index} className='text-sm text-terciary'>
