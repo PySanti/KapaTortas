@@ -36,5 +36,6 @@ BASE_SERIALIZER_ERROR_RESPONSE = Response({'error' : "serializer_error"}, status
 BASE_PROFILE_SHOWABLE_FIELDS = ("nombre_completo", "numero_telefonico", "fecha_nacimiento", "correo", "id", "link_foto", "rol", "contraseña",  "stripeCustomerId")
 BASE_DIRECCIONES_SHOWABLE_FIELDS = ["direccion", "referencia", "codigo_postal", "pais", "estado", "ciudad"]
 BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS = ["id", "titulo", "imagenes", "descripcion", "categoria"]
+BASE_PRESENTACIONES_SHOWABLE_FIELDS = ["id", "ref", "proporcion", "precio", "stock", "calorias"]
 BASE_REVIEWS_SHOWABLE_FIELDS = ["calificacion", "descripcion", ]
 BASE_PEDIDOS_SHOWABLE_FIELDS = ["numero_de_orden", "monto_total", "estado", "metodo_pago", "metodo_entrega"]

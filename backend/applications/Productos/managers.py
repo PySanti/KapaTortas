@@ -1,4 +1,4 @@
-from backend.utils.constants import BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS
+from backend.utils.constants import BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS, BASE_PRESENTACIONES_SHOWABLE_FIELDS
 
 from django.db.models.manager import Manager
 
@@ -15,8 +15,8 @@ class ProductosManager(Manager):
     def get_presentaciones_list(self, producto):
         presentaciones = []
         for u in producto.presentaciones.all():
-            presentaciones.append({})
-        pass
+            presentaciones.append({k:v for k,v in u.__dict__.items() if k in BASE_PRESENTACIONES_SHOWABLE_FIELDS})
+        return presentaciones
     def get_producto_info(self, producto):
         product_data = {k:v for k,v in producto.__dict__.items() if k in BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS}
         product_data["reviews"] = self.get_reviews_list(producto);
@@ -24,6 +24,9 @@ class ProductosManager(Manager):
     def get_productos_list(self):
         productos = [] 
         for p in self.model.objects.all():
-            productos.append({k:v for k,v in p.__dict__.items() if k in BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS})
+            producto_dict = {k:v for k,v in p.__dict__.items() if k in BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS}
+            producto_dict["reviews"] = self.get_reviews_list(p)
+            producto_dict["presentaciones"] = self.get_presentaciones_list(p)
+            productos.append(producto_dict)
         return productos
 
