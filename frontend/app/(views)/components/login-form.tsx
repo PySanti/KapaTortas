@@ -52,6 +52,8 @@ export default function LoginForm() {
     setErrorMsg('');
     setSuccessMsg('');
 
+    console.log('Form Data:', data);
+
     startTransition(() => {
       login(data).then((data) => {
         setErrorMsg(data?.error);
@@ -133,7 +135,7 @@ export default function LoginForm() {
                 className='gap-2'
                 onClick={() => {
                   setIsGoogleLoading(true);
-                  signIn('google', { callbackUrl: '/dashboard' });
+                  signIn('google', { redirectTo: '/dashboard' });
                 }}
               >
                 {isGoogleLoading ? (

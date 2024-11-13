@@ -8,6 +8,7 @@ import { stripe } from '@/app/controladores/lib/stripe';
 import passwordsMatch from './app/controladores/utilities/passwordsMatch';
 import crearStripeId from './app/controladores/utilities/crearStripeId';
 import correoVerificado from './app/controladores/utilities/correoVerificado';
+import checkCorreoVerificado from './app/controladores/utilities/checkCorreoVerificado';
 // import { authRoutes, defaultLoginRedirect, publicRoutes } from './config/routes';
 
 export default {
@@ -80,13 +81,15 @@ export default {
           console.log('Usuario creado en stripe');
         }
 
+        // extend profile type and add auth_token
+
         return {
-          id: String(user.id),
           name: user.nombre_completo,
           email: user.correo,
           image: user.link_foto,
           rol: user.rol,
           stripeCustomerId: user.stripeCustomerId || 'no-client',
+          // auth_token: user.auth_token || '1234',
         };
       },
     }),
@@ -114,8 +117,31 @@ export default {
   },
   callbacks: {
     async signIn({ user, account }) {
-      // Allow oauth users to sign in without verifying their email
-      if (account?.provider !== 'credentials') return true;
+      // // Allow oauth users to sign in without verifying their email
+      // if (account?.provider !== 'credentials') {
+      //   if (user) {
+      //     const idToken = account?.id_token;
+
+      //     const url = `http://localhost:8000/api/perfiles/google_service/`;
+
+      //     try {
+      //       const response = await fetch(url, {
+      //         method: 'post',
+      //         headers: { 'Content-Type': 'application/json' },
+      //         body: JSON.stringify({
+      //           auth_token: idToken, // Send id token to backend
+      //         }),
+      //       });
+      //       const data = await response.json();
+
+      //       // Assign the `tokens` field from the API response to `user.auth_token`
+      //       user.auth_token = data.tokens;
+      //       return true;
+      //     } catch (error) {
+      //       return false;
+      //     }
+      //   }
+      // }
 
       //* Check if user exists
       const cliente = await ClienteAPI.obtenerCliente(user.email!);
@@ -127,7 +153,9 @@ export default {
 
       const { perfil: existingUser } = cliente;
 
-      if (!existingUser?.is_active) return false;
+      const verificado = await checkCorreoVerificado(user.email!);
+
+      if (!verificado) return false;
 
       return true;
     },
@@ -201,11 +229,15 @@ export default {
       if (!existingUser) return token;
 
       if (user) {
+        // if (user.auth_token) {
+        //   token.auth_token = user.auth_token; // Add auth_token to token
+        // }
+
         return {
           ...token,
           rol: user.rol,
           // If it's null, set it to an empty string
-          stripeCustomerId: user.stripeCustomerId!,
+          stripeCustomerId: user.stripeCustomerId || '',
         };
       }
 
@@ -213,6 +245,9 @@ export default {
     },
     async session({ session, token, user }: { session: Session; token?: JWT; user?: User }) {
       if (token) {
+        // if (token.auth_token) {
+        //   session.auth_token = token.auth_token as string;
+        // }
         return {
           ...session,
           user: {

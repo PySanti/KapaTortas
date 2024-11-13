@@ -13,4 +13,5 @@ export interface Perfil {
   stripeCustomerId: string;
   is_active: boolean;
   is_staff: boolean;
+  auth_token: string;
 }

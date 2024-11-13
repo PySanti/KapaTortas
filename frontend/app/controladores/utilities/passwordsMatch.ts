@@ -1,8 +1,8 @@
 export default async function passwordsMatch(email: string, password: string): Promise<boolean> {
-  const url = `http://localhost:8000/api/perfiles/${encodeURIComponent(email)}`;
+  const url = `http://localhost:8000/api/perfiles/consultar_password/`;
   try {
     const response = await fetch(url, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },

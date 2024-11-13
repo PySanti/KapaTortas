@@ -1,12 +1,12 @@
 export default async function crearStripeId(email: string, stripeId: string): Promise<void> {
-  const url = `http://localhost:8000/api/perfiles/perfiles/activar_perfil/`;
+  const url = `http://localhost:8000/api/perfiles/actualizar_stripeId/`;
   try {
     const response = await fetch(url, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, new_stripeid: stripeId }),
+      body: JSON.stringify({ email, new_stripeId: stripeId }),
     });
 
     if (!response.ok) {

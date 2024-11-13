@@ -73,10 +73,18 @@ export const login = async (data: loginType) => {
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin': {
-          return { error: 'Credenciales inválidos' };
+          return {
+            error: 'Credenciales inválidos',
+            email: `${data.email}`,
+            password: `${data.password}`,
+          };
         }
         default:
-          return { error: 'Algo salió mal' };
+          return {
+            error: 'Error al iniciar sesión',
+            email: `${data.email}`,
+            password: `${data.password}`,
+          };
       }
     }
 
