@@ -27,6 +27,7 @@ class Pedidos(models.Model):
     estado                  = models.CharField(choices=[(role.value, role.name) for role in EstadoEnum], default=EstadoEnum.PENDIENTE)
     metodo_pago             = models.CharField(choices=[(role.value, role.name) for role in MetodoPagoEnum], default=MetodoPagoEnum.PAGO_MOVIL)
     metodo_entrega          = models.CharField(choices=[(role.value, role.name) for role in MetodoEntregaEnum], default=MetodoEntregaEnum.PICKUP)
+    direccion_entrega       = models.ForeignKey(DireccionesEnvio, related_name="pedidos",null=True, on_delete=models.SET_NULL )
 
     objects                 = PedidosManager()
 
@@ -54,7 +55,6 @@ class DescripcionesPedido(models.Model):
 
 class Ventas(models.Model):
     fecha                   = models.DateField()
-    direccion               = models.ForeignKey(DireccionesEnvio, related_name="ventas", on_delete=models.DO_NOTHING)
     nota                    = models.TextField(blank=True, null=True)
     pedido                  = models.OneToOneField(Pedidos, on_delete=models.SET_NULL, null=True)
     # factura
