@@ -11,14 +11,10 @@ class ProductosManager(Manager):
     def get_producto_json(self, producto):
         product_data = get_info_dict(producto, BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS)
         product_data["reviews"] = self.get_reviews_json(producto);
+        product_data["presentaciones"] = self.get_presentaciones_json(producto)
         return product_data
     def get_productos_list_json(self) -> list:
-        productos = [] 
-        for p in self.model.objects.all():
-            producto_dict = self.get_producto_json(p)
-            producto_dict["presentaciones"] = self.get_presentaciones_json(p)
-            productos.append(producto_dict)
-        return productos
+        return [self.get_producto_json(p) for p in self.model.objects.all()] 
 
 class ReviewsManager(Manager):
     def get_review_json(self, r):
