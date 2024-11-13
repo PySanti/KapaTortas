@@ -4,6 +4,7 @@ from applications.Clientes.models import Clientes
 from .managers import ProductosManager
 from django.contrib.postgres.fields import ArrayField  
 from backend.utils.constants import CategoriaProductoEnum
+from .managers import ReviewsManager
 
 class Productos(models.Model):
     titulo                  = models.CharField(unique=True)
@@ -46,6 +47,8 @@ class Reviews(models.Model):
     # con el campo related_name, podemos acceder a traves de una instancia de cliente a sus reviews asociadas
     cliente_asociado = models.ForeignKey(Clientes, related_name="reviews", on_delete=models.CASCADE) 
     producto_asociado = models.ForeignKey(Productos, related_name="reviews", on_delete=models.CASCADE) 
+
+    objects = ReviewsManager()
 
     def __str__(self):
         return f"{self.calificacion} : {self.descripcion}"

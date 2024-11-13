@@ -15,5 +15,6 @@ class DescripcionesPedidosManager(Manager):
             'titulo' : descripcion.producto_asociado.titulo,
             'presentacion' : descripcion.presentacion_asociada.proporcion,
             "precio_presentacion" : descripcion.presentacion_asociada.precio,
-            'cantidad' : descripcion.cantidad
+            'cantidad' : descripcion.cantidad,
+            'imagenes_producto' : descripcion.producto_asociado.imagenes
         }
