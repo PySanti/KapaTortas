@@ -52,7 +52,7 @@ class PedidosAdmin(admin.ModelAdmin):
     def descripciones_pedido(self, obj):  
         descripciones = []  
         for p in obj.descripciones_pedido.all():  
-            descripciones.append(f"{p.producto_asociado.titulo} ({p.presentacion_asociada.proporcion}) ({p.cantidad})")  
+            descripciones.append(f"{p.producto_asociado.titulo} ({p.presentacion_asociada.proporcion if p.presentacion_asociada else None}) ({p.cantidad})")  
         return " + ".join(descripciones)  
 
     descripciones_pedido.short_description = 'descripcion'
