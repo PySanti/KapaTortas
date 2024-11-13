@@ -13,14 +13,17 @@ from backend.utils.constants import (
     MetodoPagoEnum,
     MetodoEntrega
 )
+from .managers import PedidosManager
 
 class Pedidos(models.Model):
     numero_de_orden         = models.IntegerField(unique=True, blank=False, null=False)
     cliente_asociado        = models.ForeignKey(Clientes, on_delete=models.SET_NULL, null=True, related_name="pedidos")
-    monto_total             = models.DecimalField(max_digits=7, decimal_places=2)
+    monto_total             = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     estado                  = models.CharField(choices=[(role.value, role.name) for role in EstadoEnum], default=EstadoEnum.PENDIENTE)
     metodo_pago             = models.CharField(choices=[(role.value, role.name) for role in MetodoPagoEnum], default=MetodoPagoEnum.PAGO_MOVIL)
     metodo_entrega          = models.CharField(choices=[(role.value, role.name) for role in MetodoEntrega], default=MetodoEntrega.PICKUP)
+
+    objects                 = PedidosManager()
 
     def __str__(self):
         return f"{self.cliente_asociado.perfil.nombre_completo} : {self.numero_de_orden}"

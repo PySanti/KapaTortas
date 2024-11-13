@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/perfiles/", include('applications.Perfiles.urls')),  # Prefijo único para Perfiles
     path("api/productos/", include('applications.Productos.urls')),  # Prefijo único para Productos
+    path("api/pedidos/", include('applications.Pedidos.urls')),  # Prefijo único para Productos
 ]
