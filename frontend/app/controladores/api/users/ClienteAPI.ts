@@ -1,4 +1,4 @@
-import { Cliente } from "@/app/models/Cliente";
+import { Cliente } from '@/app/models/Cliente';
 
 // Tiene un singleton
 class ClienteAPI {
@@ -19,9 +19,9 @@ class ClienteAPI {
     const url = `http://localhost:8000/api/perfiles/${encodeURIComponent(email)}`;
     try {
       const response = await fetch(url, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
@@ -30,10 +30,10 @@ class ClienteAPI {
       }
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       return data;
     } catch (err) {
-      console.error("Error en la peticion de consultar cliente: ", err);
+      console.error('Error en la peticion de consultar cliente: ', err);
       return null;
     }
   }

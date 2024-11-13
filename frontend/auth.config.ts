@@ -161,7 +161,7 @@ export default {
       const { pathname, search } = nextUrl;
       const isLoggedIn = !!auth?.user;
 
-      console.log('Current pathname:', pathname);
+      // console.log('Current pathname:', pathname);
       // console.log('Is logged in:', isLoggedIn);
 
       //* Check if the user is on an auth page

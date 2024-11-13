@@ -58,7 +58,7 @@ export default function LoginForm() {
     setErrorMsg('');
     setSuccessMsg('');
 
-    console.log('Form Data:', data);
+    // console.log('Form Data:', data);
 
     startTransition(() => {
       login(data).then((data) => {
