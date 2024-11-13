@@ -59,3 +59,7 @@ class SendVerificationMailSerializer(serializers.Serializer):
 
 class CheckVerifiedSerializer(serializers.Serializer):
     pass
+class GetClientePedidosSerializer(serializers.Serializer):
+    pass
+class GetClienteDireccionesSerializer(serializers.Serializer):
+    pass

@@ -11,7 +11,9 @@ ActivarPerfilSerializer,
 ActivarPerfilByTokenSerializer,
 GoogleSocialAuthSerializer,
 SendVerificationMailSerializer,
-CheckVerifiedSerializer
+CheckVerifiedSerializer,
+GetClientePedidosSerializer,
+GetClienteDireccionesSerializer
 
 )
 from rest_framework.permissions import (
@@ -203,15 +205,48 @@ class CheckVerifiedAPI(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
-    @base_serializercheck_decorator
     def get(self, request, email_perfil, *args, **kwargs):
         try:
             # Check if the profile exists by email in the Perfiles model
-            if profile := Perfiles.objects.filter(correo=email_perfil).first():
-                # Return the is_active status of the profile
-                return JsonResponse({"is_active": profile.is_active}, status=status.HTTP_200_OK)
+            if profile := Perfiles.objects.filter(correo=email_perfil):
+                return JsonResponse({"is_active": profile[0].is_active}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             # Handle any unexpected errors
             return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class GetClientePedidosAPI(APIView):
+    serializer_class = GetClientePedidosSerializer
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def get(self, request, email_perfil, *args, **kwargs):
+        try:
+            if cliente := Clientes.objects.filter(perfil__correo=email_perfil):
+                return JsonResponse({"pedidos": Clientes.objects.get_formated_pedidos_list(cliente[0])}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class GetClienteDireccionesAPI(APIView):
+    serializer_class = GetClienteDireccionesSerializer
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def get(self, request, email_perfil, *args, **kwargs):
+        try:
+            if cliente := Clientes.objects.filter(perfil__correo=email_perfil):
+                return JsonResponse({
+                    "direcciones": Clientes.objects.get_formated_direcciones_dict(cliente[0]),
+                    "direccion_preferida" : Clientes.objects.get_formated_direccion_preferida(cliente[0])}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+

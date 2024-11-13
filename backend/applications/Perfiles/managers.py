@@ -27,6 +27,7 @@ class PerfilesManager(BaseUserManager):
             return Clientes.objects.crear_cliente(perfil=new_profile)
         else:
             return new_profile
+    
 
     def user_exists(self, nombre_completo, correo):
         """

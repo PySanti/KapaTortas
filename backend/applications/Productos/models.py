@@ -3,11 +3,11 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from applications.Clientes.models import Clientes
 from .managers import ProductosManager
 from django.contrib.postgres.fields import ArrayField  
-from backend.utils.constants import CategoriaProducto
+from backend.utils.constants import CategoriaProductoEnum
 
 class Productos(models.Model):
     titulo                  = models.CharField(unique=True)
-    categoria               = models.CharField(choices=[(role.value, role.name) for role in CategoriaProducto], default=CategoriaProducto.POSTRE)
+    categoria               = models.CharField(choices=[(role.value, role.name) for role in CategoriaProductoEnum], default=CategoriaProductoEnum.POSTRE)
     descripcion             = models.TextField(default=None, null=True)
     imagenes                = ArrayField(models.CharField(max_length=200), blank=True, default=list)  
 
@@ -26,7 +26,8 @@ class Presentaciones(models.Model):
     stock           = models.IntegerField()
     calorias        = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     producto_asociado = models.ForeignKey(Productos, related_name="presentaciones", on_delete=models.DO_NOTHING)
-    
+
+
     def __str__(self):
         return f"{self.producto_asociado.titulo} - {self.proporcion}"
     class Meta:
