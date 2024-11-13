@@ -7,14 +7,14 @@ import { ClientePC } from "../models/config/marketing";
 export default async function Home() {
 // EN PC NO TENGO EL SERVER AAA
 
-  // const product = (await getStaticProps()).props.productos;
+  const product = (await getStaticProps()).props.productos;
 
-  // if (!Array.isArray(product)) {
-  //   console.error("Expected productoList to be an array, received:", product);
-  //   return <p>Hola</p>;
-  // }
+  if (!Array.isArray(product)) {
+    console.error("Expected productoList to be an array, received:", product);
+    return <p>Hola</p>;
+  }
 
-  const product = ClientePC;
+  // const product = ClientePC;
 
   return (
     <>
