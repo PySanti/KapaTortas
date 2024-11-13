@@ -11,21 +11,21 @@ type Review = {
   puntuacion: number;
 };
 
-export interface Presentacion {
-  presentacion_id: number;
-  ref?: string;
-  proporcion?: string;
-  precio: number;
+export type Presentacion = {
+  id: number;
+  ref: string;
+  proporcion: string;
+  precio: string;
   stock: number;
-  calorias?: number;
-}
+  calorias: string;
+};
 
 export interface Producto {
-  producto_id: number;
+  id: number;
   titulo: string;
-  categoria: Categoria;
+  categoria: string;
   descripcion: string;
-  imagenes?: string[];
-  reviews?: Review[];
-  presentacion?: Presentacion[];
+  presentaciones: Presentacion[];
+  imagenes: string[];
+  reviews: Review[];
 }

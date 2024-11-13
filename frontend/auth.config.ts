@@ -8,7 +8,6 @@ import { stripe } from '@/app/controladores/lib/stripe';
 import passwordsMatch from './app/controladores/utilities/passwords-match';
 import crearStripeId from './app/controladores/utilities/crear-stripeid';
 import correoVerificado from './app/controladores/utilities/correo-verificado';
-import checkCorreoVerificado from './app/controladores/utilities/check-correo-verificado';
 import { authRoutes, defaultLoginRedirect, publicRoutes } from './app/models/config/routes';
 // import { authRoutes, defaultLoginRedirect, publicRoutes } from './config/routes';
 
@@ -152,11 +151,10 @@ export default {
         return false;
       }
 
-      const verificado = await checkCorreoVerificado(user.email!);
+      const isActive = cliente.perfil.is_active;
 
-      if (!verificado) return false;
+      if (!isActive) return false;
 
-      console.log('Google profile data:', cliente.perfil);
       return true;
     },
     authorized({ auth, request: { nextUrl } }) {
@@ -164,30 +162,30 @@ export default {
       const isLoggedIn = !!auth?.user;
 
       console.log('Current pathname:', pathname);
-      console.log('Is logged in:', isLoggedIn);
+      // console.log('Is logged in:', isLoggedIn);
 
       //* Check if the user is on an auth page
       const isOnAuthPage = authRoutes.some((page) => pathname.startsWith(page));
-      console.log('Is on auth page:', isOnAuthPage);
+      // console.log('Is on auth page:', isOnAuthPage);
 
       //* Check if the user is on a public page
       const isOnUnprotectedPage =
         pathname === '/' || publicRoutes.some((page) => pathname.startsWith(page));
-      console.log('Is on unprotected page:', isOnUnprotectedPage);
+      // console.log('Is on unprotected page:', isOnUnprotectedPage);
       const isProtectedPage = !isOnUnprotectedPage;
-      console.log('Is protected page:', isProtectedPage);
+      // console.log('Is protected page:', isProtectedPage);
 
       if (isOnAuthPage) {
         //* Redirect to /dashboard if logged in and is on an auth page
         if (isLoggedIn) {
-          console.log('Redirecting to dashboard from auth page');
+          // console.log('Redirecting to dashboard from auth page');
           return Response.redirect(new URL(defaultLoginRedirect, nextUrl));
         }
       } else if (isProtectedPage) {
         //* Redirect to /login if not logged in but is on a protected page
         if (!isLoggedIn) {
           const from = encodeURIComponent(pathname + search); //* The /login page shall then use this `from` param as a `callbackUrl` upon successful sign-in
-          console.log('Redirecting to login from protected page');
+          // console.log('Redirecting to login from protected page');
           return Response.redirect(new URL(`/login?from=${from}`, nextUrl));
         }
       }
