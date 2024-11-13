@@ -8,6 +8,7 @@ export default async function DashboardPage() {
       <h1 className='text-3xl font-bold tracking-tight text-gray-900 md:text-4xl'>
         {session?.user.name}
       </h1>
+      <p className='text-2xl'> {session?.user.email}</p>
       <SignOutButton />
     </div>
   );
