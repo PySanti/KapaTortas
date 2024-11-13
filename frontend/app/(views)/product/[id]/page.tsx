@@ -1,6 +1,10 @@
 import Product from "../../components/product";
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+export default async function ProductPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { id } = params;
 
   return (
