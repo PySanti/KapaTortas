@@ -21,7 +21,7 @@ class ConsultarProductoAPI(APIView):
         from applications.Productos.models import Productos
         try:
             if producto:=Productos.objects.filter(id=id_producto):
-                return JsonResponse({'producto' : Productos.objects.get_producto_info(producto[0])}, status=status.HTTP_200_OK)
+                return JsonResponse({'producto' : Productos.objects.get_producto_json(producto[0])}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({'error' : "no_producto_with_id"}, status=status.HTTP_400_BAD_REQUEST)
         except:
@@ -35,7 +35,7 @@ class ObtenerListaProductosAPI(APIView):
     def get(self, request, *args, **kwargs):
         from applications.Productos.models import Productos
         try:
-            productos = Productos.objects.get_productos_list()
+            productos = Productos.objects.get_productos_list_json()
             return JsonResponse({'productos' : productos}, status=status.HTTP_200_OK)
         except:
             return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)

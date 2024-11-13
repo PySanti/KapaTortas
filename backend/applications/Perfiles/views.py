@@ -43,7 +43,7 @@ class ConsultarPerfilAPI(APIView):
             # si es un cliente, el diccionario de su perfil es perfil[0].perfil.__dict__
             # si es un perfil, el diccionario de su perfil es perfil[0].__dict__
             if (type(perfil[0]) == Clientes):
-                client_info = Clientes.objects.get_client_info(perfil[0])
+                client_info = Clientes.objects.get_client_json(perfil[0])
                 return JsonResponse({
                     "perfil": client_info["perfil"], 
                     "direcciones" : client_info["direcciones"], 
@@ -228,7 +228,7 @@ class GetClientePedidosAPI(APIView):
     def get(self, request, email_perfil, *args, **kwargs):
         try:
             if cliente := Clientes.objects.filter(perfil__correo=email_perfil):
-                return JsonResponse({"pedidos": Clientes.objects.get_formated_pedidos_list(cliente[0])}, status=status.HTTP_200_OK)
+                return JsonResponse({"pedidos": Clientes.objects.get_pedidos_json(cliente[0])}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
@@ -247,7 +247,7 @@ class GetClienteDireccionesAPI(APIView):
             if cliente := Clientes.objects.filter(perfil__correo=email_perfil):
                 return JsonResponse({
                     "direcciones": Clientes.objects.get_direcciones_json(cliente[0]),
-                    "direccion_preferida" : Clientes.objects.get_formated_direccion_preferida(cliente[0])}, status=status.HTTP_200_OK)
+                    "direccion_preferida" : Clientes.objects.get_direccion_preferida_json(cliente[0])}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
