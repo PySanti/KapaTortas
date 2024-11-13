@@ -24,5 +24,4 @@ export interface Pedido {
     estado: EstadoEnum,
     metodo_pago: MetodoPago,
     metodo_entrega: MetodoEntrega,
-    
 }

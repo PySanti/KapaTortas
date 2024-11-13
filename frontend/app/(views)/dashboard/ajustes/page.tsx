@@ -17,19 +17,23 @@ const usuario: Perfil = {
   stripeCustomerId: '123',
   is_active: true,
   is_staff: false,
+  auth_token: '1234',
 };
+import { auth } from '@/auth';
 
-export default function PagosPage() {
+export default async function PagosPage() {
+  const session = await auth();
+
   return (
     <DashboardContainer>
       <DashboardHeader heading='Datos Personales' />
       {usuario && (
         <>
           <DashboardCard title='Información Personal' editable>
-            <p>{usuario.nombre_completo}</p>
+            <p>{session?.user?.name}</p>
           </DashboardCard>
           <DashboardCard title='Correo' editable>
-            <p>{usuario.correo}</p>
+            <p>{session?.user?.email}</p>
           </DashboardCard>
           <DashboardCard title='Contraseña' editable>
             <p>********</p>

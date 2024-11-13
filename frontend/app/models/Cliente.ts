@@ -1,8 +1,11 @@
+import { Pedido } from './Pedido';
 import { Perfil } from './Perfil';
 
 export interface Cliente {
   perfil: Perfil;
   direcciones: DireccionEnvio[];
+  direccion_preferida: DireccionEnvio;
+  pedidos: Pedido[];
 }
 
 export interface DireccionEnvio {
