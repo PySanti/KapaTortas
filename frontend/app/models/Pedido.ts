@@ -1,5 +1,3 @@
-import { Cliente } from './Cliente';
-
 enum EstadoEnum {
   PENDIENTE = 'pendiente',
   CANCELADO = 'cancelado',
