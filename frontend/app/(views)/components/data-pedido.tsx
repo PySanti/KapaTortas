@@ -159,7 +159,7 @@ export default function DataPedido({ perfilDir, descripciones, deliveryPriceHand
                                                             as="span"
                                                              className="mt-1 flex items-center text-lg text-terciary"
                                                         >
-                                                            {option.precio}
+                                                            ${option.precio}
                                                         </Description>
                                                     </span>
                                                 </span>
