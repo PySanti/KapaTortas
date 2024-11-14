@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/app/(views)/components/ui/button";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -27,6 +28,8 @@ type DialogEditarProps = {
 };
 
 export function DialogEditar({ title, triggerText, fields, email }: DialogEditarProps) {
+    const router = useRouter();
+
   // This function will be called on form submission
   async function handleSubmit() {
     try {
@@ -45,6 +48,8 @@ export function DialogEditar({ title, triggerText, fields, email }: DialogEditar
         formValues["email"], // Access email value
         formValues["password"] // Access password value
       );
+
+      // router.push(/dashboard/ajustes);
 
       if (updatedProfile) {
         console.log("Cliente actualizado exitosamente:", updatedProfile);

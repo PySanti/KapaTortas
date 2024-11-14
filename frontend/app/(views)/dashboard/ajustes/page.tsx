@@ -6,9 +6,11 @@ import { Rol } from "@/app/models/RolEnum";
 
 import { auth } from "@/auth";
 import { DialogEditar } from "../../components/dialog-editar-field";
+import ClienteAPI from "@/app/controladores/api/users/ClienteAPI";
 
 export default async function PagosPage() {
   const session = await auth();
+  const perfil = await ClienteAPI.obtenerCliente(session?.user.email!);
 
   return (
     <DashboardContainer>
