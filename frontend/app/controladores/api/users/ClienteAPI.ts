@@ -1,5 +1,6 @@
 import { Cliente } from "@/app/models/Cliente";
 import { DireccionEntrega } from "@/app/models/Pedido";
+import { Perfil } from "@/app/models/Perfil";
 
 // Tiene un singleton
 class ClienteAPI {
@@ -24,6 +25,7 @@ class ClienteAPI {
         headers: {
           "Content-Type": "application/json",
         },
+        cache: 'no-cache'
       });
 
       if (!response.ok) {
@@ -68,6 +70,46 @@ class ClienteAPI {
         "Error en la peticion de consultar direcciones de envio: ",
         err,
       );
+      return null;
+    }
+  }
+
+    // Metodo para actualizar la información del Cliente
+  public async actualizarInfoCliente(
+    email: string,
+    new_nombre_completo?: string,
+    new_email?: string,
+    new_password?: string
+  ): Promise<Perfil | null>  {
+    const url = `http://127.0.0.1:8000/api/perfiles/editar/`;
+    
+    // Prepare the request body
+    const body = JSON.stringify({
+      email: email,
+      new_nombre_completo: new_nombre_completo || null,
+      new_email: new_email || null,
+      new_password: new_password || null,
+    });
+
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: body,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      // Handle the response data, you can return success or additional data
+      const data = await response.json();
+      console.log("Datos actualizados:", data);
+      return data.new_profile;
+    } catch (err) {
+      console.error("Error al actualizar la información del cliente: ", err);
       return null;
     }
   }
