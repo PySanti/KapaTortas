@@ -43,6 +43,7 @@ export interface DireccionEntrega {
   direccion: string;
   referencia: string;
   codigo_postal: number;
+  is_favorite: boolean;
 }
 
 export interface Descripcion {
