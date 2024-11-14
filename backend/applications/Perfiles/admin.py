@@ -14,5 +14,7 @@ class PerfilesAdmin(admin.ModelAdmin):
             from applications.Clientes.models import Clientes
             if obj.rol == "cliente":
                 Clientes.objects.crear_cliente(perfil=obj)
+            if obj.rol == "administrador":
+                obj.is_superuser = True
             obj.is_active = True
             obj.save()
