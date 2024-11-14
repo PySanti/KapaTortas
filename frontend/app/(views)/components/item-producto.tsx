@@ -48,7 +48,7 @@ export default function ItemProducto({ product }: { product: Producto }) {
                 Saber Más
               </MainButton>
               <MainButton className=" text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6">
-                <Link href={`/products/${product.id}`}>Realiza tu Pedido</Link>
+                <Link href={`/products/${product.id}`}>Consultar Producto</Link>
               </MainButton>
             </div>
           </div>
