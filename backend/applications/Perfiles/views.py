@@ -3,20 +3,19 @@ from rest_framework.views import (
 )
 from rest_framework import status
 from .serializers import (
-EliminarPerfilSerializer,
-ConsultarPerfilSerializer,
-CrearPerfilSerializer,
-CheckPasswordSerializer,
-ActualizarStripeCustomerIdSerializer,
-ActivarPerfilSerializer,
-ActivarPerfilByTokenSerializer,
-GoogleSocialAuthSerializer,
-SendVerificationMailSerializer,
-CheckVerifiedSerializer,
-GetClientePedidosSerializer,
-GetClienteDireccionesSerializer,
-EditarPefilSerializer
-
+    EliminarPerfilSerializer,
+    ConsultarPerfilSerializer,
+    CrearPerfilSerializer,
+    CheckPasswordSerializer,
+    ActualizarStripeCustomerIdSerializer,
+    ActivarPerfilSerializer,
+    ActivarPerfilByTokenSerializer,
+    GoogleSocialAuthSerializer,
+    SendVerificationMailSerializer,
+    CheckVerifiedSerializer,
+    GetClientePedidosSerializer,
+    GetClienteDireccionesSerializer,
+    EditarPefilSerializer
 )
 from rest_framework.permissions import (
     AllowAny
@@ -267,12 +266,6 @@ class EditarPefilAPI(APIView):
                     perfil[0].nombre_completo = serialized_data["new_nombre_completo"]
                 if serialized_data["new_password"]:
                     perfil[0].set_password(serialized_data["new_password"])
-                if serialized_data["new_email"]:
-                    if Perfiles.objects.filter(correo=serialized_data["new_email"]):
-                        perfil[0].save()
-                        return JsonResponse({"error" : "cliente_with_email_found"}, status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        perfil[0].correo = serialized_data["new_email"]
                 perfil[0].save()
                 return JsonResponse({"new_profile": get_info_dict(perfil[0], BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_200_OK)
             else:
@@ -295,4 +288,3 @@ class EliminarPerfilAPI(APIView):
                 return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
