@@ -1,16 +1,16 @@
-enum EstadoEnum {
+export enum EstadoEnum {
   PENDIENTE = 'pendiente',
   CANCELADO = 'cancelado',
   FINALIZADO = 'finalizado',
 }
 
-enum MetodoPago {
+export enum MetodoPago {
   ZELLE = 'zelle',
   PAGO_MOVIL = 'pago_movil',
   STRIPE = 'stripe',
 }
 
-enum MetodoEntrega {
+export enum MetodoEntrega {
   PICKUP = 'pickup',
   DELIVERY = 'delivery',
 }
