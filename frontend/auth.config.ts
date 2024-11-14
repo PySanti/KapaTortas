@@ -198,13 +198,20 @@ export default {
       //* Don't redirect if on an unprotected page or if logged in and is on a protected page
       return true;
     },
-    async jwt({ token, user, session }) {
+    async jwt({ token, user, session, trigger }) {
       // console.log('jwt callback', { token, user, session });
 
       const existingUser = await ClienteAPI.obtenerCliente(token?.email as string);
 
       // If no user exists
       if (!existingUser) return token;
+
+      if (trigger === "update") {
+        // Check for each field in session and update token accordingly
+        if (session?.name) token.name = session.name;
+        if (session?.email) token.email = session.email;
+        if (session?.password) token.password = session.password; // Only if needed for specific cases
+      }
 
       if (user) {
         if (user.auth_token) {
