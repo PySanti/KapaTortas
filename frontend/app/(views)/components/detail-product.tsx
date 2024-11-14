@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import classNames from "@/app/controladores/utilities/classNames";
 import { Presentacion, Producto } from "@/app/models/Producto";
 import Gallery from "./gallery";
@@ -11,6 +12,9 @@ import { RadioGroup, Label, Radio } from "@headlessui/react";
 import { Dessert, CheckIcon, CircleX } from "lucide-react";
 import { Button } from "./ui/button";
 
+// zustand
+import { usePedidoStore } from "@/src/usePedidoStore";
+
 export default function DetailProduct({
   product,
   extraList,
@@ -18,6 +22,9 @@ export default function DetailProduct({
   product: Producto;
   extraList: Producto[] | undefined;
 }) {
+  // Zustand
+  const setPedidoData = usePedidoStore((state) => state.setPedidoData)
+  // Estados
   const [extras, setExtras] = useState<Producto[]>([]);
   const [present, setPresent] = useState<Presentacion>(
     product.presentaciones?.[0],
@@ -31,6 +38,10 @@ export default function DetailProduct({
 
   // Estrellas
   const stars: number = rating != undefined ? Math.round(rating) : 0;
+
+  const handleHacerPedido = () => {
+    setPedidoData({ product, extras, present });
+  }
 
   return (
     <div className="max-w-2xl mx-4 px-8 py-16 pt-6 sm:px-6 sm:py-24 sm:pt-6 sm:mx-8 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:max-w-full">
@@ -172,8 +183,9 @@ export default function DetailProduct({
               <Button
                 type="button"
                 className="text-center text-base py-7 rounded-full"
+                onClick={handleHacerPedido}
               >
-                Agregar al Carrito
+                Hacer Pedido
               </Button>
             </div>
           </form>
