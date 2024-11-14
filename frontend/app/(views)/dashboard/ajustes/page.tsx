@@ -29,7 +29,7 @@ export default async function PagosPage() {
             triggerText="Editar Información"
             fields={[
               { id: "name", label: "Nombre", placeholder: "Pedro Duarte" },
-              { id: "email", label: "Correo Electrónico", placeholder: "pedro@example.com" },
+              // { id: "email", label: "Correo Electrónico", placeholder: "pedro@example.com" },
               { id: "password", label: "Contraseña", placeholder: "********" },
             ]}
             email={session?.user.email!}
