@@ -21,6 +21,25 @@ export type formatDescripciones = {
   id_presentacion: number,
 }
 
+// WS
+
+
+export type ItemFormat = {
+  title: string, quantity: number, price: number
+}
+export type OrderDetails = {
+  price: number;
+  items: ItemFormat[];
+  address: {
+      direccion: string;
+      referencia?: string;
+      codigo_postal: string;
+  };
+  deliveryMethod: string;
+  paymentMethod: string;
+};
+
+
 
 
 export interface Pedido {

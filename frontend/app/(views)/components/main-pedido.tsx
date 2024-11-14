@@ -6,7 +6,10 @@ import Image from "next/image";
 import { Session } from "next-auth";
 import { Cliente } from "@/app/models/Cliente";
 import { formatDescripciones } from "@/app/models/Pedido";
+import { OrderDetails } from "@/app/models/Pedido";
 
+
+import { ItemFormat } from "@/app/models/Pedido";
 import { Categoria, Presentacion, Producto } from "@/app/models/Producto";
 
 import GalleryImage from "./images/GalleryImage";
@@ -161,6 +164,19 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null
         }
     }) 
 
+    const order: ItemFormat[] = listProducts.map((item) => {
+        const calculatedPrice = item.categoria === Categoria.POSTRE
+            ? Number(present.precio) 
+            : item.presentaciones.length > 0
+                ? Number(item.presentaciones[0].precio) 
+                : 0;
+    
+        return {
+            title: item.titulo,
+            quantity: 1,
+            price: calculatedPrice,
+        };
+    });
     // Delivery
     const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
 
@@ -249,7 +265,7 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null
           </section>
 
           <section className="py-16 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-kg lg:pb-24 lg:pt-0">
-                <DataPedido perfilDir={perfil?.direccion_preferida} descripciones={descripciones} deliveryPriceHandler={deliveryPriceHandler} />            
+                <DataPedido perfilDir={perfil?.direccion_preferida} order={order} deliveryPriceHandler={deliveryPriceHandler} total={total} />            
 
           </section>
         

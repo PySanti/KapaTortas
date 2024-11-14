@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { formatDescripciones } from "@/app/models/Pedido";
+import { formatDescripciones, ItemFormat } from "@/app/models/Pedido";
 import { Button } from "./ui/button";
+import { OrderDetails } from "@/app/models/Pedido";
 
 import { DireccionEnvio } from "@/app/models/Cliente";
 import { Input } from "./ui/input";
@@ -16,6 +17,7 @@ import { Description, Label, Radio, RadioGroup } from "@headlessui/react";
 import classNames from "@/app/controladores/utilities/classNames";
 
 import { CheckCircleIcon } from "lucide-react";
+import redirectToWhatsapp from "@/app/controladores/utilities/redirect-to-whatsapp";
 
 //   Esquema
 // Define Zod schema for validation with min(1) instead of nonempty()
@@ -43,7 +45,7 @@ const metodoPagoList = [
     { metodo: "pago_movil", titulo: "Pago Móvil" }
 ];
 
-export default function DataPedido({ perfilDir, descripciones, deliveryPriceHandler }: { perfilDir: DireccionEnvio | undefined, descripciones: formatDescripciones[], deliveryPriceHandler: (item: number) => void }) {
+export default function DataPedido({ perfilDir, order, deliveryPriceHandler, total }: { perfilDir: DireccionEnvio | undefined, order: ItemFormat[], deliveryPriceHandler: (item: number) => void, total: number }) {
     // Opciones
     const [delivery, setDelivery] = useState<MetodoEntrega>(MetodoEntrega.DELIVERY);
     const [pago, setPago] = useState<MetodoPago>(MetodoPago.PAGO_MOVIL);
@@ -69,13 +71,29 @@ export default function DataPedido({ perfilDir, descripciones, deliveryPriceHand
             setPago(value);
     };
 
+    // On submit, build the complete order details object
     const onSubmit = (data: DireccionFormData) => {
-        console.log(data);
-    }
+        const orderDetails: OrderDetails = {
+            price: total,
+            items: order,
+            address: {
+                direccion: data.direccion,
+                referencia: data.referencia,
+                codigo_postal: data.codigo_postal.toString(),
+            },
+            deliveryMethod: delivery,  
+            paymentMethod: pago      
+        };
+        
+        // Here you can call your redirect or API submission with the orderDetails
+        console.log(orderDetails);
+
+        redirectToWhatsapp({ variant: "pedido", orderDetails })
+    };
     
     return (
         <>
-        <form onSubmit={handleSubmit((data) => console.log(data))}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
             <div className="mt-10">
               <h3 className="text-2xl font-medium text-terciary">Dirección de Envío</h3>
@@ -216,6 +234,12 @@ export default function DataPedido({ perfilDir, descripciones, deliveryPriceHand
               
             </div>
           </div>
+          <div className="items-center justify-between text-center ">
+
+          </div>
+          <Button type="submit" className="mt-8 text-xl text-center ml-4">
+            Procesar Pedido 
+          </Button>
         </form>
       </>
     )
