@@ -15,6 +15,14 @@ export enum MetodoEntrega {
   DELIVERY = 'delivery',
 }
 
+export type formatDescripciones = {
+  cantidad: number,
+  id_producto: number,
+  id_presentacion: number,
+}
+
+
+
 export interface Pedido {
   numero_de_orden: number;
   fecha_pedido: string;

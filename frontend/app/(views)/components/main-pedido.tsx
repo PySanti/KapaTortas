@@ -4,14 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 
 import { Session } from "next-auth";
-import { auth } from "@/auth";
+import { Cliente } from "@/app/models/Cliente";
+import { formatDescripciones } from "@/app/models/Pedido";
 
-import { Pedido } from "@/app/models/Pedido";
 import { Categoria, Presentacion, Producto } from "@/app/models/Producto";
-import { usePedidoStore } from "@/src/usePedidoStore";
 
-import { EstadoEnum, MetodoPago, MetodoEntrega } from "@/app/models/Pedido";
 import GalleryImage from "./images/GalleryImage";
+import DataPedido from "./data-pedido";
 
 // testtt
 // PRESENTACION
@@ -136,9 +135,8 @@ const examplePresentacion: Presentacion = {
       ],
     },
   ];
-
   
-export default function MainPedido({ perfil }: { perfil: Session | null
+export default function MainPedido({ perfil }: { perfil: Cliente | null
  }) {
 //   const { product, extras, present } = usePedidoStore();
     const product = exampleProducto;
@@ -155,18 +153,26 @@ export default function MainPedido({ perfil }: { perfil: Session | null
     // Lista productos 
     const listProducts: Producto[] = [product , ...(extras || [])];
 
+    const descripciones: formatDescripciones[] = listProducts.map((item) => {
+        return {
+            cantidad: 1,
+            id_producto: item.id,
+            id_presentacion: item.categoria === Categoria.POSTRE ? present.id : item.presentaciones.length > 0 ? item.presentaciones[0].id : 0,
+        }
+    }) 
+
     // Delivery
-    const [delivery, setDelivery] = useState<number>(0);
+    const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
 
     // Total
-    const [total, setTotal] = useState<number>(SUBTOTAL + delivery);
+    const [total, setTotal] = useState<number>(SUBTOTAL + deliveryPrice);
 
     // Impuestos
     const [iva, setIva] = useState<number>(total * (16/100));
 
     // Test....
-    function deliveryHandler(item: number) {
-        setDelivery(item);
+    function deliveryPriceHandler(item: number) {
+        setDeliveryPrice(item);
         const newTotal = SUBTOTAL + item;
         setTotal(newTotal);
         setIva(newTotal * (16 / 100));
@@ -188,7 +194,7 @@ export default function MainPedido({ perfil }: { perfil: Session | null
             <h1 className="sr-only">Procesar Compra</h1>
 
             <section
-          className="bg-terciary py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:px-0 lg:pb-24 lg:pt-0">
+          className="bg-terciary py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg">
             <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
                 <h2 className="sr-only">
                 Order summary
@@ -225,7 +231,7 @@ export default function MainPedido({ perfil }: { perfil: Session | null
 
                     <div className="flex items-center justify-between">
                         <dt>Delivery</dt>
-                        <dt>${delivery}</dt>
+                        <dt>${deliveryPrice}</dt>
                         
                     </div>
 
@@ -243,15 +249,7 @@ export default function MainPedido({ perfil }: { perfil: Session | null
           </section>
 
           <section className="py-16 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-kg lg:pb-24 lg:pt-0">
-
-             <form>
-                <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
-                    <div className="mt-10">
-
-                    </div>
-
-                 </div>
-            </form>   
+                <DataPedido perfilDir={perfil?.direccion_preferida} descripciones={descripciones} deliveryPriceHandler={deliveryPriceHandler} />            
 
           </section>
         
