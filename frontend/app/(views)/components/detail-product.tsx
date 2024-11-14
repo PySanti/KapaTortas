@@ -189,7 +189,7 @@ export default function DetailProduct({
                 className="text-center text-base py-7 rounded-full"
                 onClick={handleHacerPedido}
               >
-                Hacer Pedido
+               Realizar Pedido
               </Button>
             </div>
           </form>

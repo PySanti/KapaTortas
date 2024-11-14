@@ -2,8 +2,6 @@ import { Producto, Categoria } from "@/app/models/Producto";
 import ProductoAPI from "@/app/controladores/api/ProductoAPI";
 import DetailProduct from "./detail-product";
 
-import ReviewProduct from "./review-product";
-
 export const dynamic = "force-dynamic";
 
 async function fetchProduct(id: string): Promise<Producto | null> {
