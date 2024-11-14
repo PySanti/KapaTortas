@@ -32,6 +32,7 @@ export default async function PagosPage() {
               { id: "email", label: "Correo Electrónico", placeholder: "pedro@example.com" },
               { id: "password", label: "Contraseña", placeholder: "********" },
             ]}
+            email={session?.user.email!}
           />
         </>
       )}
