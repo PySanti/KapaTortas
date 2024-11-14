@@ -11,7 +11,7 @@ export default function Torta({
 }) {
   return (
     <div
-      className={`${className} -ml-20 w-[60vw] xs:w-[50vw] xs:-ml-24 sm:w-[40vw] md:-ml-24 md:w-[40vw] lg:-ml-24 xl:ml-0  lg:w-[40vw]`}
+      className={`${className} -ml-20 w-[60vw] xs:w-[50vw] xs:-ml-24 sm:w-[40vw] md:-ml-24 md:w-[40vw] lg:-ml-24 xl:ml-0  lg:w-[35vw]`}
     >
       <Image src={path} alt={alt} width={550} height={550} />
     </div>

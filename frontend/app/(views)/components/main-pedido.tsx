@@ -168,7 +168,7 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
       id_producto: item.id,
       id_presentacion:
         item.categoria === Categoria.POSTRE
-          ? present.id
+          ? present?.id
           : item.presentaciones.length > 0
             ? item.presentaciones[0].id
             : 0,
@@ -178,7 +178,7 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
   const order: ItemFormat[] = listProducts.map((item) => {
     const calculatedPrice =
       item.categoria === Categoria.POSTRE
-        ? Number(present.precio)
+        ? Number(present?.precio)
         : item.presentaciones.length > 0
           ? Number(item.presentaciones[0].precio)
           : 0;
