@@ -60,7 +60,10 @@ export default function Navbar({ className, items, user, children }: NavbarProps
                   {user ? (
                     <UserDropdown user={user} />
                   ) : (
-                    <MainButton className='px-10 py-5' asChild>
+                    <MainButton
+                      className='hidden sm:inline-flex px-10 py-5 items-center justify-center text-center'
+                      asChild
+                    >
                       <Link href='/login'>Inicia sesión</Link>
                     </MainButton>
                   )}
@@ -89,7 +92,7 @@ export default function Navbar({ className, items, user, children }: NavbarProps
                     animate={{ x: 0 }}
                     exit={{ x: '-100%' }}
                     transition
-                    className='fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white shadow-lg z-50 origin-top transition duration-200 ease-out'
+                    className='fixed top-0 left-0 h-full w-3/4 bg-white max-w-xs shadow-lg z-50 origin-top transition duration-200 ease-out'
                   >
                     {/* Close Button Inside the Slide-in Menu */}
                     <div className='flex justify-end p-4'>
@@ -119,16 +122,15 @@ export default function Navbar({ className, items, user, children }: NavbarProps
                               {item.title}
                             </DisclosureButton>
                           ))}
+                        <div className='mt-2'>
+                          <Link
+                            href='/login'
+                            className={cn('ml-4 rounded-full bg-primary text-white px-4 py-2')}
+                          >
+                            Iniciar sesión
+                          </Link>
+                        </div>
                       </ul>
-                      <Link
-                        href='/login'
-                        className={cn(
-                          buttonVariants({ variant: 'default' }),
-                          'md:inline-flex ml-3 mr-4 my-2 bg-brown-600 text-white'
-                        )}
-                      >
-                        Login
-                      </Link>
                     </div>
                   </DisclosurePanel>
                 </>
