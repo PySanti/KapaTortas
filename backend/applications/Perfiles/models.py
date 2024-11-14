@@ -29,7 +29,6 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     def check_password(self, raw_password):  
         """Verifica si la contraseña está correcta."""  
         print("Comprobando contrasenia")
-        print(raw_password)
         return check_password(raw_password, self.contraseña)  
     def save(self, *args, **kwargs):
         """

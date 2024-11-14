@@ -3,6 +3,7 @@ from rest_framework.views import (
 )
 from rest_framework import status
 from .serializers import (
+EliminarPerfilSerializer,
 ConsultarPerfilSerializer,
 CrearPerfilSerializer,
 CheckPasswordSerializer,
@@ -274,6 +275,22 @@ class EditarPefilAPI(APIView):
                         perfil[0].correo = serialized_data["new_email"]
                 perfil[0].save()
                 return JsonResponse({"new_profile": get_info_dict(perfil[0], BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EliminarPerfilAPI(APIView):
+    serializer_class        = EliminarPerfilSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    def get(self, request, email_perfil, *args, **kwargs):
+        try:
+            if perfil := Perfiles.objects.filter(correo=email_perfil):
+                perfil[0].delete()
+                return JsonResponse({"deleted": True}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

@@ -12,7 +12,8 @@ from .views import (
   CheckVerifiedAPI,
   GetClientePedidosAPI,
   GetClienteDireccionesAPI,
-  EditarPefilAPI
+  EditarPefilAPI,
+  EliminarPerfilAPI
 )
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
     path('buscar_pedidos_cliente/<str:email_perfil>/', GetClientePedidosAPI.as_view()),
     path('buscar_direcciones_cliente/<str:email_perfil>/', GetClienteDireccionesAPI.as_view()),
     path('editar/', EditarPefilAPI.as_view()),
+    path('eliminar/<str:email_perfil>/', EliminarPerfilAPI.as_view()),
     path("<str:email_perfil>/", ConsultarPerfilAPI.as_view()), 
       # Incluye barra final opcional para consistencia
 ]
