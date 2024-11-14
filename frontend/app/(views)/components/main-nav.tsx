@@ -10,6 +10,7 @@ import { MainNavItem } from '@/app/models';
 import { User } from 'next-auth';
 import { MainButton } from './MainButton';
 import Logo from '@/app/(views)/components/images/Logo';
+import UserDropdown from './user-dropdown';
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: MainNavItem[];
@@ -50,15 +51,19 @@ export default function Navbar({ className, items, user, children }: NavbarProps
                 </div>
 
                 {/* Right Section - Buttons */}
-                <div className='hidden lg:flex items-center justify-end space-x-4'>
+                <div className='lg:flex items-center justify-end space-x-4'>
                   <MainButton asChild variant='secondary' className='hidden px-6 py-3'>
                     <Link href='/catalogo' passHref>
                       Realiza tu Pedido
                     </Link>
                   </MainButton>
-                  <MainButton className=' px-10 py-5' asChild>
-                    <Link href='/login'>Inicia sesión</Link>
-                  </MainButton>
+                  {user ? (
+                    <UserDropdown user={user} />
+                  ) : (
+                    <MainButton className='px-10 py-5' asChild>
+                      <Link href='/login'>Inicia sesión</Link>
+                    </MainButton>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-// import { auth } from '@/auth';
+import { auth } from '@/auth';
 import { dashboardConfig } from '@/app/models/config/dashboard';
 import Navbar from '../components/main-nav';
 import Sidebar from '../components/sidebar';
@@ -8,15 +8,14 @@ export default async function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const session = await auth();
-  // const user = session?.user;
-  // console.log(user);
+  const session = await auth();
+  const user = session?.user;
 
   return (
     <div className='flex flex-col min-h-screen'>
       <header className='sticky top-0 bg-gray-50 shadow inset-x-0 z-[50]'>
         {/* <Navbar className='max-w-none' user={user} /> */}
-        <Navbar className='max-w-none' />
+        <Navbar className='max-w-none' user={user} />
       </header>
 
       <div className='container flex-1 items-start md:grid md:grid-cols-[160px_minmax(0,1fr)] md:gap-2 lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-4'>

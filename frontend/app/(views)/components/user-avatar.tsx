@@ -1,6 +1,6 @@
 import { User } from 'next-auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/app/(views)/components/ui/avatar';
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/controladores/lib/utils';
 
 type UserAvatarProps = {
   user: Pick<User, 'name' | 'image'>;
@@ -16,7 +16,7 @@ export default function UserAvatar({ user }: UserAvatarProps) {
       {user.image ? (
         <AvatarImage src={user.image}></AvatarImage>
       ) : (
-        <AvatarFallback className={cn('font-medium text-white bg-indigo-600')}>
+        <AvatarFallback className={cn('font-base text-white bg-primary')}>
           {userInitials}
         </AvatarFallback>
       )}
