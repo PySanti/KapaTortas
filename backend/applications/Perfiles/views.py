@@ -47,7 +47,6 @@ class ConsultarPerfilAPI(APIView):
                 return JsonResponse({
                     "perfil": client_info["perfil"], 
                     "direcciones" : client_info["direcciones"], 
-                    "direccion_preferida" : client_info["direccion_preferida"],
                     "pedidos" : client_info["pedidos"]}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"perfil": get_info_dict(perfil[0], BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_200_OK)
@@ -245,9 +244,7 @@ class GetClienteDireccionesAPI(APIView):
     def get(self, request, email_perfil, *args, **kwargs):
         try:
             if cliente := Clientes.objects.filter(perfil__correo=email_perfil):
-                return JsonResponse({
-                    "direcciones": Clientes.objects.get_direcciones_json(cliente[0]),
-                    "direccion_preferida" : Clientes.objects.get_direccion_preferida_json(cliente[0])}, status=status.HTTP_200_OK)
+                return JsonResponse({"direcciones": Clientes.objects.get_direcciones_json(cliente[0])}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

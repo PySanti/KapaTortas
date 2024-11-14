@@ -9,7 +9,13 @@ class ClientesManager(Manager):
     def crear_cliente(self, perfil):
         return self.model.objects.create(perfil=perfil)
     def get_direcciones_json(self, cliente) -> list:
-        return [get_info_dict(d, BASE_DIRECCIONES_SHOWABLE_FIELDS) for d in cliente.direcciones.all()]
+        direcciones = []
+        for d in cliente.direcciones.all():
+            direcciones.append({
+                **get_info_dict(d, BASE_DIRECCIONES_SHOWABLE_FIELDS),
+                'is_favorite':(d.id == cliente.direccion_preferida.id) if cliente.direccion_preferida else False
+            })
+        return direcciones
     def get_direccion_preferida_json(self, cliente):
         return get_info_dict(cliente.direccion_preferida, BASE_DIRECCIONES_SHOWABLE_FIELDS) if cliente.direccion_preferida else None
     def get_client_json(self, cliente):
@@ -17,7 +23,6 @@ class ClientesManager(Manager):
         return {
             'perfil' : get_info_dict(cliente.perfil, BASE_PROFILE_SHOWABLE_FIELDS),
             'direcciones' : self.get_direcciones_json(cliente),
-            'direccion_preferida' : self.get_direccion_preferida_json(cliente),
             'pedidos' : self.get_pedidos_json(cliente)
         }
 
