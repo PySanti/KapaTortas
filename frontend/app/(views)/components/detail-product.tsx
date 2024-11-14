@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import classNames from "@/app/controladores/utilities/classNames";
 import { Presentacion, Producto } from "@/app/models/Producto";
@@ -23,7 +25,8 @@ export default function DetailProduct({
   extraList: Producto[] | undefined;
 }) {
   // Zustand
-  const setPedidoData = usePedidoStore((state) => state.setPedidoData)
+  const setPedidoData = usePedidoStore((state) => state.setPedidoData);
+  const router = useRouter();
   // Estados
   const [extras, setExtras] = useState<Producto[]>([]);
   const [present, setPresent] = useState<Presentacion>(
@@ -41,7 +44,8 @@ export default function DetailProduct({
 
   const handleHacerPedido = () => {
     setPedidoData({ product, extras, present });
-  }
+    router.push("/pedido/caja");
+  };
 
   return (
     <div className="max-w-2xl mx-4 px-8 py-16 pt-6 sm:px-6 sm:py-24 sm:pt-6 sm:mx-8 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:max-w-full">
