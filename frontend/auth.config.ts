@@ -132,6 +132,11 @@ export default {
                 auth_token: idToken, // Send id token to backend
               }),
             });
+
+            if (!response.ok) {
+              return false;
+            }
+
             const data = await response.json();
 
             // Assign the `tokens` field from the API response to `user.auth_token`
