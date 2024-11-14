@@ -122,14 +122,16 @@ export default function Navbar({ className, items, user, children }: NavbarProps
                               {item.title}
                             </DisclosureButton>
                           ))}
-                        <div className='mt-2'>
-                          <Link
-                            href='/login'
-                            className={cn('ml-4 rounded-full bg-primary text-white px-4 py-2')}
-                          >
-                            Iniciar sesión
-                          </Link>
-                        </div>
+                        {!user && (
+                          <div className='mt-2'>
+                            <Link
+                              href='/login'
+                              className={cn('ml-4 rounded-full bg-primary text-white px-4 py-2')}
+                            >
+                              Iniciar sesión
+                            </Link>
+                          </div>
+                        )}
                       </ul>
                     </div>
                   </DisclosurePanel>
