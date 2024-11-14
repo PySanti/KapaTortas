@@ -11,5 +11,6 @@ def base_serializercheck_decorator(api_function):
         if serialized_data.is_valid():
             return api_function(*args, **kwargs, serialized_data=serialized_data.data)
         else:
+            print(serialized_data.errors)
             return BASE_SERIALIZER_ERROR_RESPONSE
     return wrapper

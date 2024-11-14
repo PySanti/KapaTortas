@@ -58,3 +58,9 @@ class GetClientePedidosSerializer(serializers.Serializer):
     pass
 class GetClienteDireccionesSerializer(serializers.Serializer):
     pass
+
+class EditarPefilSerializer(serializers.Serializer):
+    email                   = serializers.EmailField()
+    new_nombre_completo     = serializers.CharField(allow_null=True)
+    new_password            = serializers.CharField(allow_null=True)
+    new_email               = serializers.EmailField(allow_null=True)

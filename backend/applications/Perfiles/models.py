@@ -6,7 +6,7 @@ from backend.utils.constants import RolEnum
 
 
 class Perfiles(AbstractBaseUser, PermissionsMixin):  
-    nombre_completo     = models.CharField(unique=True)
+    nombre_completo     = models.CharField()
     correo              = models.EmailField(unique=True)
     contraseña          = models.CharField(max_length=128)
     numero_telefonico   = models.CharField(unique=True, blank=True, null=True)
@@ -17,17 +17,19 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     is_active           = models.BooleanField(default=False) # para correo confirmado
     is_staff            = models.BooleanField(default=False) # para empelados y admin (staff)
 
-    REQUIRED_FIELDS = ['correo']
-    USERNAME_FIELD  = 'nombre_completo'
+    USERNAME_FIELD  = 'correo'
 
     #* MANAGER
     objects         = PerfilesManager()
 
     def set_password(self, raw_password):  
         """Establece la contraseña usando el hasheo."""  
+        print("seteando contrasenia")
         self.contraseña = make_password(raw_password)  
     def check_password(self, raw_password):  
         """Verifica si la contraseña está correcta."""  
+        print("Comprobando contrasenia")
+        print(raw_password)
         return check_password(raw_password, self.contraseña)  
     def save(self, *args, **kwargs):
         """

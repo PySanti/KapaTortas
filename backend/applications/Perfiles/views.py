@@ -13,7 +13,8 @@ GoogleSocialAuthSerializer,
 SendVerificationMailSerializer,
 CheckVerifiedSerializer,
 GetClientePedidosSerializer,
-GetClienteDireccionesSerializer
+GetClienteDireccionesSerializer,
+EditarPefilSerializer
 
 )
 from rest_framework.permissions import (
@@ -63,8 +64,8 @@ class CrearPerfilAPI(APIView):
     @base_serializercheck_decorator
     def post(self, request, *args, **kwargs):
         serialized_data = kwargs['serialized_data']
-        if error_msg:=Perfiles.objects.user_exists(serialized_data['nombre_completo'], serialized_data['email']):
-            return JsonResponse({"error":error_msg}, status=status.HTTP_400_BAD_REQUEST)
+        if Perfiles.objects.filter(correo=serialized_data["email"]):
+            return JsonResponse({"error":"correo_exists"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             try:
                 new_profile = Perfiles.objects.crear_perfil(
@@ -250,4 +251,31 @@ class GetClienteDireccionesAPI(APIView):
         except Exception as e:
             return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class EditarPefilAPI(APIView):
+    serializer_class        = EditarPefilSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    @base_serializercheck_decorator
+    def patch(self, request, *args, **kwargs):
+        serialized_data = kwargs["serialized_data"]
+        try:
+            if perfil := Perfiles.objects.filter(correo=serialized_data["email"]):
+                if serialized_data["new_nombre_completo"]:
+                    perfil[0].nombre_completo = serialized_data["new_nombre_completo"]
+                if serialized_data["new_password"]:
+                    perfil[0].set_password(serialized_data["new_password"])
+                if serialized_data["new_email"]:
+                    if Perfiles.objects.filter(correo=serialized_data["new_email"]):
+                        perfil[0].save()
+                        return JsonResponse({"error" : "cliente_with_email_found"}, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        perfil[0].correo = serialized_data["new_email"]
+                perfil[0].save()
+                return JsonResponse({"new_profile": get_info_dict(perfil[0], BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error": "no_profile_with_email"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return JsonResponse({"error": "unexpected_error", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
