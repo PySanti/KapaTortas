@@ -10,7 +10,7 @@ export default function ItemProducto({ product }: { product: Producto }) {
       <div className="grid grid-cols-[2fr_3fr] xl:grid-cols-2 items-center">
         <div>
           <Torta
-            className="absolute top-[-8vw] md:top-[-6vw] lg:top-[-4vw]"
+            className="absolute top-[-6vw] md:top-[-6vw] lg:top-[-8vw]"
             path={
               product?.imagenes && product.imagenes.length > 0
                 ? product.imagenes[1]

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -47,6 +47,18 @@ export default function DetailProduct({
     router.push("/pedido/caja");
   };
 
+  // Calcula el precio total
+const totalPrice = useMemo(() => {
+  const extrasTotal = extras.reduce((sum, extra) => {
+    // Accede al precio en extra.producto.presentaciones[0].precio
+    const extraPrice = Number(extra.presentaciones[0]?.precio || 0);
+    return sum + extraPrice;
+  }, 0);
+
+  return Number(present?.precio || 0) + extrasTotal;
+}, [present, extras]);
+
+
   return (
     <div className="max-w-2xl mx-4 px-8 py-16 pt-6 sm:px-6 sm:py-24 sm:pt-6 sm:mx-8 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:max-w-full">
       {/* Detalles del Producto */}
@@ -67,7 +79,7 @@ export default function DetailProduct({
           {/* Precio y Estrellas */}
           <div className="flex items-center">
             <p className="text-3xl text-terciary tracking-tight">
-              ${present?.precio}
+              ${totalPrice}
             </p>
 
             <div className="ml-4 border-l border-terciary pl-4">
