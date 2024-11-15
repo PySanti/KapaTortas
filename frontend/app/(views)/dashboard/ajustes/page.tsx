@@ -27,9 +27,6 @@ export default function AjustesPage() {
           <DashboardCard title='Información Personal' editable onEdit={() => handleEdit('name')}>
             <p>{user.name}</p>
           </DashboardCard>
-          <DashboardCard title='Correo' editable onEdit={() => handleEdit('email')}>
-            <p>{user.email}</p>
-          </DashboardCard>
           <DashboardCard title='Contraseña' editable onEdit={() => handleEdit('password')}>
             <p>********</p>
           </DashboardCard>

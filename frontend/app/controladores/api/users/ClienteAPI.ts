@@ -74,7 +74,6 @@ class ClienteAPI {
   public async actualizarInfoCliente(
     email: string,
     new_nombre_completo?: string | null,
-    new_email?: string | null,
     new_password?: string | null,
     new_numero_telefonico?: string | null,
     new_fecha_nacimiento?: string | null
@@ -85,7 +84,6 @@ class ClienteAPI {
     const body = JSON.stringify({
       email: email,
       new_nombre_completo: new_nombre_completo,
-      new_email: new_email,
       new_password: new_password,
       new_numero_telefonico: new_numero_telefonico,
       new_fecha_nacimiento: new_fecha_nacimiento,
