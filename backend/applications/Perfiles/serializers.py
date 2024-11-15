@@ -64,6 +64,7 @@ class EditarPefilSerializer(serializers.Serializer):
     new_nombre_completo     = serializers.CharField(allow_null=True)
     new_password            = serializers.CharField(allow_null=True)
     new_numero_telefonico   = serializers.CharField(allow_null=True)
+    new_fecha_nacimiento    = serializers.CharField(allow_null=True)
 
 class EliminarPerfilSerializer(serializers.Serializer):
     pass
