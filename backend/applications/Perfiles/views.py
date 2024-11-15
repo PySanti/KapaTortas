@@ -266,6 +266,12 @@ class EditarPefilAPI(APIView):
                     perfil[0].nombre_completo = serialized_data["new_nombre_completo"]
                 if serialized_data["new_password"]:
                     perfil[0].set_password(serialized_data["new_password"])
+                if serialized_data["new_numero_telefonico"]:
+                    if Perfiles.objects.filter(numero_telefonico=serialized_data["new_numero_telefonico"]):
+                        perfil[0].save()
+                        return JsonResponse({"error": "numero_telefonico_exists"}, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        perfil[0].numero_telefonico = serialized_data["new_numero_telefonico"]
                 perfil[0].save()
                 return JsonResponse({"new_profile": get_info_dict(perfil[0], BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_200_OK)
             else:
