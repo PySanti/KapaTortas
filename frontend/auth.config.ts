@@ -90,6 +90,7 @@ export default {
           rol: user.rol,
           stripeCustomerId: user.stripeCustomerId,
           auth_token: user.auth_token,
+          phone_number: user.numero_telefonico,
         };
       },
     }),
@@ -200,18 +201,16 @@ export default {
     },
     async jwt({ token, user, session, trigger }) {
       // console.log('jwt callback', { token, user, session });
+      console.log('im being called again');
 
       const existingUser = await ClienteAPI.obtenerCliente(token?.email as string);
 
       // If no user exists
       if (!existingUser) return token;
 
-      if (trigger === "update") {
-        // Check for each field in session and update token accordingly
-        if (session?.name) token.name = session.name;
-        if (session?.email) token.email = session.email;
-        if (session?.password) token.password = session.password; // Only if needed for specific cases
-      }
+      token.name = existingUser.perfil.nombre_completo;
+      token.email = existingUser.perfil.correo;
+      token.phone_number = existingUser.perfil.numero_telefonico;
 
       if (user) {
         if (user.auth_token) {
@@ -221,8 +220,7 @@ export default {
         return {
           ...token,
           rol: user.rol,
-          // If it's null, set it to an empty string
-          stripeCustomerId: user.stripeCustomerId || '',
+          stripeCustomerId: user.stripeCustomerId || '', // If it's null, set it to an empty string
         };
       }
 
@@ -235,6 +233,11 @@ export default {
         if (token.auth_token) {
           session.auth_token = token.auth_token as string;
         }
+
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.phone_number = token.phone_number;
+
         return {
           ...session,
           user: {

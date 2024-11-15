@@ -1,42 +1,58 @@
-import { Perfil } from "@/app/models/Perfil";
-import DashboardCard from "../../components/dashboard-card";
-import DashboardContainer from "../../components/dashboard-container";
-import { DashboardHeader } from "../../components/dashboard-header";
-import { Rol } from "@/app/models/RolEnum";
+'use client';
 
-import { auth } from "@/auth";
-import { DialogEditar } from "../../components/dialog-editar-field";
-import ClienteAPI from "@/app/controladores/api/users/ClienteAPI";
+import { useState } from 'react';
+import DashboardCard from '../../components/dashboard-card';
+import DashboardContainer from '../../components/dashboard-container';
+import { DashboardHeader } from '../../components/dashboard-header';
+import { DialogEditar } from '../../components/dialog-editar-field';
+import getCurrentUser from '@/app/controladores/utilities/get-current-user';
 
-export default async function PagosPage() {
-  const session = await auth();
-  const perfil = await ClienteAPI.obtenerCliente(session?.user.email!);
+export default function AjustesPage() {
+  const user = getCurrentUser();
+  const [editingField, setEditingField] = useState<string | null>(null);
+
+  const handleEdit = (field: string) => {
+    setEditingField(field);
+  };
+
+  const closeEditModal = () => {
+    setEditingField(null);
+  };
 
   return (
     <DashboardContainer>
-      <DashboardHeader heading="Datos Personales" />
-      {session?.user && (
+      <DashboardHeader heading='Datos Personales' />
+      {user && (
         <>
-          <DashboardCard title="Información Personal" editable>
-            <p>{session?.user?.name}</p>
+          <DashboardCard title='Información Personal' editable onEdit={() => handleEdit('name')}>
+            <p>{user.name}</p>
           </DashboardCard>
-          <DashboardCard title="Correo" editable>
-            <p>{session?.user?.email}</p>
+          <DashboardCard title='Correo' editable onEdit={() => handleEdit('email')}>
+            <p>{user.email}</p>
           </DashboardCard>
-          <DashboardCard title="Contraseña" editable>
+          <DashboardCard title='Contraseña' editable onEdit={() => handleEdit('password')}>
             <p>********</p>
           </DashboardCard>
-          <DialogEditar
-            title="Editar información"
-            triggerText="Editar Información"
-            fields={[
-              { id: "name", label: "Nombre", placeholder: "Pedro Duarte" },
-              // { id: "email", label: "Correo Electrónico", placeholder: "pedro@example.com" },
-              { id: "password", label: "Contraseña", placeholder: "********" },
-            ]}
-            email={session?.user.email!}
-          />
+          <DashboardCard
+            title='Número de Teléfono'
+            editable
+            onEdit={() => handleEdit('phone_number')}
+          >
+            <p>{user.phone_number}</p>
+          </DashboardCard>
+          {/* <DashboardCard title='Fecha de Nacimiento' editable onEdit={() => handleEdit('phone_number')}>
+            <p>{user.phone_number}</p>
+          </DashboardCard> */}
         </>
+      )}
+      {editingField && (
+        <DialogEditar
+          title={`Editar ${editingField === 'name' ? 'Información Personal' : editingField}`}
+          email={user?.email!}
+          field={editingField}
+          initialValue={editingField in user! ? user![editingField as keyof typeof user] : ''}
+          onClose={closeEditModal}
+        />
       )}
     </DashboardContainer>
   );

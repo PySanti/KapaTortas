@@ -1,6 +1,7 @@
 import NextAuth, { User } from 'next-auth';
 import authConfig from '@/auth.config';
 import { Rol } from './app/models/RolEnum';
+import { StringToBoolean } from 'class-variance-authority/types';
 
 //* Augment the default session, user & JWT Token to include role and stripeCustomerId
 declare module 'next-auth' {
@@ -9,11 +10,13 @@ declare module 'next-auth' {
       rol: Rol;
       stripeCustomerId: string;
       auth_token: string;
+      phone_number: string;
     };
     token: {
       rol: Rol;
       stripeCustomerId: string;
       auth_token: string;
+      phone_number: string;
     };
 
     auth_token: string;
@@ -22,6 +25,7 @@ declare module 'next-auth' {
     rol: Rol;
     stripeCustomerId: string;
     auth_token: string;
+    phone_number: string;
   }
 }
 
@@ -29,6 +33,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     rol: Rol;
     stripeCustomerId: string;
+    phone_number: string;
   }
 }
 
