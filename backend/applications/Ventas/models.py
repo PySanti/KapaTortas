@@ -40,13 +40,12 @@ class Pedidos(models.Model):
 
 class DescripcionesPedido(models.Model):
     cantidad                    = models.IntegerField()
-    producto_asociado           = models.ForeignKey(Productos, related_name="descripciones_pedido", on_delete=models.SET_NULL, null=True)
     pedido_asociado             = models.ForeignKey(Pedidos, related_name="descripciones_pedido", on_delete=models.SET_NULL, null=True)
     presentacion_asociada       = models.ForeignKey(Presentaciones, related_name="descripciones_pedido", on_delete=models.SET_NULL, null=True)
 
     objects = DescripcionesPedidosManager()
     def __str__(self):
-        return f"{self.cantidad} : {self.producto_asociado.titulo if self.producto_asociado else None}"
+        return f"{self.cantidad} : {self.presentacion_asociada.producto_asociado.titulo}"
     class Meta:
         verbose_name = 'Descripción de pedido'
         verbose_name_plural = 'Descripciones de pedidos'
@@ -55,9 +54,9 @@ class DescripcionesPedido(models.Model):
 
 
 class Ventas(models.Model):
-    fecha                   = models.DateField()
+    fecha                   = models.DateTimeField()
     nota                    = models.TextField(blank=True, null=True)
-    pedido                  = models.OneToOneField(Pedidos, on_delete=models.SET_NULL, null=True)
+    pedido                  = models.OneToOneField(Pedidos, on_delete=models.SET_NULL, null=True, related_name="venta")
     # factura
 
 
