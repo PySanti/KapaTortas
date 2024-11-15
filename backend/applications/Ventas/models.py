@@ -56,7 +56,7 @@ class DescripcionesPedido(models.Model):
 class Ventas(models.Model):
     fecha                   = models.DateTimeField()
     nota                    = models.TextField(blank=True, null=True)
-    pedido                  = models.OneToOneField(Pedidos, on_delete=models.SET_NULL, null=True)
+    pedido                  = models.OneToOneField(Pedidos, on_delete=models.SET_NULL, null=True, related_name="venta")
     # factura
 
 
