@@ -24,8 +24,7 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
 
     def set_password(self, raw_password):  
         """Establece la contraseña usando el hasheo."""  
-        print("seteando contrasenia")
-        self.contraseña = make_password(raw_password)  
+        self.contraseña = raw_password
     def check_password(self, raw_password):  
         """Verifica si la contraseña está correcta."""  
         print("Comprobando contrasenia")
@@ -37,6 +36,8 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
         """
         if self.pk is None:  
             self.set_password(self.contraseña)
+        elif Perfiles.objects.get(id=self.pk).contraseña != self.contraseña:
+            self.contraseña = make_password(self.contraseña)
         super().save(*args, **kwargs)  
 
 
