@@ -22,6 +22,21 @@ type DialogEditarProps = {
   onClose: () => void; // Callback to close the modal
 };
 
+function getPlaceholderText(field: string): string {
+  switch (field) {
+    case 'name':
+      return 'nuevo nombre';
+    case 'password':
+      return 'nueva contraseña';
+    case 'phone_number':
+      return 'nuevo número de teléfono';
+    case 'email':
+      return 'nuevo correo';
+    default:
+      return `${field}`;
+  }
+}
+
 export function DialogEditar({ title, field, initialValue, email, onClose }: DialogEditarProps) {
   const [value, setValue] = useState(initialValue);
   const [loading, setLoading] = useState(false);
@@ -71,7 +86,7 @@ export function DialogEditar({ title, field, initialValue, email, onClose }: Dia
             id={field}
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder={`Ingrese su nuevo ${field}`}
+            placeholder={`Ingrese su ${getPlaceholderText(field)}`}
           />
         </div>
         <DialogFooter>
