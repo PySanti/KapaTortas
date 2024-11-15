@@ -13,11 +13,12 @@ class PedidosManager(Manager):
 
 class DescripcionesPedidosManager(Manager):
     def get_descripcion_json(self, descripcion):
+        producto_asociado = descripcion.presentacion_asociada.producto_asociado
         return {
-            'titulo' : descripcion.producto_asociado.titulo,
-            'id_producto_asociado' : descripcion.producto_asociado.id,
+            'titulo' : producto_asociado.titulo,
+            'id_producto_asociado' : producto_asociado.id,
             'presentacion' : descripcion.presentacion_asociada.proporcion if descripcion.presentacion_asociada else None,
             "precio_presentacion" : descripcion.presentacion_asociada.precio if descripcion.presentacion_asociada else None,
             'cantidad' : descripcion.cantidad,
-            'imagenes_producto' : descripcion.producto_asociado.imagenes
+            'imagenes_producto' : producto_asociado.imagenes
         }
