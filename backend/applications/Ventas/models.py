@@ -24,7 +24,7 @@ class Pedidos(models.Model):
     fecha_pedido            = models.DateTimeField(null=True, blank=True, default=get_current_time)
     fecha_entrega           = models.DateTimeField(null=True, blank=True)
     cliente_asociado        = models.ForeignKey(Clientes, on_delete=models.SET_NULL, null=True, related_name="pedidos")
-    monto_total             = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    monto_total             = models.FloatField(null=True, blank=True)
     estado                  = models.CharField(choices=[(role.value, role.name) for role in EstadoEnum], default=EstadoEnum.PENDIENTE)
     metodo_pago             = models.CharField(choices=[(role.value, role.name) for role in MetodoPagoEnum], default=MetodoPagoEnum.PAGO_MOVIL)
     metodo_entrega          = models.CharField(choices=[(role.value, role.name) for role in MetodoEntregaEnum], default=MetodoEntregaEnum.PICKUP)
