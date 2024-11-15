@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from backend.utils.constants import RolEnum
 
 
+
 class Perfiles(AbstractBaseUser, PermissionsMixin):  
     nombre_completo     = models.CharField()
     correo              = models.EmailField(unique=True)
@@ -18,6 +19,7 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
     is_staff            = models.BooleanField(default=False) # para empelados y admin (staff)
 
     USERNAME_FIELD  = 'correo'
+    REQUIRED_FIELDS = ['nombre_completo']
 
     #* MANAGER
     objects         = PerfilesManager()
@@ -27,7 +29,6 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
         self.contraseña = raw_password
     def check_password(self, raw_password):  
         """Verifica si la contraseña está correcta."""  
-        print("Comprobando contrasenia")
         return check_password(raw_password, self.contraseña)  
     def save(self, *args, **kwargs):
         """
@@ -35,7 +36,7 @@ class Perfiles(AbstractBaseUser, PermissionsMixin):
             Se sobreescribe para evitar problemas de encriptacion de contraseñas por crear perfiles desde el admin
         """
         if self.pk is None:  
-            self.set_password(self.contraseña)
+            self.contraseña = make_password(self.contraseña)
         elif Perfiles.objects.get(id=self.pk).contraseña != self.contraseña:
             self.contraseña = make_password(self.contraseña)
         super().save(*args, **kwargs)  

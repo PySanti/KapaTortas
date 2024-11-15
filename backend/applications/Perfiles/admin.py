@@ -16,5 +16,6 @@ class PerfilesAdmin(admin.ModelAdmin):
                 Clientes.objects.crear_cliente(perfil=obj)
             if obj.rol == "administrador":
                 obj.is_superuser = True
+                obj.is_staff = True
             obj.is_active = True
             obj.save()
