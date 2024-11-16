@@ -201,9 +201,10 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
   // Test....
   function deliveryPriceHandler(item: number) {
     setDeliveryPrice(item);
-    const newTotal = SUBTOTAL + item;
+    const newIva = SUBTOTAL + item;
+    setIva(newIva * (16 / 100));
+    const newTotal = iva + newIva;
     setTotal(newTotal);
-    setIva(newTotal * (16 / 100));
   }
 
   return (

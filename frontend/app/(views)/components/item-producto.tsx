@@ -13,7 +13,7 @@ export default function ItemProducto({ product }: { product: Producto }) {
             className="absolute top-[-6vw] md:top-[-6vw] lg:top-[-8vw]"
             path={
               product?.imagenes && product.imagenes.length > 0
-                ? product.imagenes[1]
+                ? product.imagenes[0]
                 : "/images/miga-Chocolate.png"
             }
             alt={product.titulo}
@@ -30,7 +30,7 @@ export default function ItemProducto({ product }: { product: Producto }) {
                 className="hidden sm:flex"
                 path={
                   product?.imagenes && product.imagenes.length > 0
-                    ? product.imagenes[0]
+                    ? product.imagenes[1]
                     : "/images/miga-Chocolate.png"
                 }
                 alt={product.titulo}
