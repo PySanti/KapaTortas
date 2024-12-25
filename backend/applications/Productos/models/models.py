@@ -1,10 +1,10 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from applications.Clientes.models import Clientes
-from .managers import ProductosManager
+from ..managers import ProductosManager
 from django.contrib.postgres.fields import ArrayField  
 from backend.utils.constants import CategoriaProductoEnum
-from .managers import ReviewsManager
+from ..managers import ReviewsManager
 
 class Productos(models.Model):
     titulo                  = models.CharField(unique=True)

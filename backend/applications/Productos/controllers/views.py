@@ -8,7 +8,7 @@ from rest_framework.permissions import (
 from django.http import JsonResponse
 from backend.utils.constants import (BASE_SERIALIZER_ERROR_RESPONSE)
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
-from .serializers import (ConsultarProductoSerializer, ObtenerListaProductosSerializer)
+from ..serializers.serializers import (ConsultarProductoSerializer, ObtenerListaProductosSerializer)
 
 
 # Create your views here.
