@@ -13,7 +13,7 @@ from backend.utils.constants import (
     MetodoEntregaEnum,
     DeliveryZoneEnum
 )
-from .managers import (
+from ..managers import (
     PedidosManager,
     DescripcionesPedidosManager
 )

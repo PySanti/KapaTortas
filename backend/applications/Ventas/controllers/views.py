@@ -9,13 +9,13 @@ from rest_framework.permissions import (
 from django.http import JsonResponse
 from backend.utils.constants import (BASE_SERIALIZER_ERROR_RESPONSE)
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
-from .serializers import (CrearPedidoSerializer)
+from ..serializers.serializers import (CrearPedidoSerializer)
 from backend.utils.base_serializercheck_decorator import base_serializercheck_decorator
-from .models import Pedidos
+from ..models import Pedidos
 from random import randint
 from applications.Clientes.models import Clientes
 from backend.utils.constants import EstadoEnum
-from .models import DescripcionesPedido
+from ..models import DescripcionesPedido
 from applications.Clientes.models import DireccionesEnvio
 
 
