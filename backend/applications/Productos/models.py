@@ -25,7 +25,6 @@ class Presentaciones(models.Model):
     proporcion      = models.CharField(null=True, blank=True)
     precio          = models.FloatField(null=True, blank=True)
     stock           = models.IntegerField()
-    calorias        = models.FloatField(null=True, blank=True)
     producto_asociado = models.ForeignKey(Productos, related_name="presentaciones", on_delete=models.SET_NULL, null=True)
 
 
