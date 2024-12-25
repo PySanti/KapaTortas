@@ -8,6 +8,7 @@ from backend.utils.constants import RolEnum
 
 class Perfiles(AbstractBaseUser, PermissionsMixin):  
     nombre_completo     = models.CharField()
+    cedula              = models.IntegerField(null=True, blank=True)
     correo              = models.EmailField(unique=True)
     contraseña          = models.CharField(max_length=128)
     numero_telefonico   = models.CharField( blank=True, null=True)
