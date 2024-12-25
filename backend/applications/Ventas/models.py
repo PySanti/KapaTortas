@@ -1,6 +1,5 @@
 from django.db import models
 from applications.Productos.models import (
-    Productos,
     Presentaciones
 )
 
@@ -11,7 +10,8 @@ from applications.Clientes.models import (
 from backend.utils.constants import (
     EstadoEnum,
     MetodoPagoEnum,
-    MetodoEntregaEnum
+    MetodoEntregaEnum,
+    DeliveryZoneEnum
 )
 from .managers import (
     PedidosManager,
@@ -29,6 +29,7 @@ class Pedidos(models.Model):
     metodo_pago             = models.CharField(choices=[(role.value, role.name) for role in MetodoPagoEnum], default=MetodoPagoEnum.PAGO_MOVIL)
     metodo_entrega          = models.CharField(choices=[(role.value, role.name) for role in MetodoEntregaEnum], default=MetodoEntregaEnum.PICKUP)
     direccion_entrega       = models.ForeignKey(DireccionesEnvio, related_name="pedidos",null=True, on_delete=models.SET_NULL )
+    precio_delivery         = models.IntegerField(blank=True, null=True, choices=[(delzone.value, delzone.name) for delzone in DeliveryZoneEnum], default=1)
 
     objects                 = PedidosManager()
 

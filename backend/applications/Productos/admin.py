@@ -18,7 +18,7 @@ class ProductosAdmin(admin.ModelAdmin):
 
 @admin.register(Presentaciones)  
 class PresentacionesAdmin(admin.ModelAdmin):  
-    list_display = ("id",'ref', "proporcion", "precio", "stock", "calorias", "producto")  # Agrega los campos que deseas mostrar en el admin  
+    list_display = ("id",'ref', "proporcion", "precio", "stock", "producto")  # Agrega los campos que deseas mostrar en el admin  
 
 
     def producto(self, obj):
