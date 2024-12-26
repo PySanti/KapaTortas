@@ -1,6 +1,6 @@
 from django.db import models
 from applications.Perfiles.models import Perfiles
-from .managers import ClientesManager
+from ..managers import ClientesManager
 from backend.utils.get_expiration_date import get_expiration_date
 from backend.utils.generate_verification_token import generate_verification_token
 from django.utils import timezone

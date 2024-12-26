@@ -14,7 +14,6 @@ from backend.utils.base_serializercheck_decorator import base_serializercheck_de
 from ..models import Pedidos
 from random import randint
 from applications.Clientes.models import Clientes
-from backend.utils.constants import EstadoEnum
 from ..models import DescripcionesPedido
 from applications.Clientes.models import DireccionesEnvio
 
