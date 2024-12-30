@@ -6,10 +6,11 @@ import { usePedidoStore } from "@/src/usePedidoStore";
 import { Cliente } from "@/app/models/Cliente";
 
 import { ItemFormat } from "@/app/models/Pedido";
-import { Categoria, Producto } from "@/app/models/Producto";
+import { Categoria } from "@/app/models/Producto";
 
-import GalleryImage from "./images/GalleryImage";
+import GalleryImage from "../images/GalleryImage";
 import DataPedido from "./data-pedido";
+import PriceSummary from "./price-summary";
 
 export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
   const { product, extras, present } = usePedidoStore();
@@ -112,27 +113,12 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
             </ul>
 
             {/* SECCION PRECIOS */}
-            <dl className="space-y-6 border-t border-secondary-light border-opacity-10 pt-6  font-medium text-secondary-light text-base">
-              <div className="flex items-center justify-between">
-                <dt>Subtotal</dt>
-                <dd>${SUBTOTAL}</dd>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <dt>Delivery</dt>
-                <dt>${deliveryPrice}</dt>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <dt>IVA</dt>
-                <dd>${iva}</dd>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-white border-opacity-10 pt-6 text-secondary-light">
-                <dt className="text-base">Total</dt>
-                <dd className="text-base">${total}</dd>
-              </div>
-            </dl>
+            <PriceSummary
+              subtotal={SUBTOTAL}
+              iva={IVA}
+              total={TOTAL}
+              deliveryPrice={deliveryPrice}
+            />
           </div>
         </section>
 
@@ -140,8 +126,8 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
           <DataPedido
             perfilDir={perfil?.direccion_preferida}
             order={order}
-            deliveryPriceHandler={deliveryPriceHandler}
-            total={total}
+            deliveryPriceHandler={handleDeliveryPriceChange}
+            total={TOTAL}
           />
         </section>
       </div>
