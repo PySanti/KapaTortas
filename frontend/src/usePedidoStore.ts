@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { Producto, Presentacion } from "@/app/models/Producto";
+import { persist } from "zustand/middleware";
 
 type CartItem = {
   product: Producto;
@@ -26,41 +27,49 @@ const defaultProduct: Producto = {
   reviews: [],
 };
 
-export const usePedidoStore = create<PedidoState>((set) => ({
-  cartItems: [],
-  addToCart: (item) =>
-    set((state) => {
-      const existingItem = state.cartItems.find(
-        (cartItem) => cartItem.product.id === item.product.id,
-      );
+export const usePedidoStore = create<PedidoState>()(
+  persist(
+    (set) => ({
+      cartItems: [],
+      addToCart: (item) =>
+        set((state) => {
+          const existingItem = state.cartItems.find(
+            (cartItem) => cartItem.product.id === item.product.id,
+          );
 
-      if (existingItem) {
-        // Actualizar la cantidad si ya existe
-        return {
+          if (existingItem) {
+            // Actualizar la cantidad si ya existe
+            return {
+              cartItems: state.cartItems.map((cartItem) =>
+                cartItem.product.id === item.product.id
+                  ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+                  : cartItem,
+              ),
+            };
+          }
+
+          // Agregar un nuevo producto al carrito
+          return { cartItems: [...state.cartItems, item] };
+        }),
+      removeFromCart: (productId) =>
+        set((state) => ({
+          cartItems: state.cartItems.filter(
+            (cartItem) => cartItem.product.id !== productId,
+          ),
+        })),
+      updateCartItem: (productId, quantity) =>
+        set((state) => ({
           cartItems: state.cartItems.map((cartItem) =>
-            cartItem.product.id === item.product.id
-              ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+            cartItem.product.id === productId
+              ? { ...cartItem, quantity }
               : cartItem,
           ),
-        };
-      }
-
-      // Agregar un nuevo producto al carrito
-      return { cartItems: [...state.cartItems, item] };
+        })),
+      clearCart: () => set({ cartItems: [] }),
     }),
-  removeFromCart: (productId) =>
-    set((state) => ({
-      cartItems: state.cartItems.filter(
-        (cartItem) => cartItem.product.id !== productId,
-      ),
-    })),
-  updateCartItem: (productId, quantity) =>
-    set((state) => ({
-      cartItems: state.cartItems.map((cartItem) =>
-        cartItem.product.id === productId
-          ? { ...cartItem, quantity }
-          : cartItem,
-      ),
-    })),
-  clearCart: () => set({ cartItems: [] }),
-}));
+    {
+      name: "pedido-cache",
+      partialize: (state) => ({ cartItems: state.cartItems }),
+    },
+  ),
+);

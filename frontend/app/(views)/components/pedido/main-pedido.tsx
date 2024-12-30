@@ -12,8 +12,6 @@ import GalleryImage from "../images/GalleryImage";
 import DataPedido from "./data-pedido";
 import PriceSummary from "./price-summary";
 
-import defaultImage from "../../../../public/images/Torta-Chocolate.png";
-
 export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
   const { cartItems } = usePedidoStore();
 

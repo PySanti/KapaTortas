@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { Presentacion, Producto } from "@/app/models/Producto";
 import Gallery from "../gallery";
 import Stars from "../stars";
+import { CircleX } from "lucide-react";
 import Selector from "../selector";
 import ReviewProduct from "./review-product";
 import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 
 // zustand
 import { usePedidoStore } from "@/src/usePedidoStore";
@@ -51,14 +53,16 @@ export default function DetailProduct({
     return Number(present?.precio || 0) + extrasTotal;
   }, [present, extras]);
 
-  const handleHacerPedido = () => {
+  const handleCart = (type: string) => {
     addToCart({ product, present, quantity: 1 });
     if (extras.length > 0) {
       extras.map((product) => {
         addToCart({ product, quantity: 1 });
       });
     }
-    router.push("/pedido/caja");
+    if (type === "realizar") {
+      router.push("/pedido/caja");
+    }
   };
 
   return (
@@ -126,22 +130,34 @@ export default function DetailProduct({
               />
             </div>
 
-            <div className="flex flex-col w-auto space sm:flex-row justify-evenly mt-10 text-center">
-              <Button
-                type="button"
-                variant="secondary"
-                className="m-4 mt-0 sm:m-auto text-center text-base py-7 w-auto rounded-full border-2 border-primary"
-                onClick={handleHacerPedido}
-              >
-                Añadir al Carrito
-              </Button>
-              <Button
-                type="button"
-                className="m-4 mt-0 sm:m-auto text-center text-base py-7 rounded-full"
-                onClick={handleHacerPedido}
-              >
-                Realizar Pedido
-              </Button>
+            <div className="flex flex-col mt-10 text-center">
+              <div className="flex flex-col w-auto space sm:flex-row justify-evenly">
+                <Button
+                  type="button"
+                  variant={
+                    !present?.stock || present.stock < 1 ? "ghost" : "secondary"
+                  }
+                  className={`${(!present?.stock || present.stock < 1) && "hover:bg-red-500 hover:border-red-500"} m-4 mt-0 sm:m-auto text-center text-base py-7 w-auto rounded-full border-2 border-primary`}
+                  onClick={() => handleCart("addToCart")}
+                >
+                  Añadir al Carrito
+                </Button>
+                <Button
+                  type="button"
+                  className={`${(!present?.stock || present.stock < 1) && "hidden"} m-4 mt-0 sm:m-auto text-center text-base py-7 rounded-full`}
+                  onClick={() => handleCart("realizar")}
+                >
+                  Realizar Pedido
+                </Button>
+              </div>
+              {(!present?.stock || present.stock < 1) && (
+                <div className="flex justify-center items-center p-2 text-center">
+                  <CircleX className="h-5 w-5 flex-shrink-0 text-red-500 mr-2" />
+                  <Label className=" text-red-500">
+                    No hay stock disponible
+                  </Label>
+                </div>
+              )}
             </div>
           </form>
         </section>

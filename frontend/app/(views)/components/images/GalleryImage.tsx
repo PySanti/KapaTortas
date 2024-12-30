@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import logo from "@/public/images/Orange.png";
-
 import miga from "../../../../public/images/miga-festival.png";
 
 export default function GalleryImage({
@@ -15,7 +13,7 @@ export default function GalleryImage({
 }) {
   return (
     <Image
-      src={miga}
+      src={miga || path}
       alt={alt}
       width={150}
       height={150}
