@@ -1,179 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState, useMemo } from "react";
 import { usePedidoStore } from "@/src/usePedidoStore";
 
-import { Session } from "next-auth";
 import { Cliente } from "@/app/models/Cliente";
-import { formatDescripciones } from "@/app/models/Pedido";
-import { OrderDetails } from "@/app/models/Pedido";
 
 import { ItemFormat } from "@/app/models/Pedido";
-import { Categoria, Presentacion, Producto } from "@/app/models/Producto";
+import { Categoria, Producto } from "@/app/models/Producto";
 
 import GalleryImage from "./images/GalleryImage";
 import DataPedido from "./data-pedido";
 
-// testtt
-// PRESENTACION
-const examplePresentacion: Presentacion = {
-  id: 1,
-  ref: "L",
-  proporcion: "1L",
-  precio: "12.50",
-  stock: 20,
-  calorias: "250",
-};
-
-const exampleProducto: Producto = {
-  id: 1,
-  titulo: "Organic Apple Juice",
-  categoria: "postre",
-  descripcion: "Fresh organic apple juice, no added sugar.",
-  presentaciones: [
-    {
-      id: 1,
-      ref: "L",
-      proporcion: "1L",
-      precio: "12.50",
-      stock: 20,
-      calorias: "250",
-    },
-    {
-      id: 2,
-      ref: "500ml",
-      proporcion: "500ml",
-      precio: "7.00",
-      stock: 15,
-      calorias: "125",
-    },
-  ],
-  imagenes: [
-    "https://res.cloudinary.com/dhxc2ozvw/image/upload/v1731461803/kapatortas/kehirlnc2rcnra7b2fdg.png",
-  ],
-  reviews: [
-    {
-      calificacion: 5,
-      descripcion: "Excellent taste!",
-      autor_review: "user123",
-    },
-    {
-      calificacion: 4,
-      descripcion: "Very refreshing.",
-      autor_review: "user456",
-    },
-  ],
-};
-
-const exampleProductos: Producto[] = [
-  {
-    id: 1,
-    titulo: "Organic Apple Juice",
-    categoria: "extra",
-    descripcion: "Fresh organic apple juice, no added sugar.",
-    presentaciones: [
-      {
-        id: 1,
-        ref: "L",
-        proporcion: "1L",
-        precio: "12.50",
-        stock: 20,
-        calorias: "250",
-      },
-      {
-        id: 2,
-        ref: "500ml",
-        proporcion: "500ml",
-        precio: "7.00",
-        stock: 15,
-        calorias: "125",
-      },
-    ],
-    imagenes: [
-      "https://res.cloudinary.com/dhxc2ozvw/image/upload/v1731461803/kapatortas/kehirlnc2rcnra7b2fdg.png",
-      "https://res.cloudinary.com/dhxc2ozvw/image/upload/v1731461803/kapatortas/kehirlnc2rcnra7b2fdg.png",
-    ],
-    reviews: [
-      {
-        calificacion: 5,
-        descripcion: "Excellent taste!",
-        autor_review: "user123",
-      },
-    ],
-  },
-  {
-    id: 2,
-    titulo: "Almond Milk",
-    categoria: "extra",
-    descripcion: "Organic almond milk, rich in vitamins.",
-    presentaciones: [
-      {
-        id: 1,
-        ref: "L",
-        proporcion: "1L",
-        precio: "15.00",
-        stock: 30,
-        calorias: "100",
-      },
-      {
-        id: 2,
-        ref: "250ml",
-        proporcion: "250ml",
-        precio: "4.00",
-        stock: 40,
-        calorias: "25",
-      },
-    ],
-    imagenes: [
-      "https://res.cloudinary.com/dhxc2ozvw/image/upload/v1731461803/kapatortas/kehirlnc2rcnra7b2fdg.png",
-      "https://res.cloudinary.com/dhxc2ozvw/image/upload/v1731461803/kapatortas/kehirlnc2rcnra7b2fdg.png",
-    ],
-    reviews: [
-      {
-        calificacion: 5,
-        descripcion: "Excellent taste!",
-        autor_review: "user123",
-      },
-    ],
-  },
-];
-
 export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
   const { product, extras, present } = usePedidoStore();
-  //
-  //
-  //
-  // const product = exampleProducto;
-  // const present = examplePresentacion;
-  // const extras = exampleProductos;
 
-  //   Price
-  const SUBTOTAL: number =
-    Number(present?.precio || 0) +
-    (extras && extras.length > 0
-      ? extras
-          .filter((item) => item.presentaciones.length > 0)
-          .reduce(
-            (total, item) => total + Number(item.presentaciones[0].precio || 0),
-            0,
-          )
-      : 0);
-  // Lista productos
-  const listProducts: Producto[] = [product, ...(extras || [])];
+  const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
 
-  const descripciones: formatDescripciones[] = listProducts.map((item) => {
-    return {
-      cantidad: 1,
-      id_producto: item.id,
-      id_presentacion:
-        item.categoria === Categoria.POSTRE
-          ? present?.id
-          : item.presentaciones.length > 0
-            ? item.presentaciones[0].id
-            : 0,
-    };
-  });
+  const SUBTOTAL = useMemo(() => {
+    const presentPrice = Number(present?.precio || 0);
+    const extrasTotal =
+      extras?.reduce((total, item) => {
+        const presentationPrice =
+          item.presentaciones.length > 0
+            ? Number(item.presentaciones[0]?.precio || 0)
+            : 0;
+        return total + presentationPrice;
+      }, 0) || 0;
+
+    return presentPrice + extrasTotal;
+  }, [extras, present]);
+
+  const IVA = useMemo(() => SUBTOTAL * 0.16, [SUBTOTAL]);
+  const TOTAL = useMemo(
+    () => SUBTOTAL + deliveryPrice + IVA,
+    [SUBTOTAL, deliveryPrice, IVA],
+  );
+
+  const listProducts = useMemo(
+    () => [product, ...(extras || [])],
+    [product, extras],
+  );
 
   const order: ItemFormat[] = listProducts.map((item) => {
     const calculatedPrice =
@@ -189,32 +55,13 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
       price: calculatedPrice,
     };
   });
-  // Delivery
-  const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
 
-  // Total
-  const [total, setTotal] = useState<number>(SUBTOTAL + deliveryPrice);
-
-  // Impuestos
-  const [iva, setIva] = useState<number>(total * (16 / 100));
-
-  // Test....
-  function deliveryPriceHandler(item: number) {
-    setDeliveryPrice(item);
-    const newIva = SUBTOTAL + item;
-    setIva(newIva * (16 / 100));
-    const newTotal = iva + newIva;
-    setTotal(newTotal);
-  }
+  const handleDeliveryPriceChange = (price: number) => {
+    setDeliveryPrice(price);
+  };
 
   return (
     <div className="bg-white">
-      {/* TESTING */}
-      {/* <p>{product?.titulo}</p>
-      <p>{product?.categoria}</p>
-      <p>{extras?.[0].titulo}</p>
-      <p>{present?.calorias}</p> */}
-
       {/* Separación color bg */}
       <div
         className="fixed right-0 top-0 hidden h-full w-1/2 bg-white lg:block"

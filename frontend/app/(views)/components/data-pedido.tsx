@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { formatDescripciones, ItemFormat } from "@/app/models/Pedido";
+import { ItemFormat } from "@/app/models/Pedido";
 import { Button } from "./ui/button";
 import { OrderDetails } from "@/app/models/Pedido";
 

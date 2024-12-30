@@ -1,0 +1,88 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { usePedidoStore } from "@/src/usePedidoStore";
+import { Cliente } from "@/app/models/Cliente";
+import GalleryImage from "./images/GalleryImage";
+import DataPedido from "./data-pedido";
+import PriceSummary from "./PriceSummary";
+
+export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
+  const { product, extras, present } = usePedidoStore();
+
+  const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
+
+  const SUBTOTAL = useMemo(() => {
+    return (
+      Number(present?.precio || 0) +
+      extras?.reduce(
+        (total, item) =>
+          total +
+          (item.presentaciones.length > 0
+            ? Number(item.presentaciones[0].precio)
+            : 0),
+        0,
+      ) || 0
+    );
+  }, [extras, present]);
+
+  const IVA = useMemo(() => SUBTOTAL * 0.16, [SUBTOTAL]);
+  const TOTAL = useMemo(() => SUBTOTAL + deliveryPrice + IVA, [
+    SUBTOTAL,
+    deliveryPrice,
+    IVA,
+  ]);
+
+  const listProducts = useMemo(
+    () => [product, ...(extras || [])],
+    [product, extras],
+  );
+
+  const handleDeliveryPriceChange = (price: number) => {
+    setDeliveryPrice(price);
+  };
+
+  return (
+    <div className="bg-white">
+      <div className="relative mx-auto max-w-7xl grid grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8 lg:pt-16">
+        {/* Products Section */}
+        <section className="bg-terciary py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg">
+          <h2 className="mt-1 text-3xl font-bold tracking-tight text-secondary-light">
+            Productos
+          </h2>
+          <ul className="divide-y divide-white divide-opacity-10 text-sm font-medium">
+            {listProducts.map((product, index) => (
+              <li key={index} className="flex items-start space-x-4 py-6">
+                <GalleryImage
+                  path={product?.imagenes?.[0] || ""}
+                  alt={product.titulo}
+                  className="h-20 w-20 flex-none rounded-md object-cover object-center"
+                />
+                <div className="flex-auto space-y-1">
+                  <h3 className="text-secondary-light">{product.titulo}</h3>
+                  <p className="text-secondary-light text-opacity-40">
+                    {present?.proporcion}
+                  </p>
+                </div>
+                <h3 className="flex-none text-lg font-medium text-secondary">
+                  {product.categoria === "POSTRE" ? present?.precio : "Extra"}
+                </h3>
+              </li>
+            ))}
+          </ul>
+          <PriceSummary subtotal={SUBTOTAL} iva={IVA} total={TOTAL} deliveryPrice={deliveryPrice} />
+        </section>
+
+        {/* DataPedido Form */}
+        <section className="py-16 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-kg lg:pb-24 lg:pt-0">
+          <DataPedido
+            perfilDir={perfil?.direccion_preferida}
+            order={listProducts}
+            deliveryPriceHandler={handleDeliveryPriceChange}
+            total={TOTAL}
+          />
+        </section>
+      </div>
+    </div>
+  );
+}
