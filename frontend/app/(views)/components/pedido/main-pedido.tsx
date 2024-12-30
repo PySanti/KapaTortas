@@ -12,47 +12,31 @@ import GalleryImage from "../images/GalleryImage";
 import DataPedido from "./data-pedido";
 import PriceSummary from "./price-summary";
 
-export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
-  const { product, extras, present } = usePedidoStore();
+import defaultImage from "../../../../public/images/Torta-Chocolate.png";
 
-  const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
+export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
+  const { cartItems } = usePedidoStore();
 
   const SUBTOTAL = useMemo(() => {
-    const presentPrice = Number(present?.precio || 0);
-    const extrasTotal =
-      extras?.reduce((total, item) => {
-        const presentationPrice =
-          item.presentaciones.length > 0
-            ? Number(item.presentaciones[0]?.precio || 0)
-            : 0;
-        return total + presentationPrice;
-      }, 0) || 0;
-
-    return presentPrice + extrasTotal;
-  }, [extras, present]);
+    return cartItems.reduce((total, item) => {
+      const presentPrice = Number(item.present?.precio || 0);
+      return total + presentPrice * item.quantity;
+    }, 0);
+  }, [cartItems]);
 
   const IVA = useMemo(() => SUBTOTAL * 0.16, [SUBTOTAL]);
+  const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
   const TOTAL = useMemo(
     () => SUBTOTAL + deliveryPrice + IVA,
     [SUBTOTAL, deliveryPrice, IVA],
   );
 
-  const listProducts = useMemo(
-    () => [product, ...(extras || [])],
-    [product, extras],
-  );
-
-  const order: ItemFormat[] = listProducts.map((item) => {
-    const calculatedPrice =
-      item.categoria === Categoria.POSTRE
-        ? Number(present?.precio)
-        : item.presentaciones.length > 0
-          ? Number(item.presentaciones[0].precio)
-          : 0;
+  const order: ItemFormat[] = cartItems.map((item) => {
+    const calculatedPrice = item.present ? Number(item.present.precio) : 0;
 
     return {
-      title: item.titulo,
-      quantity: 1,
+      title: item.product.titulo,
+      quantity: item.quantity,
       price: calculatedPrice,
     };
   });
@@ -86,26 +70,28 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
               role="list"
               className="divide-y divide-white divide-opacity-10 text-sm font-medium"
             >
-              {listProducts.map((product, index) => (
+              {cartItems.map((item, index) => (
                 <li key={index} className="flex items-start space-x-4 py-6">
                   <GalleryImage
                     path={
-                      product?.imagenes && product.imagenes.length > 0
-                        ? product.imagenes[0]
+                      item.product?.imagenes && item.product.imagenes.length > 0
+                        ? item.product.imagenes[0]
                         : ""
                     }
-                    alt={product.titulo}
+                    alt={item.product.titulo}
                     className="h-20 w-20 flex-none rounded-md object-cover object-center"
                   />
                   <div className="flex-auto space-y-1">
-                    <h3 className="text-secondary-light">{product.titulo}</h3>
+                    <h3 className="text-secondary-light">
+                      {item.product.titulo}
+                    </h3>
                     <p className="text-secondary-light text-opacity-40">
-                      {present && present.proporcion}
+                      {item.present && item.present.proporcion}
                     </p>
                   </div>
                   <h3 className="flex-none text-lg font-medium text-secondary">
-                    {product.categoria === Categoria.POSTRE
-                      ? present?.precio
+                    {item.product.categoria === Categoria.POSTRE
+                      ? item.present?.precio
                       : "Extra"}
                   </h3>
                 </li>

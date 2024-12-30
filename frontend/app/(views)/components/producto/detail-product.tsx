@@ -23,7 +23,7 @@ export default function DetailProduct({
   extraList: Producto[] | undefined;
 }) {
   // Zustand
-  const setPedidoData = usePedidoStore((state) => state.setPedidoData);
+  const { addToCart } = usePedidoStore();
   const router = useRouter();
   // Estados
   const [extras, setExtras] = useState<Producto[]>([]);
@@ -52,7 +52,12 @@ export default function DetailProduct({
   }, [present, extras]);
 
   const handleHacerPedido = () => {
-    setPedidoData({ product, extras, present });
+    addToCart({ product, present, quantity: 1 });
+    if (extras.length > 0) {
+      extras.map((product) => {
+        addToCart({ product, quantity: 1 });
+      });
+    }
     router.push("/pedido/caja");
   };
 
