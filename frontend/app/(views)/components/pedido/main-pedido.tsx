@@ -8,8 +8,6 @@ import { Cliente } from "@/app/models/Cliente";
 import { ItemFormat } from "@/app/models/Pedido";
 import { Categoria } from "@/app/models/Producto";
 
-import { XIcon } from "lucide-react";
-
 import GalleryImage from "../images/GalleryImage";
 import DataPedido from "./data-pedido";
 import PriceSummary from "./price-summary";
