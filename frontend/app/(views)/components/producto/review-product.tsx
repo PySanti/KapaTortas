@@ -2,7 +2,7 @@
 
 import { Fragment } from "react";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/react";
-import Stars from "./stars";
+import Stars from "../stars";
 import classNames from "@/app/controladores/utilities/classNames";
 import { Producto } from "@/app/models/Producto";
 import { User } from "lucide-react";

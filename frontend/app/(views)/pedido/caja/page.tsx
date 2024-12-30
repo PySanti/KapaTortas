@@ -1,6 +1,6 @@
 import { Pedido } from "@/app/models/Pedido";
 import { Cliente } from "@/app/models/Cliente";
-import MainPedido from "../../components/Pedido/main-pedido";
+import MainPedido from "../../components/pedido/main-pedido";
 import { auth } from "@/auth";
 import ClienteAPI from "@/app/controladores/api/users/ClienteAPI";
 import { Rol } from "@/app/models/RolEnum";
