@@ -19,4 +19,6 @@ class ClientesAdmin(admin.ModelAdmin):
 
 
 
+admin.site.site_header = "Panel de administración KapaTortas"
+admin.site.site_title = "Kapa"
 
