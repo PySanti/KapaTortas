@@ -42,6 +42,8 @@ export default function DetailProduct({
 
   const stars = Math.round(rating || 0);
 
+  console.log(present);
+
   // Calcula el precio total
   const totalPrice = useMemo(() => {
     const extrasTotal = extras.reduce((sum, extra) => {

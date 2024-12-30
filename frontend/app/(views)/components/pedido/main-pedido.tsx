@@ -8,12 +8,18 @@ import { Cliente } from "@/app/models/Cliente";
 import { ItemFormat } from "@/app/models/Pedido";
 import { Categoria } from "@/app/models/Producto";
 
+import { XIcon } from "lucide-react";
+
 import GalleryImage from "../images/GalleryImage";
 import DataPedido from "./data-pedido";
 import PriceSummary from "./price-summary";
+import { Button } from "../ui/button";
+import QuantityCard from "../quantity-card";
+import DiscardItem from "./discard-item";
 
 export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
-  const { cartItems } = usePedidoStore();
+  const { cartItems, updateCartItem, removeFromCart, clearCart } =
+    usePedidoStore();
 
   const SUBTOTAL = useMemo(() => {
     return cartItems.reduce((total, item) => {
@@ -54,13 +60,18 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8 lg:pt-16">
         <h1 className="sr-only">Procesar Compra</h1>
 
-        <section className="bg-terciary py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg">
+        <section className="bg-terciary py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto rounded-t-xl lg:w-full lg:max-w-lg">
           <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
             <h2 className="sr-only">Order summary</h2>
 
-            <h2 className="mt-1 text-3xl font-bold tracking-tight text-secondary-light">
-              Productos
-            </h2>
+            <div className="flex justify-between p-2">
+              <h2 className="mt-1 text-3xl font-bold tracking-tight text-secondary-light">
+                Productos
+              </h2>
+              <Button variant="destructive" onClick={clearCart}>
+                Borrar Carrito
+              </Button>
+            </div>
 
             {/* SECCION PRODUCTOS */}
 
@@ -69,29 +80,39 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
               className="divide-y divide-white divide-opacity-10 text-sm font-medium"
             >
               {cartItems.map((item, index) => (
-                <li key={index} className="flex items-start space-x-4 py-6">
-                  <GalleryImage
-                    path={
-                      item.product?.imagenes && item.product.imagenes.length > 0
-                        ? item.product.imagenes[0]
-                        : ""
-                    }
-                    alt={item.product.titulo}
-                    className="h-20 w-20 flex-none rounded-md object-cover object-center"
-                  />
-                  <div className="flex-auto space-y-1">
-                    <h3 className="text-secondary-light">
-                      {item.product.titulo}
+                <li key={index} className="flex flex-col py-6 justify-between">
+                  {/* Remover del Carrito */}
+                  <DiscardItem item={item} removeFromCart={removeFromCart} />
+
+                  <div className="flex items-start space-x-4">
+                    <GalleryImage
+                      path={
+                        item.product?.imagenes &&
+                        item.product.imagenes.length > 0
+                          ? item.product.imagenes[0]
+                          : ""
+                      }
+                      alt={item.product.titulo}
+                      className="h-20 w-20 flex-none rounded-md object-cover object-center"
+                    />
+                    <div className="flex-auto space-y-1">
+                      <h3 className="text-secondary-light">
+                        {item.product.titulo}
+                      </h3>
+                      <p className="text-secondary-light text-opacity-40">
+                        {item.present && item.present.proporcion}
+                      </p>
+                    </div>
+                    <h3 className="flex-none text-lg font-medium text-secondary">
+                      $
+                      {item.product.categoria === Categoria.POSTRE
+                        ? item.present?.precio
+                        : "Extra"}
                     </h3>
-                    <p className="text-secondary-light text-opacity-40">
-                      {item.present && item.present.proporcion}
-                    </p>
                   </div>
-                  <h3 className="flex-none text-lg font-medium text-secondary">
-                    {item.product.categoria === Categoria.POSTRE
-                      ? item.present?.precio
-                      : "Extra"}
-                  </h3>
+
+                  {/* Cantidad del Producto */}
+                  <QuantityCard item={item} updateCartItem={updateCartItem} />
                 </li>
               ))}
             </ul>

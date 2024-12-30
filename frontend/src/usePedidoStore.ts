@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { Producto, Presentacion } from "@/app/models/Producto";
 import { persist } from "zustand/middleware";
 
-type CartItem = {
+export type CartItem = {
   product: Producto;
   present?: Presentacion;
   quantity: number;
