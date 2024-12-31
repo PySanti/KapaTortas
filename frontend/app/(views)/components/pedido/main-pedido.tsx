@@ -58,13 +58,13 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8 lg:pt-16">
         <h1 className="sr-only">Procesar Compra</h1>
 
-        <section className="bg-terciary py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto rounded-t-xl lg:w-full lg:max-w-lg">
+        <section className="bg-terciary py-6 md:py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto rounded-t-xl lg:w-full lg:max-w-lg">
           <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
             <h2 className="sr-only">Order summary</h2>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <div className="flex flex-col ">
-                <h2 className="mt-1 text-3xl font-bold tracking-tight text-secondary-light">
+                <h2 className="mt-1 text-xl md:text-3xl font-bold tracking-tight text-secondary-light">
                   Lista de Productos
                 </h2>
                 <span>
@@ -78,7 +78,7 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
               </Button>
             </div>
 
-            <Divider />
+            <Divider className="bg-terciary-muted mt-2 bg-opacity-40" />
 
             {/* SECCION PRODUCTOS */}
 
@@ -87,7 +87,10 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
               className="divide-y divide-white divide-opacity-10 text-sm font-medium"
             >
               {cartItems.map((item, index) => (
-                <li key={index} className="flex flex-col py-6 justify-between">
+                <li
+                  key={index}
+                  className="flex flex-col py-4 px-2 justify-between"
+                >
                   {/* Remover del Carrito */}
                   <DiscardItem item={item} removeFromCart={removeFromCart} />
 
