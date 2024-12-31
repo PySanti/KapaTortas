@@ -59,7 +59,9 @@ export default function DetailProduct({
     addToCart({ product, present, quantity: 1 });
     if (extras.length > 0) {
       extras.map((product) => {
-        addToCart({ product, quantity: 1 });
+        console.log("AQUI EL EXTRA", product.presentaciones[0]);
+        const present = product.presentaciones[0] || undefined;
+        addToCart({ product, present, quantity: 1 });
       });
     }
     if (type === "realizar") {

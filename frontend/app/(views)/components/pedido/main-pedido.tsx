@@ -8,6 +8,7 @@ import { Cliente } from "@/app/models/Cliente";
 import { ItemFormat } from "@/app/models/Pedido";
 import { Categoria } from "@/app/models/Producto";
 
+import { Divider } from "@nextui-org/divider";
 import GalleryImage from "../images/GalleryImage";
 import DataPedido from "./data-pedido";
 import PriceSummary from "./price-summary";
@@ -16,7 +17,7 @@ import QuantityCard from "../quantity-card";
 import DiscardItem from "./discard-item";
 
 export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
-  const { cartItems, updateCartItem, removeFromCart, clearCart } =
+  const { cartItems, updateCartItem, removeFromCart, clearCart, quantity } =
     usePedidoStore();
 
   const SUBTOTAL = useMemo(() => {
@@ -62,14 +63,23 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
           <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
             <h2 className="sr-only">Order summary</h2>
 
-            <div className="flex justify-between p-2">
-              <h2 className="mt-1 text-3xl font-bold tracking-tight text-secondary-light">
-                Productos
-              </h2>
+            <div className="flex justify-between">
+              <div className="flex flex-col ">
+                <h2 className="mt-1 text-3xl font-bold tracking-tight text-secondary-light">
+                  Lista de Productos
+                </h2>
+                <span>
+                  {quantity === 1
+                    ? `(${quantity}) Producto`
+                    : `(${quantity}) Productos`}
+                </span>
+              </div>
               <Button variant="destructive" onClick={clearCart}>
                 Borrar Carrito
               </Button>
             </div>
+
+            <Divider />
 
             {/* SECCION PRODUCTOS */}
 
@@ -102,10 +112,7 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
                       </p>
                     </div>
                     <h3 className="flex-none text-lg font-medium text-secondary">
-                      $
-                      {item.product.categoria === Categoria.POSTRE
-                        ? item.present?.precio
-                        : "Extra"}
+                      {item.present ? `$${item.present.precio}` : "EXTRA"}
                     </h3>
                   </div>
 
