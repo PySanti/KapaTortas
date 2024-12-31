@@ -3,7 +3,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/app/(views)/components/ui/button';
 import { Input } from '@/app/(views)/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/(views)/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/app/(views)/components/ui/card';
 import {
   Form,
   FormControl,
@@ -22,7 +28,20 @@ import { signIn } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FormErrorMessage from './form-error-msg';
 import FormSuccessMessage from './form-success-msg';
-import { Eye, EyeOff } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Eye, EyeOff } from 'lucide-react';
+
+const steps = [
+  {
+    id: 1,
+    name: 'Información Personal',
+    fields: ['nombre', 'email', 'password', 'confirmPassword'],
+  },
+  {
+    id: 2,
+    name: 'Información Personal',
+    fields: ['cedula'], // telefono tmbn
+  },
+];
 
 export default function RegistroClienteForm() {
   const router = useRouter();
@@ -41,10 +60,14 @@ export default function RegistroClienteForm() {
       password: '',
       confirmPassword: '',
       rol: 'cliente',
+      cedula: '',
     },
+    mode: 'onChange',
   });
 
   const {
+    handleSubmit,
+    trigger,
     formState: { errors, isSubmitting },
     setError,
   } = form;
@@ -57,6 +80,7 @@ export default function RegistroClienteForm() {
         email: data.email,
         password: data.password,
         rol: 'cliente',
+        cedula: data.cedula,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -66,43 +90,45 @@ export default function RegistroClienteForm() {
     const resData = await res.json();
 
     if (!res.ok) {
-      setErrorMsg('Something went wrong');
+      setErrorMsg('Algo salió mal');
     } else {
-      setSuccessMsg(resData.success); // Mensaje con success en su respuesta de api/register
+      setSuccessMsg('Usuario registrado exitosamente'); // Mensaje con success en su respuesta de api/register
       setTimeout(() => {
         router.push('/login');
       }, 2000);
     }
 
-    if (resData.errors) {
-      const errors = resData.errors;
+    //* REFA: Pedirle a santiago que mejore el manejo de errores de la response de la api. Si ya existe un usuario con el correo devolver un objeto errors con el campo email que diga usuario existente
 
-      if (errors.email) {
-        setError('email', {
-          type: 'server',
-          message: errors.email,
-        });
-      } else if (errors.nombre) {
-        setError('nombre', {
-          type: 'server',
-          message: errors.nombre,
-        });
-      } else if (errors.password) {
-        setError('password', {
-          type: 'server',
-          message: errors.password,
-        });
-      } else if (errors.confirmPassword) {
-        setError('confirmPassword', {
-          type: 'server',
-          message: errors.confirmPassword,
-        });
-      } else if (errors.limit) {
-        setErrorMsg(errors.limit);
-      } else {
-        console.error('Error en el registro');
-      }
-    }
+    // if (resData.errors) {
+    //   const errors = resData.errors;
+
+    //   if (errors.email) {
+    //     setError('email', {
+    //       type: 'server',
+    //       message: errors.email,
+    //     });
+    //   } else if (errors.nombre) {
+    //     setError('nombre', {
+    //       type: 'server',
+    //       message: errors.nombre,
+    //     });
+    //   } else if (errors.password) {
+    //     setError('password', {
+    //       type: 'server',
+    //       message: errors.password,
+    //     });
+    //   } else if (errors.confirmPassword) {
+    //     setError('confirmPassword', {
+    //       type: 'server',
+    //       message: errors.confirmPassword,
+    //     });
+    //   } else if (errors.limit) {
+    //     setErrorMsg(errors.limit);
+    //   } else {
+    //     console.error('Error en el registro');
+    //   }
+    // }
   };
 
   const togglePasswordVisibility = () => {
@@ -127,6 +153,28 @@ export default function RegistroClienteForm() {
   };
 
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
+  const [previousStep, setPreviousStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(0);
+
+  type FieldName = keyof registroType;
+
+  const next = async () => {
+    const fields = steps[currentStep].fields;
+    const output = await trigger(fields as FieldName[], { shouldFocus: true });
+
+    if (!output) return;
+
+    if (currentStep < steps.length - 1) {
+      setPreviousStep(currentStep);
+      setCurrentStep((step) => step + 1);
+    }
+  };
+
+  const prev = () => {
+    if (currentStep > 0) {
+      setCurrentStep((step) => step - 1);
+    }
+  };
 
   return (
     <Card className='w-[24rem] text-terciary'>
@@ -200,7 +248,7 @@ export default function RegistroClienteForm() {
           <CardContent>
             <Form {...form}>
               <motion.form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit)}
                 className='space-y-4'
                 key='form'
                 initial='hidden'
@@ -208,110 +256,155 @@ export default function RegistroClienteForm() {
                 exit='hidden'
                 variants={formVariants}
               >
-                <FormField
-                  control={form.control}
-                  name='nombre'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nombre Completo</FormLabel>
-                      <FormControl>
-                        <Input placeholder='Leo Messi' {...field} />
-                      </FormControl>
-                      <FormMessage className='text-[0.8rem]' /> {/* Form error */}
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='email'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input type='email' placeholder='lmessi@gmail.com' {...field} />
-                      </FormControl>
-                      <FormMessage className='text-[0.8rem]' /> {/* Form error */}
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='password'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Contraseña</FormLabel>
-                      <FormControl>
-                        <div className='relative'>
-                          <Input
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder='********'
-                            className='pr-10'
-                            {...field}
-                          />
-                          <Button
-                            type='button'
-                            variant='ghost'
-                            size='icon'
-                            className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
-                            onClick={togglePasswordVisibility}
-                            aria-label={showPassword ? 'Hide password' : 'Show password'}
-                          >
-                            {showPassword ? (
-                              <EyeOff className='h-4 w-4 text-gray-500' />
-                            ) : (
-                              <Eye className='h-4 w-4 text-gray-500' />
-                            )}
-                          </Button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='confirmPassword'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Confirmar Contraseña</FormLabel>
-                      <FormControl>
-                        <div className='relative'>
-                          <Input
-                            type={showPassword2 ? 'text' : 'password'}
-                            placeholder='********'
-                            className='pr-10'
-                            {...field}
-                          />
-                          <Button
-                            type='button'
-                            variant='ghost'
-                            size='icon'
-                            className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
-                            onClick={togglePasswordVisibility2}
-                            aria-label={showPassword2 ? 'Hide password' : 'Show password'}
-                          >
-                            {showPassword2 ? (
-                              <EyeOff className='h-4 w-4 text-gray-500' />
-                            ) : (
-                              <Eye className='h-4 w-4 text-gray-500' />
-                            )}
-                          </Button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
+                {currentStep === 0 && (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name='nombre'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nombre Completo</FormLabel>
+                          <FormControl>
+                            <Input placeholder='Leo Messi' {...field} />
+                          </FormControl>
+                          <FormMessage className='text-[0.8rem]' /> {/* Form error */}
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name='email'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input type='email' placeholder='lmessi@gmail.com' {...field} />
+                          </FormControl>
+                          <FormMessage className='text-[0.8rem]' /> {/* Form error */}
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name='password'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contraseña</FormLabel>
+                          <FormControl>
+                            <div className='relative'>
+                              <Input
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder='********'
+                                className='pr-10'
+                                {...field}
+                              />
+                              <Button
+                                type='button'
+                                variant='ghost'
+                                size='icon'
+                                className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
+                                onClick={togglePasswordVisibility}
+                                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                              >
+                                {showPassword ? (
+                                  <EyeOff className='h-4 w-4 text-gray-500' />
+                                ) : (
+                                  <Eye className='h-4 w-4 text-gray-500' />
+                                )}
+                              </Button>
+                            </div>
+                          </FormControl>
+                          <FormMessage className='text-[0.8rem]' />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name='confirmPassword'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Confirmar Contraseña</FormLabel>
+                          <FormControl>
+                            <div className='relative'>
+                              <Input
+                                type={showPassword2 ? 'text' : 'password'}
+                                placeholder='********'
+                                className='pr-10'
+                                {...field}
+                              />
+                              <Button
+                                type='button'
+                                variant='ghost'
+                                size='icon'
+                                className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
+                                onClick={togglePasswordVisibility2}
+                                aria-label={showPassword2 ? 'Hide password' : 'Show password'}
+                              >
+                                {showPassword2 ? (
+                                  <EyeOff className='h-4 w-4 text-gray-500' />
+                                ) : (
+                                  <Eye className='h-4 w-4 text-gray-500' />
+                                )}
+                              </Button>
+                            </div>
+                          </FormControl>
+                          <FormMessage className='text-[0.8rem]' />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+                {currentStep === 1 && (
+                  <FormField
+                    control={form.control}
+                    name='cedula'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Cédula</FormLabel>
+                        <FormControl>
+                          <Input placeholder='V29542675 (Incluya V o E)' {...field} />
+                        </FormControl>
+                        <FormMessage className='text-[0.8rem]' />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 <FormErrorMessage message={errorMsg} />
                 <FormSuccessMessage message={successMsg} />
-                <Button
-                  className='bg-primary text-white rounded-full'
-                  disabled={isSubmitting}
-                  type='submit'
-                >
-                  Enviar
-                </Button>
+                <div className='flex items-center space-x-2'>
+                  {/* Botón de regresar */}
+                  {currentStep > 0 && (
+                    <Button
+                      type='button'
+                      className='bg-primary text-white rounded-full'
+                      onClick={prev}
+                    >
+                      <ArrowLeft className='w-4 h-4 mr-0' />
+                      Regresar
+                    </Button>
+                  )}
+                  {/* Botón de enviar */}
+                  {currentStep === steps.length - 1 && (
+                    <Button
+                      disabled={isSubmitting}
+                      type='submit'
+                      className='bg-primary text-white rounded-full'
+                    >
+                      Enviar
+                    </Button>
+                  )}
+                  {/* Botón de siguiente */}
+                  {currentStep < steps.length - 1 && (
+                    <Button
+                      type='button'
+                      className='bg-primary text-white rounded-full'
+                      onClick={next}
+                    >
+                      Siguiente
+                      <ArrowRight className='w-4 h-4 ml-0' />
+                    </Button>
+                  )}
+                </div>
               </motion.form>
             </Form>
           </CardContent>

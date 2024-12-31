@@ -18,7 +18,7 @@ class CrearPerfilSerializer(serializers.Serializer):
     rol = serializers.ChoiceField(  
         choices=[(role.value, role.name) for role in RolEnum],  
     )
-    cedula = serializers.IntegerField()
+    cedula = serializers.CharField()
 
 
 class CheckPasswordSerializer(serializers.Serializer):
