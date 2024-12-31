@@ -6,8 +6,8 @@ import { usePedidoStore } from "@/src/usePedidoStore";
 import { Cliente } from "@/app/models/Cliente";
 
 import { ItemFormat } from "@/app/models/Pedido";
-import { Categoria } from "@/app/models/Producto";
 
+import { Divider } from "@nextui-org/divider";
 import GalleryImage from "../images/GalleryImage";
 import DataPedido from "./data-pedido";
 import PriceSummary from "./price-summary";
@@ -16,7 +16,7 @@ import QuantityCard from "../quantity-card";
 import DiscardItem from "./discard-item";
 
 export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
-  const { cartItems, updateCartItem, removeFromCart, clearCart } =
+  const { cartItems, updateCartItem, removeFromCart, clearCart, quantity } =
     usePedidoStore();
 
   const SUBTOTAL = useMemo(() => {
@@ -58,18 +58,27 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8 lg:pt-16">
         <h1 className="sr-only">Procesar Compra</h1>
 
-        <section className="bg-terciary py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto rounded-t-xl lg:w-full lg:max-w-lg">
+        <section className="bg-terciary py-6 md:py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto rounded-t-xl lg:w-full lg:max-w-lg">
           <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
             <h2 className="sr-only">Order summary</h2>
 
-            <div className="flex justify-between p-2">
-              <h2 className="mt-1 text-3xl font-bold tracking-tight text-secondary-light">
-                Productos
-              </h2>
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col ">
+                <h2 className="mt-1 text-xl md:text-3xl font-bold tracking-tight text-secondary-light">
+                  Lista de Productos
+                </h2>
+                <span>
+                  {quantity === 1
+                    ? `(${quantity}) Producto`
+                    : `(${quantity}) Productos`}
+                </span>
+              </div>
               <Button variant="destructive" onClick={clearCart}>
                 Borrar Carrito
               </Button>
             </div>
+
+            <Divider className="bg-terciary-muted mt-2 bg-opacity-40" />
 
             {/* SECCION PRODUCTOS */}
 
@@ -78,7 +87,10 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
               className="divide-y divide-white divide-opacity-10 text-sm font-medium"
             >
               {cartItems.map((item, index) => (
-                <li key={index} className="flex flex-col py-6 justify-between">
+                <li
+                  key={index}
+                  className="flex flex-col py-4 px-2 justify-between"
+                >
                   {/* Remover del Carrito */}
                   <DiscardItem item={item} removeFromCart={removeFromCart} />
 
@@ -93,19 +105,16 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
                       alt={item.product.titulo}
                       className="h-20 w-20 flex-none rounded-md object-cover object-center"
                     />
-                    <div className="flex-auto space-y-1">
+                    <div className="flex-auto">
                       <h3 className="text-secondary-light">
                         {item.product.titulo}
                       </h3>
-                      <p className="text-secondary-light text-opacity-40">
+                      <p className="text-secondary text-lg text-opacity-70">
                         {item.present && item.present.proporcion}
                       </p>
                     </div>
                     <h3 className="flex-none text-lg font-medium text-secondary">
-                      $
-                      {item.product.categoria === Categoria.POSTRE
-                        ? item.present?.precio
-                        : "Extra"}
+                      {item.present ? `$${item.present.precio}` : "EXTRA"}
                     </h3>
                   </div>
 

@@ -42,8 +42,6 @@ export default function DetailProduct({
 
   const stars = Math.round(rating || 0);
 
-  console.log(present);
-
   // Calcula el precio total
   const totalPrice = useMemo(() => {
     const extrasTotal = extras.reduce((sum, extra) => {
@@ -56,10 +54,12 @@ export default function DetailProduct({
   }, [present, extras]);
 
   const handleCart = (type: string) => {
-    addToCart({ product, present, quantity: 1 });
+    const id = `${product.id}-${present?.id}`;
+    addToCart({ id, product, present, quantity: 1 });
     if (extras.length > 0) {
       extras.map((product) => {
-        addToCart({ product, quantity: 1 });
+        const present = product.presentaciones[0] || undefined;
+        addToCart({ id, product, present, quantity: 1 });
       });
     }
     if (type === "realizar") {

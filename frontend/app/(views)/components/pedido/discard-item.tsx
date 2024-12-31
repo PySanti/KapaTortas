@@ -7,14 +7,14 @@ export default function DiscardItem({
   removeFromCart,
 }: {
   item: CartItem;
-  removeFromCart: (productId: number) => void;
+  removeFromCart: (productId: string) => void;
 }) {
   const handlerRemoveFromCart = () => {
-    removeFromCart(item.product.id);
+    removeFromCart(item.id);
   };
 
   return (
-    <div className="flex flex-col sm:self-end items-center py-2">
+    <div className="flex flex-col self-end items-center py-2">
       <Button
         className="h-8 w-8 rounded-full bg-red-500 hover:bg-red-300"
         onClick={handlerRemoveFromCart}
