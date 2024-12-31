@@ -20,9 +20,9 @@ class PerfilesManager(BaseUserManager):
         return self._create_user( nombre_completo, password, correo, True, True, rol=RolEnum.ADMIN,  **kwargs)
     def create_user(self, nombre_completo, password, correo, **kwargs):
         return self._create_user( nombre_completo, password, correo, False, False, **kwargs)
-    def crear_perfil(self, nombre_completo, password, correo,  rol, cedula):
+    def crear_perfil(self, nombre_completo, password, correo,  rol, cedula, numero_telefonico):
         from applications.Clientes.models import Clientes
-        new_profile =  self._create_user( nombre_completo, password, correo,rol == "administrador" , rol in ["administrador", "empleado"], rol=rol, cedula=cedula)
+        new_profile =  self._create_user( nombre_completo, password, correo,rol == "administrador" , rol in ["administrador", "empleado"], rol=rol, cedula=cedula, numero_telefonico=numero_telefonico)
         if rol == "cliente":
             return Clientes.objects.crear_cliente(perfil=new_profile)
         else:

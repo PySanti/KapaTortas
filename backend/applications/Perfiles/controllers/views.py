@@ -73,7 +73,8 @@ class CrearPerfilAPI(APIView):
                     password = serialized_data['password'],
                     correo = serialized_data['email'],
                     rol = serialized_data['rol'],
-                    cedula = serialized_data['cedula']
+                    cedula = serialized_data['cedula'],
+                    numero_telefonico = serialized_data['numero_telefonico']
                 )
                 if (serialized_data["rol"] == "cliente"):
                     new_profile.verification_token = VerificationToken.objects.create()
