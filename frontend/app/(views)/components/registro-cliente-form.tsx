@@ -100,6 +100,14 @@ export default function RegistroClienteForm() {
 
     //* REFA: Pedirle a santiago que mejore el manejo de errores de la response de la api. Si ya existe un usuario con el correo devolver un objeto errors con el campo email que diga usuario existente
 
+    if (resData.error && resData.error === 'correo_exists') {
+      setError('email', {
+        type: 'server',
+        message: 'Este correo ya está registrado',
+      });
+      setErrorMsg('Este correo ya está registrado. Intenta iniciar sesión');
+    }
+
     // if (resData.errors) {
     //   const errors = resData.errors;
 

@@ -10,11 +10,6 @@ export const registroSchema = z
       .refine((value) => /^[A-Za-zÑñÁÉÍÓÚáéíóú]+ [A-Za-zÑñÁÉÍÓÚáéíóú]+$/.test(value), {
         message: 'Por favor, ingresa nombre y apellido',
       }),
-    // .regex(
-    //   /^[A-Za-zÑñÁÉÍÓÚáéíóú]+ [A-Za-zÑñÁÉÍÓÚáéíóú]+$/,
-    //   'Por favor, ingresa nombre y apellido'
-    // )
-    // .transform((value) => value.trim().replace(/\s+/g, ' ')), // Quita espacios redundantes
     email: z.string().email({ message: 'Por favor, ingresa un email válido' }),
     password: z.string().min(6, { message: 'La contraseña debe tener al menos 6 caractéres' }),
     confirmPassword: z
