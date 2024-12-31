@@ -13,9 +13,8 @@ export type Presentacion = {
   id: number;
   ref: string;
   proporcion: string;
-  precio: string;
+  precio: number;
   stock: number;
-  calorias: string;
 };
 
 export interface Producto {

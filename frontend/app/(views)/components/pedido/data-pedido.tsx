@@ -4,13 +4,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { formatDescripciones, ItemFormat } from "@/app/models/Pedido";
-import { Button } from "./ui/button";
+import { ItemFormat } from "@/app/models/Pedido";
+import { Button } from "../ui/button";
 import { OrderDetails } from "@/app/models/Pedido";
 
 import { DireccionEnvio } from "@/app/models/Cliente";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import { useState } from "react";
 import { MetodoEntrega, MetodoPago } from "@/app/models/Pedido";
 import { Description, Label, Radio, RadioGroup } from "@headlessui/react";

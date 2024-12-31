@@ -1,4 +1,4 @@
-import Product from "../../components/product";
+import Product from "../../components/producto/product";
 
 export default async function ProductPage({
   params,
