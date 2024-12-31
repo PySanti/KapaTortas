@@ -94,13 +94,11 @@ export default function RegistroClienteForm() {
     if (!res.ok) {
       setErrorMsg('Algo salió mal');
     } else {
-      setSuccessMsg('Usuario registrado exitosamente'); // Mensaje con success en su respuesta de api/register
+      setSuccessMsg('Registro exitoso! Verifica tu correo para completar el registro'); // Mensaje con success en su respuesta de api/register
       setTimeout(() => {
         router.push('/login');
-      }, 2000);
+      }, 3000); // Muestra el mensaje 3 segundos antes de ir a la ruta del login0
     }
-
-    //* REFA: Pedirle a santiago que mejore el manejo de errores de la response de la api. Si ya existe un usuario con el correo devolver un objeto errors con el campo email que diga usuario existente
 
     if (resData.error && resData.error === 'correo_exists') {
       setError('email', {

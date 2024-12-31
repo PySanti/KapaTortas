@@ -159,7 +159,9 @@ export default {
 
       const isActive = cliente.perfil.is_active;
 
-      if (!isActive) return false;
+      if (!isActive) {
+        throw new Error('USER_NOT_ACTIVE');
+      }
 
       return true;
     },
