@@ -39,7 +39,7 @@ const steps = [
   {
     id: 2,
     name: 'Información Personal',
-    fields: ['cedula'], // telefono tmbn
+    fields: ['cedula', 'numero_telefonico'], // telefono tmbn
   },
 ];
 
@@ -61,6 +61,7 @@ export default function RegistroClienteForm() {
       confirmPassword: '',
       rol: 'cliente',
       cedula: '',
+      numero_telefonico: '',
     },
     mode: 'onChange',
   });
@@ -81,6 +82,7 @@ export default function RegistroClienteForm() {
         password: data.password,
         rol: 'cliente',
         cedula: data.cedula,
+        numero_telefonico: data.numero_telefonico,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -105,7 +107,7 @@ export default function RegistroClienteForm() {
         type: 'server',
         message: 'Este correo ya está registrado',
       });
-      setErrorMsg('Este correo ya está registrado. Intenta iniciar sesión');
+      setErrorMsg('Este correo ya está registrado');
     }
 
     // if (resData.errors) {
@@ -363,19 +365,35 @@ export default function RegistroClienteForm() {
                   </>
                 )}
                 {currentStep === 1 && (
-                  <FormField
-                    control={form.control}
-                    name='cedula'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Cédula</FormLabel>
-                        <FormControl>
-                          <Input placeholder='V29542675 (Incluya V o E)' {...field} />
-                        </FormControl>
-                        <FormMessage className='text-[0.8rem]' />
-                      </FormItem>
-                    )}
-                  />
+                  <>
+                    <FormField
+                      control={form.control}
+                      name='cedula'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Cédula</FormLabel>
+                          <FormControl>
+                            <Input placeholder='V29542675 (Incluya V o E)' {...field} />
+                          </FormControl>
+                          <FormMessage className='text-[0.8rem]' />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name='numero_telefonico'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Número Telefónico</FormLabel>
+                          <FormControl>
+                            <Input placeholder='0412-1234567' {...field} />
+                          </FormControl>
+                          <FormMessage className='text-[0.8rem]' />
+                        </FormItem>
+                      )}
+                    />
+                  </>
                 )}
                 <FormErrorMessage message={errorMsg} />
                 <FormSuccessMessage message={successMsg} />

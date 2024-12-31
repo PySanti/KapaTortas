@@ -19,6 +19,9 @@ export const registroSchema = z
     cedula: z.string().regex(/^[VE]-?\d{7,8}$/, {
       message: 'La cédula debe comenzar con V o E y tener 7 u 8 dígitos',
     }),
+    numero_telefonico: z.string().regex(/^(0412|0414|0416|0424|0426)-?\d{7}$/, {
+      message: 'Por favor, ingresa un número de teléfono válido',
+    }),
   })
   .refine(
     (form) => {
