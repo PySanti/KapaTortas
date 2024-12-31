@@ -8,14 +8,14 @@ export default function QuantityCard({
   updateCartItem,
 }: {
   item: CartItem;
-  updateCartItem: (productId: number, quantity: number) => void;
+  updateCartItem: (productId: string, quantity: number) => void;
 }) {
   const [advice, setAdvice] = useState<string>("");
 
   const handleQuantity = (type: string) => {
     setAdvice("");
     return updateCartItem(
-      item.product.id,
+      item.id,
       type === "minus" ? item.quantity - 1 : item.quantity + 1,
     );
   };

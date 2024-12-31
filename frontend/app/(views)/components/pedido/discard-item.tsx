@@ -7,10 +7,10 @@ export default function DiscardItem({
   removeFromCart,
 }: {
   item: CartItem;
-  removeFromCart: (productId: number) => void;
+  removeFromCart: (productId: string) => void;
 }) {
   const handlerRemoveFromCart = () => {
-    removeFromCart(item.product.id);
+    removeFromCart(item.id);
   };
 
   return (

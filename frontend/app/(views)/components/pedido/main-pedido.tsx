@@ -6,7 +6,6 @@ import { usePedidoStore } from "@/src/usePedidoStore";
 import { Cliente } from "@/app/models/Cliente";
 
 import { ItemFormat } from "@/app/models/Pedido";
-import { Categoria } from "@/app/models/Producto";
 
 import { Divider } from "@nextui-org/divider";
 import GalleryImage from "../images/GalleryImage";
@@ -103,11 +102,11 @@ export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
                       alt={item.product.titulo}
                       className="h-20 w-20 flex-none rounded-md object-cover object-center"
                     />
-                    <div className="flex-auto space-y-1">
+                    <div className="flex-auto">
                       <h3 className="text-secondary-light">
                         {item.product.titulo}
                       </h3>
-                      <p className="text-secondary-light text-opacity-40">
+                      <p className="text-secondary text-lg text-opacity-70">
                         {item.present && item.present.proporcion}
                       </p>
                     </div>
