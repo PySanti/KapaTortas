@@ -44,7 +44,8 @@ export default function EmailVerification() {
         {!successMsg && !errorMsg && (
           <>
             <Image
-              src={'/images/miga-festival.png'}
+              src='https://res.cloudinary.com/dhxc2ozvw/image/upload/v1731461803/kapatortas/kehirlnc2rcnra7b2fdg.png'
+              //src={'/images/miga-festival.png'}
               className='mx-auto h-24 w-24 animate-spin-slower'
               alt='Spinner'
               width={100}
