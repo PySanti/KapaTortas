@@ -15,7 +15,8 @@ from backend.utils.constants import (
 )
 from ..managers import (
     PedidosManager,
-    DescripcionesPedidosManager
+    DescripcionesPedidosManager,
+    VentasManager
 )
 from backend.utils.get_current_time import get_current_time
 
@@ -60,7 +61,7 @@ class Ventas(models.Model):
     pedido                  = models.OneToOneField(Pedidos, on_delete=models.SET_NULL, null=True, related_name="venta")
     # factura
 
-
+    objects = VentasManager()
     def __str__(self):
         return f"{self.fecha} : {self.nota}"
     class Meta:

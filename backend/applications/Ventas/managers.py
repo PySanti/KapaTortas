@@ -1,6 +1,7 @@
 from django.db.models.manager import Manager
 from backend.utils.constants import BASE_PEDIDOS_SHOWABLE_FIELDS
 from backend.utils.constants import BASE_DIRECCIONES_SHOWABLE_FIELDS
+from backend.utils.constants import BASE_VENTAS_LIST_SHOWABLE_FIELDS
 from backend.utils.get_info_dict import get_info_dict
 
 class PedidosManager(Manager):
@@ -22,3 +23,10 @@ class DescripcionesPedidosManager(Manager):
             'cantidad' : descripcion.cantidad,
             'imagenes_producto' : producto_asociado.imagenes
         }
+
+class VentasManager(Manager):
+    def get_venta_json(self, venta):
+        venta_data = get_info_dict(venta, BASE_VENTAS_LIST_SHOWABLE_FIELDS)
+        return venta_data
+    def get_ventas_list_json(self) -> list:
+        return [self.get_venta_json(p) for p in self.model.objects.all()] 
