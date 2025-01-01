@@ -28,3 +28,7 @@ class ObtenerListaPedidosSerializer(serializers.Serializer):
 
 class ConsultarFacturaByIdSerializer(serializers.Serializer):
     pass
+
+class EditarEstadoPedidoSerializer(serializers.Serializer):
+    numero_orden = serializers.IntegerField(required=True)
+    cancelado = serializers.BooleanField(required=True)
