@@ -34,3 +34,4 @@ class VentasManager(Manager):
 
     def get_ventas_list_json(self) -> list:
         return [self.get_venta_json(v) for v in self.select_related('pedido').all()]
+

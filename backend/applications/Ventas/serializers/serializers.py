@@ -26,3 +26,5 @@ class ObtenerListaVentasSerializer(serializers.Serializer):
 class ObtenerListaPedidosSerializer(serializers.Serializer):
     pass
 
+class ConsultarFacturaByIdSerializer(serializers.Serializer):
+    pass

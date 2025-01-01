@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from ..models import Facturas
 from rest_framework.views import (
     APIView,
 )
@@ -9,7 +10,7 @@ from rest_framework.permissions import (
 from django.http import JsonResponse
 from backend.utils.constants import (BASE_SERIALIZER_ERROR_RESPONSE)
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
-from ..serializers.serializers import (CrearPedidoSerializer, ObtenerListaVentasSerializer, ObtenerListaPedidosSerializer)
+from ..serializers.serializers import (CrearPedidoSerializer, ObtenerListaVentasSerializer, ObtenerListaPedidosSerializer, ConsultarFacturaByIdSerializer)
 from backend.utils.base_serializercheck_decorator import base_serializercheck_decorator
 from ..models import Pedidos
 from random import randint
@@ -81,3 +82,20 @@ class ObtenerListaPedidosAPI(APIView):
             return JsonResponse({'pedidos' : pedidos}, status=status.HTTP_200_OK)
         except:
             return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+class ConsultarFacturaByIdAPI(APIView):
+    serializer_class        = ConsultarFacturaByIdSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    def get(self, request, id_factura, *args, **kwargs):
+        try:
+            if factura:=Facturas.objects.filter(id=id_factura):
+                factura = factura[0]
+                return JsonResponse({'factura' : 0}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({'error' : 'factura_not_found'}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
