@@ -9,7 +9,7 @@ from rest_framework.permissions import (
 from django.http import JsonResponse
 from backend.utils.constants import (BASE_SERIALIZER_ERROR_RESPONSE)
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
-from ..serializers.serializers import (CrearPedidoSerializer, ObtenerListaVentasSerializer)
+from ..serializers.serializers import (CrearPedidoSerializer, ObtenerListaVentasSerializer, ObtenerListaPedidosSerializer)
 from backend.utils.base_serializercheck_decorator import base_serializercheck_decorator
 from ..models import Pedidos
 from random import randint
@@ -66,5 +66,18 @@ class ObtenerListaVentasAPI(APIView):
         try:
             ventas = Ventas.objects.get_ventas_list_json()
             return JsonResponse({'ventas' : ventas}, status=status.HTTP_200_OK)
+        except:
+            return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ObtenerListaPedidosAPI(APIView):
+    serializer_class        = ObtenerListaPedidosSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            pedidos = Pedidos.objects.get_pedidos_list_json()
+            return JsonResponse({'pedidos' : pedidos}, status=status.HTTP_200_OK)
         except:
             return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)

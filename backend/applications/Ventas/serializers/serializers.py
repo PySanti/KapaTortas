@@ -22,3 +22,7 @@ class CrearPedidoSerializer(serializers.Serializer):
 
 class ObtenerListaVentasSerializer(serializers.Serializer):
     pass
+
+class ObtenerListaPedidosSerializer(serializers.Serializer):
+    pass
+

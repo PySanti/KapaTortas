@@ -9,6 +9,9 @@ class PedidosManager(Manager):
         pedido_dict["direccion_entrega"] = get_info_dict(pedido.direccion_entrega, BASE_DIRECCIONES_SHOWABLE_FIELDS) if pedido.direccion_entrega else None
         pedido_dict["descripciones"] = [DescripcionesPedido.objects.get_descripcion_json(p) for p in pedido.descripciones_pedido.all()];
         return pedido_dict
+    
+    def get_pedidos_list_json(self):
+        return [self.get_pedido_json(p) for p in self.all()]
 
 class DescripcionesPedidosManager(Manager):
     def get_descripcion_json(self, descripcion):
@@ -26,8 +29,8 @@ class DescripcionesPedidosManager(Manager):
 class VentasManager(Manager):
     def get_venta_json(self, venta):
         venta_data = get_info_dict(venta, BASE_VENTAS_LIST_SHOWABLE_FIELDS)
-        venta_data["pedido"] = PedidosManager().get_pedido_json(venta.pedido)
+        venta_data["pedido_asociado"] = PedidosManager().get_pedido_json(venta.pedido)
         return venta_data
 
     def get_ventas_list_json(self) -> list:
-        return [self.get_venta_json(v) for v in self.model.objects.select_related('pedido').all()]
+        return [self.get_venta_json(v) for v in self.select_related('pedido').all()]
