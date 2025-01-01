@@ -4,7 +4,8 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import (
     Pedidos,
-    Ventas
+    Ventas,
+    Facturas
 )
 from openpyxl import Workbook
 from io import BytesIO  
@@ -26,6 +27,16 @@ class ClienteFilter(admin.SimpleListFilter):
         if self.value():  
             return queryset.filter(cliente_asociado__id=self.value())  
         return queryset  
+
+
+@admin.register(Facturas)  
+class FacturasAdmin(admin.ModelAdmin):
+    list_display = ('id',  'fecha_emision_factura', 'id_venta')  
+
+    def id_venta(self, factura):
+        return factura.venta_asociada.id
+
+    id_venta.short_description = "id venta asociada"
 
 @admin.register(DescripcionesPedido)  
 class DescripcionesPedidoAdmin(admin.ModelAdmin):
@@ -74,6 +85,7 @@ class FechaVentasFilter(admin.SimpleListFilter):
         if self.value() == 'mes':  
             return queryset.filter(fecha__gte=timezone.now().date() - timedelta(days=30))  
         return queryset  
+
 @admin.register(Ventas)  
 class VentasAdmin(admin.ModelAdmin):  
     list_display = ('fecha',   'nota')  

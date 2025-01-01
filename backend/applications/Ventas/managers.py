@@ -1,5 +1,5 @@
 from django.db.models.manager import Manager
-from backend.utils.constants import BASE_PEDIDOS_SHOWABLE_FIELDS, BASE_DIRECCIONES_SHOWABLE_FIELDS, BASE_VENTAS_LIST_SHOWABLE_FIELDS
+from backend.utils.constants import BASE_PEDIDOS_SHOWABLE_FIELDS, BASE_DIRECCIONES_SHOWABLE_FIELDS, BASE_VENTAS_LIST_SHOWABLE_FIELDS, BASE_FACTURAS_SHOWABLE_FIELDS
 from backend.utils.get_info_dict import get_info_dict
 
 class PedidosManager(Manager):
@@ -35,3 +35,8 @@ class VentasManager(Manager):
     def get_ventas_list_json(self) -> list:
         return [self.get_venta_json(v) for v in self.select_related('pedido').all()]
 
+class FacturasManager(Manager):
+    def get_factura_json(self, factura):
+        factura_data = get_info_dict(factura, BASE_FACTURAS_SHOWABLE_FIELDS)
+        factura_data["venta_asociada"] = VentasManager().get_venta_json(factura.venta)
+        return factura_data
