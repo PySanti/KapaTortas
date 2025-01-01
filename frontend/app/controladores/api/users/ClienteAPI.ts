@@ -111,6 +111,31 @@ class ClienteAPI {
       return null;
     }
   }
+
+  public async eliminarPerfil(email: string): Promise<boolean> {
+    const url = `http://localhost:8000/api/perfiles/eliminar/${encodeURIComponent(email)}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      // Handle the response data, you can return success or additional data
+      const data = await response.json();
+      console.log('Perfil eliminado:', data);
+      return true;
+    } catch (error) {
+      console.error('Error al eliminar el perfil: ', error);
+      return false;
+    }
+  }
 }
 
 export default ClienteAPI.getInstance();

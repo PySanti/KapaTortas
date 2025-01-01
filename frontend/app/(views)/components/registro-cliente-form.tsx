@@ -39,7 +39,7 @@ const steps = [
   {
     id: 2,
     name: 'Información Personal',
-    fields: ['cedula'], // telefono tmbn
+    fields: ['cedula', 'numero_telefonico'], // telefono tmbn
   },
 ];
 
@@ -61,6 +61,7 @@ export default function RegistroClienteForm() {
       confirmPassword: '',
       rol: 'cliente',
       cedula: '',
+      numero_telefonico: '',
     },
     mode: 'onChange',
   });
@@ -81,6 +82,7 @@ export default function RegistroClienteForm() {
         password: data.password,
         rol: 'cliente',
         cedula: data.cedula,
+        numero_telefonico: data.numero_telefonico,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -92,13 +94,19 @@ export default function RegistroClienteForm() {
     if (!res.ok) {
       setErrorMsg('Algo salió mal');
     } else {
-      setSuccessMsg('Usuario registrado exitosamente'); // Mensaje con success en su respuesta de api/register
+      setSuccessMsg('Registro exitoso! Verifica tu correo para completar el registro'); // Mensaje con success en su respuesta de api/register
       setTimeout(() => {
         router.push('/login');
-      }, 2000);
+      }, 3000); // Muestra el mensaje 3 segundos antes de ir a la ruta del login0
     }
 
-    //* REFA: Pedirle a santiago que mejore el manejo de errores de la response de la api. Si ya existe un usuario con el correo devolver un objeto errors con el campo email que diga usuario existente
+    if (resData.error && resData.error === 'correo_exists') {
+      setError('email', {
+        type: 'server',
+        message: 'Este correo ya está registrado',
+      });
+      setErrorMsg('Este correo ya está registrado');
+    }
 
     // if (resData.errors) {
     //   const errors = resData.errors;
@@ -355,19 +363,35 @@ export default function RegistroClienteForm() {
                   </>
                 )}
                 {currentStep === 1 && (
-                  <FormField
-                    control={form.control}
-                    name='cedula'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Cédula</FormLabel>
-                        <FormControl>
-                          <Input placeholder='V29542675 (Incluya V o E)' {...field} />
-                        </FormControl>
-                        <FormMessage className='text-[0.8rem]' />
-                      </FormItem>
-                    )}
-                  />
+                  <>
+                    <FormField
+                      control={form.control}
+                      name='cedula'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Cédula</FormLabel>
+                          <FormControl>
+                            <Input placeholder='V29542675 (Incluya V o E)' {...field} />
+                          </FormControl>
+                          <FormMessage className='text-[0.8rem]' />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name='numero_telefonico'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Número Telefónico</FormLabel>
+                          <FormControl>
+                            <Input placeholder='0412-1234567' {...field} />
+                          </FormControl>
+                          <FormMessage className='text-[0.8rem]' />
+                        </FormItem>
+                      )}
+                    />
+                  </>
                 )}
                 <FormErrorMessage message={errorMsg} />
                 <FormSuccessMessage message={successMsg} />

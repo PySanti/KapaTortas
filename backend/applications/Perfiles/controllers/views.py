@@ -73,12 +73,13 @@ class CrearPerfilAPI(APIView):
                     password = serialized_data['password'],
                     correo = serialized_data['email'],
                     rol = serialized_data['rol'],
-                    cedula = serialized_data['cedula']
+                    cedula = serialized_data['cedula'],
+                    numero_telefonico = serialized_data['numero_telefonico']
                 )
                 if (serialized_data["rol"] == "cliente"):
                     new_profile.verification_token = VerificationToken.objects.create()
                     new_profile.save()
-                    # send_verification_mail(new_profile.perfil.correo, new_profile.verification_token.token)
+                    send_verification_mail(new_profile.perfil.correo, new_profile.verification_token.token)
                 new_profile = new_profile.perfil if serialized_data['rol'] == "cliente" else new_profile
                 return JsonResponse({"new_profile": get_info_dict(new_profile, BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_201_CREATED)
             except:
@@ -284,7 +285,7 @@ class EliminarPerfilAPI(APIView):
     authentication_classes  = []
     permission_classes      = [AllowAny]
 
-    def get(self, request, email_perfil, *args, **kwargs):
+    def delete(self, request, email_perfil, *args, **kwargs):
         try:
             if perfil := Perfiles.objects.filter(correo=email_perfil):
                 perfil[0].delete()

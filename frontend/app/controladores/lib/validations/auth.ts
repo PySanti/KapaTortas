@@ -10,11 +10,6 @@ export const registroSchema = z
       .refine((value) => /^[A-Za-zÑñÁÉÍÓÚáéíóú]+ [A-Za-zÑñÁÉÍÓÚáéíóú]+$/.test(value), {
         message: 'Por favor, ingresa nombre y apellido',
       }),
-    // .regex(
-    //   /^[A-Za-zÑñÁÉÍÓÚáéíóú]+ [A-Za-zÑñÁÉÍÓÚáéíóú]+$/,
-    //   'Por favor, ingresa nombre y apellido'
-    // )
-    // .transform((value) => value.trim().replace(/\s+/g, ' ')), // Quita espacios redundantes
     email: z.string().email({ message: 'Por favor, ingresa un email válido' }),
     password: z.string().min(6, { message: 'La contraseña debe tener al menos 6 caractéres' }),
     confirmPassword: z
@@ -23,6 +18,9 @@ export const registroSchema = z
     rol: z.enum(['cliente', 'empleado', 'admin']).optional(),
     cedula: z.string().regex(/^[VE]-?\d{7,8}$/, {
       message: 'La cédula debe comenzar con V o E y tener 7 u 8 dígitos',
+    }),
+    numero_telefonico: z.string().regex(/^(0412|0414|0416|0424|0426)-?\d{7}$/, {
+      message: 'Por favor, ingresa un número de teléfono válido',
     }),
   })
   .refine(

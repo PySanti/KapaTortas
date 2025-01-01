@@ -5,15 +5,6 @@ import { signIn } from '@/auth';
 import { defaultLoginRedirect } from '@/app/models/config/routes';
 import { AuthError } from 'next-auth';
 import ClienteAPI from '../api/users/ClienteAPI';
-// import { generateVerificationToken } from '@/lib/tokens';
-// import { sendVerificationEmail } from '@/actions/email';
-// import { Ratelimit } from '@upstash/ratelimit';
-// import { Redis } from '@upstash/redis';
-
-// const ratelimit = new Ratelimit({
-//   redis: Redis.fromEnv(),
-//   limiter: Ratelimit.slidingWindow(4, '1 h'), // max requests per hour
-// });
 
 export const login = async (data: loginType) => {
   const validatedData = loginSchema.safeParse(data);
@@ -37,29 +28,9 @@ export const login = async (data: loginType) => {
     return { error: 'Correo no existe' };
   }
 
-  // Check for verified email
-  // if (!user.is_active) {
-  //   // //* Rate limiter
-  //   // const { success, reset } = await ratelimit.limit(email);
-
-  //   // if (!success) {
-  //   //   const now = Date.now();
-  //   //   const retryAfter = Math.floor((reset - now) / 1000 / 60);
-
-  //   //   return {
-  //   //     error: `Try the last code sent to your email or wait ${retryAfter}m`,
-  //   //   };
-  //   // }
-
-  //   const verificationToken = await generateVerificationToken(existingUser.email);
-
-  //   const verificationEmail = await sendVerificationEmail(
-  //     existingUser.email,
-  //     verificationToken.token
-  //   );
-
-  //   return { error: 'Please confirm your email address' };
-  // }
+  if (!user.is_active) {
+    return { error: 'Revisa tu correo para activar tu cuenta' };
+  }
 
   try {
     await signIn('credentials', {
@@ -74,7 +45,7 @@ export const login = async (data: loginType) => {
       switch (error.type) {
         case 'CredentialsSignin': {
           return {
-            error: 'Credenciales inválidos',
+            error: 'Correo o contraseña incorrectos',
             email: `${data.email}`,
             password: `${data.password}`,
           };
@@ -90,6 +61,4 @@ export const login = async (data: loginType) => {
 
     throw error;
   }
-
-  // return { success: 'Confirmation email sent!' };
 };

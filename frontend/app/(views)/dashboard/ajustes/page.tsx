@@ -6,6 +6,7 @@ import DashboardContainer from '../../components/dashboard-container';
 import { DashboardHeader } from '../../components/dashboard-header';
 import { DialogEditar } from '../../components/dialog-editar-field';
 import getCurrentUser from '@/app/controladores/utilities/get-current-user';
+import DeleteProfileDialog from '../../components/dialog-eliminar-perfil';
 
 export default function AjustesPage() {
   const user = getCurrentUser();
@@ -19,12 +20,26 @@ export default function AjustesPage() {
     setEditingField(null);
   };
 
+  // Helper para retornar un label amigable
+  const getFieldLabel = (field: string) => {
+    switch (field) {
+      case 'name':
+        return 'Nombre Completo';
+      case 'password':
+        return 'Contraseña';
+      case 'phone_number':
+        return 'Número de Teléfono';
+      default:
+        return field;
+    }
+  };
+
   return (
     <DashboardContainer>
       <DashboardHeader heading='Datos Personales' />
       {user && (
         <>
-          <DashboardCard title='Información Personal' editable onEdit={() => handleEdit('name')}>
+          <DashboardCard title='Nombre completo' editable onEdit={() => handleEdit('name')}>
             <p>{user.name}</p>
           </DashboardCard>
           <DashboardCard title='Contraseña' editable onEdit={() => handleEdit('password')}>
@@ -44,13 +59,14 @@ export default function AjustesPage() {
       )}
       {editingField && (
         <DialogEditar
-          title={`Editar ${editingField === 'name' ? 'Información Personal' : editingField}`}
+          title={`Editar ${getFieldLabel(editingField)}`}
           email={user?.email!}
           field={editingField}
           initialValue={editingField in user! ? user![editingField as keyof typeof user] : ''}
           onClose={closeEditModal}
         />
       )}
+      <DeleteProfileDialog user={{ email: user?.email }} />
     </DashboardContainer>
   );
 }
