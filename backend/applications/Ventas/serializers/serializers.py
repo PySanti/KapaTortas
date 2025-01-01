@@ -19,3 +19,6 @@ class CrearPedidoSerializer(serializers.Serializer):
         choices=[(role.value, role.name) for role in MetodoEntregaEnum]  
     )
     descripciones = serializers.ListField(child=DescripcionesPedidosSerializer())
+
+class ObtenerListaVentasSerializer(serializers.Serializer):
+    pass
