@@ -1,7 +1,5 @@
 from django.db.models.manager import Manager
-from backend.utils.constants import BASE_PEDIDOS_SHOWABLE_FIELDS
-from backend.utils.constants import BASE_DIRECCIONES_SHOWABLE_FIELDS
-from backend.utils.constants import BASE_VENTAS_LIST_SHOWABLE_FIELDS
+from backend.utils.constants import BASE_PEDIDOS_SHOWABLE_FIELDS, BASE_DIRECCIONES_SHOWABLE_FIELDS, BASE_VENTAS_LIST_SHOWABLE_FIELDS
 from backend.utils.get_info_dict import get_info_dict
 
 class PedidosManager(Manager):
@@ -27,19 +25,9 @@ class DescripcionesPedidosManager(Manager):
 
 class VentasManager(Manager):
     def get_venta_json(self, venta):
-        # Get the fields for 'venta' itself
         venta_data = get_info_dict(venta, BASE_VENTAS_LIST_SHOWABLE_FIELDS)
-        
-        # Check if there is a related 'pedido' and get its fields using get_info_dict
-        if venta.pedido:
-            # Dynamically get all field names from the 'Pedido' model
-            pedido_fields = [field.name for field in venta.pedido._meta.fields]
-            # Add all the fields from 'pedido' to the venta data
-            pedido_data = get_info_dict(venta.pedido, pedido_fields)
-            # Now, include all the fields from 'pedido' in the 'venta' data
-            venta_data['pedido'] = pedido_data
-
+        venta_data["pedido"] = PedidosManager().get_pedido_json(venta.pedido)
         return venta_data
 
     def get_ventas_list_json(self) -> list:
-        return [self.get_venta_json(p) for p in self.model.objects.select_related('pedido').all()]
+        return [self.get_venta_json(v) for v in self.model.objects.select_related('pedido').all()]
