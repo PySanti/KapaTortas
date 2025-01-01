@@ -18,18 +18,26 @@ import DiscardItem from "./discard-item";
 export default function MainPedido({ perfil }: { perfil: Cliente | null }) {
   const { cartItems, updateCartItem, removeFromCart, clearCart, quantity } =
     usePedidoStore();
+  const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
 
   const SUBTOTAL = useMemo(() => {
-    return cartItems.reduce((total, item) => {
-      const presentPrice = Number(item.present?.precio || 0);
-      return total + presentPrice * item.quantity;
-    }, 0);
+    return (
+      Math.round(
+        cartItems.reduce((total, item) => {
+          const presentPrice = Number(item.present?.precio || 0);
+          return total + presentPrice * item.quantity;
+        }, 0) * 100,
+      ) / 100
+    );
   }, [cartItems]);
 
-  const IVA = useMemo(() => SUBTOTAL * 0.16, [SUBTOTAL]);
-  const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
+  const IVA = useMemo(
+    () => Math.round(SUBTOTAL * 0.16 * 100) / 100,
+    [SUBTOTAL],
+  );
+
   const TOTAL = useMemo(
-    () => SUBTOTAL + deliveryPrice + IVA,
+    () => Math.round((SUBTOTAL + deliveryPrice + IVA) * 100) / 100,
     [SUBTOTAL, deliveryPrice, IVA],
   );
 

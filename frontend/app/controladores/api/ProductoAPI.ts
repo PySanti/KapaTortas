@@ -16,7 +16,7 @@ class ProductoAPI {
   // Metodo para obtener el Producto
   // Cambiar T por Producto[]
   public async obtenerListaProductos(): Promise<Producto[] | null> {
-    const url = `http://localhost:8000/api/productos/todos`;
+    const url = `http://localhost:8000/api/productos/all_productos/`;
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -28,6 +28,7 @@ class ProductoAPI {
     if (!response.ok) throw new Error(`Error: ${response.status}`);
 
     const data = await response.json();
+
     return data.productos;
   }
 
