@@ -20,8 +20,8 @@ class VerificationToken(models.Model):
 
 class DireccionesEnvio(models.Model):
     pais            = models.CharField(default="VENEZUELA")
+    ciudad          = models.CharField(default="CARACAS")
     estado          = models.CharField()
-    ciudad          = models.CharField()
     direccion       = models.CharField()
     referencia      = models.CharField(null=True, blank=True)
     codigo_postal   = models.IntegerField()
