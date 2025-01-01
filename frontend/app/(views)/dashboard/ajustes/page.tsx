@@ -6,6 +6,7 @@ import DashboardContainer from '../../components/dashboard-container';
 import { DashboardHeader } from '../../components/dashboard-header';
 import { DialogEditar } from '../../components/dialog-editar-field';
 import getCurrentUser from '@/app/controladores/utilities/get-current-user';
+import DeleteProfileDialog from '../../components/dialog-eliminar-perfil';
 
 export default function AjustesPage() {
   const user = getCurrentUser();
@@ -65,6 +66,7 @@ export default function AjustesPage() {
           onClose={closeEditModal}
         />
       )}
+      <DeleteProfileDialog user={{ email: user?.email }} />
     </DashboardContainer>
   );
 }
