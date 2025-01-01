@@ -24,9 +24,22 @@ class DescripcionesPedidosManager(Manager):
             'imagenes_producto' : producto_asociado.imagenes
         }
 
+
 class VentasManager(Manager):
     def get_venta_json(self, venta):
+        # Get the fields for 'venta' itself
         venta_data = get_info_dict(venta, BASE_VENTAS_LIST_SHOWABLE_FIELDS)
+        
+        # Check if there is a related 'pedido' and get its fields using get_info_dict
+        if venta.pedido:
+            # Dynamically get all field names from the 'Pedido' model
+            pedido_fields = [field.name for field in venta.pedido._meta.fields]
+            # Add all the fields from 'pedido' to the venta data
+            pedido_data = get_info_dict(venta.pedido, pedido_fields)
+            # Now, include all the fields from 'pedido' in the 'venta' data
+            venta_data['pedido'] = pedido_data
+
         return venta_data
+
     def get_ventas_list_json(self) -> list:
-        return [self.get_venta_json(p) for p in self.model.objects.all()] 
+        return [self.get_venta_json(p) for p in self.model.objects.select_related('pedido').all()]
