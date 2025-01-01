@@ -285,7 +285,7 @@ class EliminarPerfilAPI(APIView):
     authentication_classes  = []
     permission_classes      = [AllowAny]
 
-    def get(self, request, email_perfil, *args, **kwargs):
+    def delete(self, request, email_perfil, *args, **kwargs):
         try:
             if perfil := Perfiles.objects.filter(correo=email_perfil):
                 perfil[0].delete()
