@@ -4,6 +4,7 @@ from ..managers import ClientesManager
 from backend.utils.get_expiration_date import get_expiration_date
 from backend.utils.generate_verification_token import generate_verification_token
 from django.utils import timezone
+from backend.utils.constants import (DEFAULT_PAIS, DEFAULT_CIUDAD)
 
 class VerificationToken(models.Model):
     token = models.CharField(max_length=10, blank=False, null=False, default=generate_verification_token)
@@ -19,8 +20,8 @@ class VerificationToken(models.Model):
 
 
 class DireccionesEnvio(models.Model):
-    pais            = models.CharField(default="VENEZUELA")
-    ciudad          = models.CharField(default="CARACAS")
+    pais            = models.CharField(default=DEFAULT_PAIS)
+    ciudad          = models.CharField(default=DEFAULT_CIUDAD)
     estado          = models.CharField()
     direccion       = models.CharField()
     referencia      = models.CharField(null=True, blank=True)
