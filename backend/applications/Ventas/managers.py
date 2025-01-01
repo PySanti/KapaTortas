@@ -38,5 +38,5 @@ class VentasManager(Manager):
 class FacturasManager(Manager):
     def get_factura_json(self, factura):
         factura_data = get_info_dict(factura, BASE_FACTURAS_SHOWABLE_FIELDS)
-        factura_data["venta_asociada"] = VentasManager().get_venta_json(factura.venta)
+        factura_data["venta_asociada"] = VentasManager().get_venta_json(factura.venta_asociada)
         return factura_data

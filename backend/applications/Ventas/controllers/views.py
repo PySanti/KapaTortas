@@ -17,6 +17,7 @@ from random import randint
 from applications.Clientes.models import Clientes
 from ..models import DescripcionesPedido
 from applications.Clientes.models import DireccionesEnvio
+from ..models import Facturas
 
 
 
@@ -91,8 +92,7 @@ class ConsultarFacturaByIdAPI(APIView):
     def get(self, request, id_factura, *args, **kwargs):
         try:
             if factura:=Facturas.objects.filter(id=id_factura):
-                factura = factura[0]
-                return JsonResponse({'factura' : 0}, status=status.HTTP_200_OK)
+                return JsonResponse({'factura' : Facturas.objects.get_factura_json(factura[0])}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({'error' : 'factura_not_found'}, status=status.HTTP_404_NOT_FOUND)
         except:
