@@ -5,6 +5,6 @@ from .controllers.views import (
 )
 
 urlpatterns = [
-    path("todos/",ObtenerListaProductosAPI.as_view()),
+    path("all_productos/",ObtenerListaProductosAPI.as_view()),
     path("<int:id_producto>/",ConsultarProductoAPI.as_view()),
 ]
