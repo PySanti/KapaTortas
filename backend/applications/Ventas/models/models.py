@@ -38,7 +38,7 @@ class Pedidos(models.Model):
     objects                 = PedidosManager()
 
     def __str__(self):
-        return f"{self.cliente_asociado.perfil.nombre_completo} : {self.numero_de_orden}"
+        return f"{self.cliente_asociado.perfil.nombre_completo} : {self.numero_de_orden}" if self.cliente_asociado else f"--- : {self.numero_de_orden}"
     class Meta:
         verbose_name = 'Pedido'
         verbose_name_plural = 'Pedidos'
