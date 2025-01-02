@@ -9,4 +9,5 @@ class CrearDireccionEnvioSerializer(serializers.Serializer):
     codigo_postal = serializers.IntegerField()
 
 
-
+class EliminarDireccionEnvioSerializer(serializers.Serializer):
+    direccion_id = serializers.IntegerField()
