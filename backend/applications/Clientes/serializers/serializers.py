@@ -12,3 +12,19 @@ class CrearDireccionEnvioSerializer(serializers.Serializer):
 
 class EliminarDireccionEnvioSerializer(serializers.Serializer):
     direccion_id = serializers.IntegerField()
+
+
+
+class EditarDireccionEnvioSerializer(serializers.Serializer):
+    direccion_id        = serializers.IntegerField()
+    new_pais            = serializers.CharField(allow_null=True)
+    new_ciudad          = serializers.CharField(allow_null=True)
+    new_estado          = serializers.CharField(allow_null=True)
+    new_direccion       = serializers.CharField(allow_null=True)
+    new_referencia      = serializers.CharField(allow_null=True)
+    new_codigo_postal   = serializers.IntegerField(allow_null=True)
+
+
+
+
+
