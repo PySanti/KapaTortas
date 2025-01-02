@@ -56,12 +56,19 @@ export default function CajaPage() {
 
   return (
     <div className="bg-white">
-      <MainPedido precios={precios} />
-      <DataPedido
-        order={order}
-        deliveryPriceHandler={handleDeliveryPrecios}
-        total={precios.total}
+      <div
+        className="fixed right-0 top-0 hidden h-full w-1/2 bg-white lg:block"
+        aria-hidden="true"
       />
+
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8 lg:pt-16">
+        <MainPedido precios={precios} />
+        <DataPedido
+          order={order}
+          deliveryPriceHandler={handleDeliveryPrecios}
+          total={precios.total}
+        />
+      </div>
     </div>
   );
 }
