@@ -38,7 +38,7 @@ class Pedidos(models.Model):
     objects                 = PedidosManager()
 
     def __str__(self):
-        return f"{self.cliente_asociado.perfil.nombre_completo} : {self.numero_de_orden}"
+        return f"{self.cliente_asociado.perfil.nombre_completo} : {self.numero_de_orden}" if self.cliente_asociado else f"--- : {self.numero_de_orden}"
     class Meta:
         verbose_name = 'Pedido'
         verbose_name_plural = 'Pedidos'
@@ -72,7 +72,7 @@ class Ventas(models.Model):
         verbose_name_plural = 'Ventas'
 
 class Facturas(models.Model):
-    fecha_emision_factura               = models.DateTimeField()
+    fecha_emision_factura               = models.DateTimeField(default=get_current_time)
     venta_asociada                      = models.OneToOneField(Ventas, on_delete=models.SET_NULL, null=True, related_name="factura")
     domicilio_fiscal                    = models.CharField(blank=True, default=DEFAULT_DOMICILIO_FISCAL)
     numero_telefonico_empresa           = models.CharField(blank=True, default=DEFAULT_NUMERO_TELEFONICO_EMPRESA)

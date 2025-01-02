@@ -12,9 +12,9 @@ import { Precios } from "@/app/models/Pedido";
 import { DireccionEntrega } from "@/app/models/Pedido";
 
 export default function CajaPage({
-  direccion,
+  direcciones,
 }: {
-  direccion: DireccionEntrega | undefined;
+  direcciones: DireccionEntrega[] | undefined;
 }) {
   // Zustand
   const { cartItems } = usePedidoStore();
@@ -73,7 +73,7 @@ export default function CajaPage({
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8 lg:pt-16">
         <MainPedido precios={precios} />
         <DataPedido
-          direccion={direccion}
+          direcciones={direcciones}
           order={order}
           deliveryPriceHandler={handleDeliveryPrecios}
           total={precios.total}

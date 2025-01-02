@@ -13,9 +13,11 @@ class DireccionesEnvioAdmin(admin.ModelAdmin):
 
 @admin.register(Clientes)  
 class ClientesAdmin(admin.ModelAdmin):  
-    list_display = ('id', 'nombre_completo')  # Agrega los campos que deseas mostrar en el admin  
+    list_display = ('id', 'nombre_completo', "correo_cliente")  # Agrega los campos que deseas mostrar en el admin  
     def nombre_completo(self, obj):
         return obj.perfil.nombre_completo
+    def correo_cliente(self, obj):
+        return obj.perfil.correo
 
 
 

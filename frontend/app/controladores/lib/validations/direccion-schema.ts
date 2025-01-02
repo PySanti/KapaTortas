@@ -7,7 +7,7 @@ export const direccionSchema = z.object({
     .string()
     .min(1, "El código postal es requerido")
     .transform((val) => parseInt(val, 10))
-    .refine((val) => !isNaN(val) && val >= 1000 && val <= 99999, {
+    .refine((val) => !isNaN(val) && val >= 999 && val <= 99999, {
       message: "Código postal inválido",
     }),
 });

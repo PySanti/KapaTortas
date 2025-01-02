@@ -31,12 +31,12 @@ const deliveryMetodosList = [
 ];
 
 export default function DataPedido({
-  direccion,
+  direcciones,
   order,
   deliveryPriceHandler,
   total,
 }: {
-  direccion: DireccionEntrega | undefined;
+  direcciones: DireccionEntrega[] | undefined;
   order: ItemFormat[];
   deliveryPriceHandler: (item: number) => void;
   total: number;
@@ -47,6 +47,11 @@ export default function DataPedido({
     MetodoEntrega.DELIVERY,
   );
   const [pago, setPago] = useState<MetodoPago>(MetodoPago.PAGO_MOVIL);
+
+  // Direccion Preferida
+  const direccion = direcciones?.find((item) => item.is_favorite);
+
+  console.log(direccion);
 
   const defaultValues = {
     direccion: direccion?.direccion || "",
@@ -60,27 +65,23 @@ export default function DataPedido({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<DireccionFormData>({
     resolver: zodResolver(direccionSchema),
     defaultValues,
+    mode: "onChange",
   });
 
   // On submit, build the complete order details object
   const onSubmit = (data: DireccionFormData) => {
-    const orderDetails: OrderDetails = {
-      price: total,
-      items: order,
-      address: {
-        direccion: data.direccion,
-        referencia: data.referencia,
-        codigo_postal: data.codigo_postal.toString(),
-      },
-      deliveryMethod: delivery,
-      paymentMethod: pago,
-    };
+    // Checkeo si ya hay direccion
+    const checkDireccion = direcciones?.find(
+      (direccion) => direccion.direccion === data.direccion,
+    );
+    // if(!checkDireccion) {
 
-    redirectToWhatsapp({ variant: "pedido", orderDetails });
+    // }
+    //
   };
 
   return (
@@ -158,7 +159,7 @@ export default function DataPedido({
         <Button
           type="submit"
           className="mt-8 text-xl text-center ml-4"
-          disabled={cartItems.length <= 0}
+          disabled={!isValid || cartItems.length <= 0}
         >
           Procesar Pedido
         </Button>

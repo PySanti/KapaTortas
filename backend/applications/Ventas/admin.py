@@ -55,7 +55,7 @@ class PedidosAdmin(admin.ModelAdmin):
     list_display = ('numero_de_orden',  'monto_total',  'metodo_entrega', 'metodo_pago', 'estado', 'cliente_asociado', 'descripciones_pedido', 'direccion_entrega')  
     list_filter = (ClienteFilter,)  
     def cliente_asociado(self, obj):
-        return obj.cliente_asociado.perfil.nombre_completo
+        return obj.cliente_asociado.perfil.nombre_completo if obj.cliente_asociado else None
 
     def descripciones_pedido(self, obj):  
         descripciones = []  

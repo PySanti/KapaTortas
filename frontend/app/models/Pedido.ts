@@ -53,7 +53,7 @@ export interface Pedido {
   numero_de_orden: number;
   fecha_pedido: string;
   fecha_entrega: string;
-  monto_total: string;
+  monto_total: number;
   estado: string;
   metodo_pago: string;
   metodo_entrega: string;
@@ -76,7 +76,7 @@ export interface Descripcion {
   titulo: string;
   id_producto_asociado: number;
   presentacion: string;
-  precio_presentacion: string;
+  precio_presentacion: number;
   cantidad: number;
   imagenes_producto: string[];
 }

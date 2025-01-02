@@ -1,7 +1,4 @@
-from django.core.mail import send_mail
-from django.conf import settings
-
-def mail_html_content(activation_token):
+def verification_mail_html_content(activation_token):
     return """
 <!DOCTYPE html>
 <html lang="es">
@@ -110,13 +107,3 @@ def mail_html_content(activation_token):
 """ % ( activation_token);
 
 
-def send_verification_mail(correo, activation_token):
-    """
-        Función creada para enviar mails de verificación de los usuarios
-    """
-    return send_mail(
-            subject         =   f"Correo de verificación", 
-            html_message    =  mail_html_content( activation_token),
-            message         =   "", 
-            from_email      =   settings.EMAIL_HOST_USER, 
-            recipient_list  =   [correo])

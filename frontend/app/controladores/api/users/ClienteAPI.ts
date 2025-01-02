@@ -1,6 +1,6 @@
-import { Cliente } from '@/app/models/Cliente';
-import { DireccionEntrega } from '@/app/models/Pedido';
-import { Perfil } from '@/app/models/Perfil';
+import { Cliente } from "@/app/models/Cliente";
+import { DireccionEntrega } from "@/app/models/Pedido";
+import { Perfil } from "@/app/models/Perfil";
 
 // Tiene un singleton
 class ClienteAPI {
@@ -21,11 +21,11 @@ class ClienteAPI {
     const url = `http://localhost:8000/api/perfiles/${encodeURIComponent(email)}`;
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        cache: 'no-cache',
+        cache: "no-cache",
       });
 
       if (!response.ok) {
@@ -37,24 +37,26 @@ class ClienteAPI {
       return data;
     } catch (err) {
       console.error(email);
-      console.error('Error en la peticion de consultar cliente: ', err);
+      console.error("Error en la peticion de consultar cliente: ", err);
       return null;
     }
   }
 
   // Metodo para obtener direcciones de envio del Cliente
-  public async obtenerDireccionesEnvio(email: string): Promise<DireccionEntrega[] | null> {
+  public async obtenerDireccionesEnvio(
+    email: string,
+  ): Promise<DireccionEntrega[] | null> {
     const url = `http://localhost:8000/api/perfiles/buscar_direcciones_cliente/${encodeURIComponent(
-      email
+      email,
     )}`;
 
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        cache: 'no-store',
+        cache: "no-store",
       });
 
       if (!response.ok) {
@@ -65,7 +67,10 @@ class ClienteAPI {
       // console.log(data);
       return data.direcciones;
     } catch (err) {
-      console.error('Error en la peticion de consultar direcciones de envio: ', err);
+      console.error(
+        "Error en la peticion de consultar direcciones de envio: ",
+        err,
+      );
       return null;
     }
   }
@@ -76,7 +81,7 @@ class ClienteAPI {
     new_nombre_completo?: string | null,
     new_password?: string | null,
     new_numero_telefonico?: string | null,
-    new_fecha_nacimiento?: string | null
+    new_fecha_nacimiento?: string | null,
   ): Promise<Perfil | null> {
     const url = `http://127.0.0.1:8000/api/perfiles/editar/`;
 
@@ -91,9 +96,9 @@ class ClienteAPI {
 
     try {
       const response = await fetch(url, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: body,
       });
@@ -104,10 +109,10 @@ class ClienteAPI {
 
       // Handle the response data, you can return success or additional data
       const data = await response.json();
-      console.log('Datos actualizados:', data);
+      console.log("Datos actualizados:", data);
       return data.new_profile;
     } catch (err) {
-      console.error('Error al actualizar la información del cliente: ', err);
+      console.error("Error al actualizar la información del cliente: ", err);
       return null;
     }
   }
@@ -117,9 +122,9 @@ class ClienteAPI {
 
     try {
       const response = await fetch(url, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -129,13 +134,16 @@ class ClienteAPI {
 
       // Handle the response data, you can return success or additional data
       const data = await response.json();
-      console.log('Perfil eliminado:', data);
+      console.log("Perfil eliminado:", data);
       return true;
     } catch (error) {
-      console.error('Error al eliminar el perfil: ', error);
+      console.error("Error al eliminar el perfil: ", error);
       return false;
     }
   }
+
+  // Postear dirección
+  // public async crearDireccionCliente()
 }
 
 export default ClienteAPI.getInstance();
