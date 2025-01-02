@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 class CrearDireccionEnvioSerializer(serializers.Serializer):
+    correo_cliente = serializers.EmailField()
     pais = serializers.CharField(required=False)
     ciudad = serializers.CharField(required=False)
     estado = serializers.CharField()
@@ -9,4 +10,5 @@ class CrearDireccionEnvioSerializer(serializers.Serializer):
     codigo_postal = serializers.IntegerField()
 
 
-
+class EliminarDireccionEnvioSerializer(serializers.Serializer):
+    direccion_id = serializers.IntegerField()

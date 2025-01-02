@@ -19,6 +19,7 @@ from applications.Clientes.models import DireccionesEnvio
 from ..models import Facturas
 from backend.utils.constants import EstadoEnum
 from backend.utils.send_client_mail import send_client_mail
+from backend.utils.factura_mail_html_content import factura_mail_html_content
 
 
 
@@ -108,6 +109,7 @@ class EditarEstadoPedidoAPI(APIView):
 
     @base_serializercheck_decorator
     def patch(self, request, *args, **kwargs):
+        from applications.Ventas.models import Ventas
         serialized_data = kwargs['serialized_data']
         try:
             if pedido:=Pedidos.objects.filter(numero_de_orden=serialized_data['numero_orden']):
@@ -115,13 +117,13 @@ class EditarEstadoPedidoAPI(APIView):
                 pedido.estado = EstadoEnum.CANCELADO.value if serialized_data['cancelado']==True else EstadoEnum.FINALIZADO.value
                 pedido.save()
                 if pedido.estado == EstadoEnum.FINALIZADO.value:
-                    # new_factura = Facturas.objects.create(
-                    #     venta_asociada=
-                    # )
-                    # send_client_mail(
-                    #     subject=f"Factura {}"
-                    # )
-                    # aca se manda el correo con la factura
+                    new_venta = Ventas.objects.create(pedido=pedido)
+                    new_factura = Facturas.objects.create(venta_asociada=new_venta)
+                    send_client_mail(
+                        subject=f"Factura {new_factura.fecha_emision_factura}",
+                        correo=pedido.cliente_asociado.perfil.correo,
+                        html_content=factura_mail_html_content(factura=new_factura)
+                    )
                     pass
                 return JsonResponse({'modificado':True}, status=status.HTTP_200_OK)
             else:
