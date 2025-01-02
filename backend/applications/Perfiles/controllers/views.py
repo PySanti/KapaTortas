@@ -21,11 +21,12 @@ from rest_framework.permissions import (
     AllowAny
 )
 from django.http import JsonResponse
-from backend.utils.constants import (BASE_PROFILE_SHOWABLE_FIELDS)
+from backend.utils.constants import (BASE_PROFILE_SHOWABLE_FIELDS, DEFAULT_ACTIVATION_MAIL_SUBJECT)
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
 from django.contrib.auth.hashers import check_password  
 from applications.Perfiles.models import Perfiles
-from backend.utils.send_verification_mail import send_verification_mail
+from backend.utils.send_client_mail import send_client_mail
+from backend.utils.verification_mail_html_content import verification_mail_html_content
 from rest_framework.response import Response
 from applications.Clientes.models import VerificationToken
 from applications.Clientes.models import Clientes
@@ -79,7 +80,10 @@ class CrearPerfilAPI(APIView):
                 if (serialized_data["rol"] == "cliente"):
                     new_profile.verification_token = VerificationToken.objects.create()
                     new_profile.save()
-                    send_verification_mail(new_profile.perfil.correo, new_profile.verification_token.token)
+                    send_client_mail(
+                        subject=DEFAULT_ACTIVATION_MAIL_SUBJECT, 
+                        html_content=verification_mail_html_content(activation_token=new_profile.verification_token.token),
+                        correo=new_profile.perfil.correo)
                 new_profile = new_profile.perfil if serialized_data['rol'] == "cliente" else new_profile
                 return JsonResponse({"new_profile": get_info_dict(new_profile, BASE_PROFILE_SHOWABLE_FIELDS)}, status=status.HTTP_201_CREATED)
             except:
@@ -198,7 +202,10 @@ class SendVerificationMailAPI(APIView):
                 cliente = cliente[0]
                 cliente.verification_token = VerificationToken.objects.create()
                 cliente.save()
-                send_verification_mail(cliente.perfil.correo,  cliente.verification_token.token)
+                send_client_mail(
+                        subject=DEFAULT_ACTIVATION_MAIL_SUBJECT, 
+                        html_content=verification_mail_html_content(activation_token=cliente.verification_token.token),
+                        correo=cliente.perfil.correo)
                 return JsonResponse({"email_sent" : True}, status=status.HTTP_200_OK)
             except:
                 return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
