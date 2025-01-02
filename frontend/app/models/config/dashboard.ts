@@ -30,3 +30,29 @@ export const dashboardConfig: DashboardConfig = {
     },
   ],
 };
+
+export const dashboardConfigEmpleado: DashboardConfig = {
+  mainNav: [
+    {
+      title: 'Overview',
+      href: '/dashboard',
+    },
+  ],
+  sidebarNav: [
+    {
+      title: 'Pedidos',
+      href: '/dashboard/ordenes',
+      icon: 'paquete',
+    },
+    {
+      title: 'Ventas',
+      href: '/dashboard/ventas',
+      icon: 'wallet',
+    },
+    {
+      title: 'Productos',
+      href: '/dashboard/items',
+      icon: 'shoppingCart',
+    },
+  ],
+};

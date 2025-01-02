@@ -10,7 +10,9 @@ import {
   LogOut,
   MapPin,
   Package,
+  ShoppingCart,
   User,
+  Wallet,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -26,7 +28,9 @@ export const Icons = {
   google: FcGoogle,
   logout: LogOut,
   paquete: Package,
+  shoppingCart: ShoppingCart,
   spinner: Loader2,
   tarjeta: CreditCard,
   usuario: User,
+  wallet: Wallet,
 };
