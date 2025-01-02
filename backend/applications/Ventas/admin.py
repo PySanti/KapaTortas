@@ -34,7 +34,7 @@ class FacturasAdmin(admin.ModelAdmin):
     list_display = ('id',  'fecha_emision_factura', 'id_venta')  
 
     def id_venta(self, factura):
-        return factura.venta_asociada.id
+        return factura.venta_asociada.id if factura.venta_asociada else None
 
     id_venta.short_description = "id venta asociada"
 
