@@ -1,3 +1,4 @@
+// Cambiar esto
 export enum EstadoEnum {
   PENDIENTE = 'pendiente',
   CANCELADO = 'cancelado',
@@ -45,9 +46,9 @@ export interface Pedido {
   fecha_pedido: string;
   fecha_entrega: string;
   monto_total: number;
-  estado: string;
-  metodo_pago: string;
-  metodo_entrega: string;
+  estado: EstadoEnum;
+  metodo_pago: MetodoPago;
+  metodo_entrega: MetodoEntrega;
   direccion_entrega: DireccionEntrega;
   descripciones: Descripcion[];
 }

@@ -42,7 +42,7 @@ class PedidoAPI {
 
   // Trae todos los pedidos de la db
   public async obtenerPedidos(): Promise<Pedido[] | null> {
-    const url = `http://localhost:8000/api/pedidos/all_pedidos/}`;
+    const url = `http://localhost:8000/api/pedidos/all_pedidos/`;
 
     try {
       const response = await fetch(url, {
