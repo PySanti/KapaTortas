@@ -16,37 +16,35 @@ export enum MetodoEntrega {
 }
 
 export type formatDescripciones = {
-  cantidad: number,
-  id_producto: number,
-  id_presentacion: number,
-}
+  cantidad: number;
+  id_producto: number;
+  id_presentacion: number;
+};
 
 // WS
 
-
 export type ItemFormat = {
-  title: string, quantity: number, price: number
-}
+  title: string;
+  quantity: number;
+  price: number;
+};
 export type OrderDetails = {
   price: number;
   items: ItemFormat[];
   address: {
-      direccion: string;
-      referencia?: string;
-      codigo_postal: string;
+    direccion: string;
+    referencia?: string;
+    codigo_postal: string;
   };
   deliveryMethod: string;
   paymentMethod: string;
 };
 
-
-
-
 export interface Pedido {
   numero_de_orden: number;
   fecha_pedido: string;
   fecha_entrega: string;
-  monto_total: string;
+  monto_total: number;
   estado: string;
   metodo_pago: string;
   metodo_entrega: string;
@@ -69,7 +67,7 @@ export interface Descripcion {
   titulo: string;
   id_producto_asociado: number;
   presentacion: string;
-  precio_presentacion: string;
+  precio_presentacion: number;
   cantidad: number;
   imagenes_producto: string[];
 }

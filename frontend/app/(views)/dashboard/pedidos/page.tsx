@@ -7,7 +7,7 @@ import PedidoAPI from '@/app/controladores/api/pedido-api';
 export default async function OrdenesPage() {
   const session = await auth();
 
-  const pedidos = await PedidoAPI.obtenerPedidos(session?.user.email!);
+  const pedidos = await PedidoAPI.obtenerPedidosCliente(session?.user.email!);
   console.log(pedidos);
 
   return (
