@@ -1,7 +1,10 @@
 from django.db import models
+from backend.utils.constants import (DEFAULT_DOMICILIO_FISCAL, DEFAULT_CORREO_EMPRESA, DEFAULT_NUMERO_TELEFONICO_EMPRESA, DEFAULT_RIF_EMPRESA)
 from applications.Productos.models import (
     Presentaciones
 )
+
+from ..managers import FacturasManager
 
 from applications.Clientes.models import (
     DireccionesEnvio,
@@ -67,3 +70,21 @@ class Ventas(models.Model):
     class Meta:
         verbose_name = 'Venta'
         verbose_name_plural = 'Ventas'
+
+class Facturas(models.Model):
+    fecha_emision_factura               = models.DateTimeField()
+    venta_asociada                      = models.OneToOneField(Ventas, on_delete=models.SET_NULL, null=True, related_name="factura")
+    domicilio_fiscal                    = models.CharField(blank=True, default=DEFAULT_DOMICILIO_FISCAL)
+    numero_telefonico_empresa           = models.CharField(blank=True, default=DEFAULT_NUMERO_TELEFONICO_EMPRESA)
+    rif_empresa                         = models.CharField(blank=True, default=DEFAULT_RIF_EMPRESA)
+    correo_electronico_empresa          = models.EmailField(blank=True, default=DEFAULT_CORREO_EMPRESA)
+    
+    objects = FacturasManager()
+
+    class Meta:
+        verbose_name = 'Factura'
+        verbose_name_plural = 'Facturas'
+
+    def __str__(self):
+        return f"{self.id} : {self.fecha_emision_factura}"
+

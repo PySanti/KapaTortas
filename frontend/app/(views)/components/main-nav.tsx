@@ -15,6 +15,8 @@ import { MainButton } from "./MainButton";
 import Logo from "@/app/(views)/components/images/Logo";
 import UserDropdown from "./user-dropdown";
 
+import { CartIcon } from "./cart-icon";
+
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: MainNavItem[];
   children?: React.ReactNode;
@@ -65,15 +67,6 @@ export default function Navbar({ className, items, user }: NavbarProps) {
 
                 {/* Right Section - Buttons */}
                 <div className="lg:flex items-center justify-end space-x-4">
-                  <MainButton
-                    asChild
-                    variant="secondary"
-                    className="hidden px-6 py-3"
-                  >
-                    <Link href="/catalogo" passHref>
-                      Realiza tu Pedido
-                    </Link>
-                  </MainButton>
                   {user ? (
                     <UserDropdown user={user} />
                   ) : (
@@ -84,6 +77,9 @@ export default function Navbar({ className, items, user }: NavbarProps) {
                       <Link href="/login">Inicia sesión</Link>
                     </MainButton>
                   )}
+
+                  {/* Icon Carrito */}
+                  <CartIcon />
                 </div>
               </div>
             </div>

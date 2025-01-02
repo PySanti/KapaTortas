@@ -18,6 +18,8 @@ import classNames from "@/app/controladores/utilities/classNames";
 
 import { CheckCircleIcon } from "lucide-react";
 import redirectToWhatsapp from "@/app/controladores/utilities/redirect-to-whatsapp";
+import getCurrentUser from "@/app/controladores/utilities/get-current-user";
+import ClienteAPI from "@/app/controladores/api/users/ClienteAPI";
 
 //   Esquema
 // Define Zod schema for validation with min(1) instead of nonempty()
@@ -47,16 +49,18 @@ const metodoPagoList = [
 ];
 
 export default function DataPedido({
-  perfilDir,
   order,
   deliveryPriceHandler,
   total,
 }: {
-  perfilDir: DireccionEnvio | undefined;
   order: ItemFormat[];
   deliveryPriceHandler: (item: number) => void;
   total: number;
 }) {
+  const session = getCurrentUser();
+  console.log(session?.email);
+  const perfilDir = ClienteAPI.obtenerDireccionesEnvio(session?.email);
+
   // Opciones
   const [delivery, setDelivery] = useState<MetodoEntrega>(
     MetodoEntrega.DELIVERY,
@@ -64,11 +68,11 @@ export default function DataPedido({
   const [pago, setPago] = useState<MetodoPago>(MetodoPago.PAGO_MOVIL);
 
   const defaultValues = {
-    direccion: perfilDir?.direccion || "",
-    referencia: perfilDir?.referencia || "",
-    codigo_postal: perfilDir?.codigo_postal
-      ? parseInt(perfilDir.codigo_postal, 10)
-      : 1000,
+    // direccion: perfilDir?.direccion || "",
+    // referencia: perfilDir?.referencia || "",
+    // codigo_postal: perfilDir?.codigo_postal
+    //   ? parseInt(perfilDir.codigo_postal, 10)
+    //   : 1000,
   };
 
   // Schema
@@ -101,9 +105,6 @@ export default function DataPedido({
       deliveryMethod: delivery,
       paymentMethod: pago,
     };
-
-    // Here you can call your redirect or API submission with the orderDetails
-    console.log(orderDetails);
 
     redirectToWhatsapp({ variant: "pedido", orderDetails });
   };

@@ -53,6 +53,13 @@ BASE_PRESENTACIONES_SHOWABLE_FIELDS = ["id", "ref", "proporcion", "precio", "sto
 BASE_REVIEWS_SHOWABLE_FIELDS = ["calificacion", "descripcion", ]
 BASE_PEDIDOS_SHOWABLE_FIELDS = ["numero_de_orden","fecha_pedido","fecha_entrega", "monto_total", "estado", "metodo_pago", "metodo_entrega"]
 BASE_VENTAS_LIST_SHOWABLE_FIELDS = ["id", "fecha", "nota"]
+BASE_FACTURAS_SHOWABLE_FIELDS = ["id", "fecha_emision_factura", "domicilio_fiscal", "numero_telefonico_empresa", "rif_empresa", "correo_electronico_empresa"]
+
 
 DEFAULT_PAIS = "VENEZUELA"
 DEFAULT_CIUDAD = "CARACAS"
+
+DEFAULT_DOMICILIO_FISCAL = "Santa Rosa de Lima"
+DEFAULT_NUMERO_TELEFONICO_EMPRESA = "+58 4242955147"
+DEFAULT_CORREO_EMPRESA = "kapatortas@gmail.com"
+DEFAULT_RIF_EMPRESA = "J-310651032"

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from ..models import Facturas
 from rest_framework.views import (
     APIView,
 )
@@ -7,15 +8,16 @@ from rest_framework.permissions import (
     AllowAny
 )
 from django.http import JsonResponse
-from backend.utils.constants import (BASE_SERIALIZER_ERROR_RESPONSE)
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
-from ..serializers.serializers import (CrearPedidoSerializer, ObtenerListaVentasSerializer, ObtenerListaPedidosSerializer)
+from ..serializers.serializers import (CrearPedidoSerializer, ObtenerListaVentasSerializer, ObtenerListaPedidosSerializer, ConsultarFacturaByIdSerializer, EditarEstadoPedidoSerializer)
 from backend.utils.base_serializercheck_decorator import base_serializercheck_decorator
 from ..models import Pedidos
 from random import randint
 from applications.Clientes.models import Clientes
 from ..models import DescripcionesPedido
 from applications.Clientes.models import DireccionesEnvio
+from ..models import Facturas
+from backend.utils.constants import EstadoEnum
 
 
 
@@ -81,3 +83,44 @@ class ObtenerListaPedidosAPI(APIView):
             return JsonResponse({'pedidos' : pedidos}, status=status.HTTP_200_OK)
         except:
             return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+class ConsultarFacturaByIdAPI(APIView):
+    serializer_class        = ConsultarFacturaByIdSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    def get(self, request, id_factura, *args, **kwargs):
+        try:
+            if factura:=Facturas.objects.filter(id=id_factura):
+                return JsonResponse({'factura' : Facturas.objects.get_factura_json(factura[0])}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({'error' : 'factura_not_found'}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EditarEstadoPedidoAPI(APIView):
+    serializer_class        = EditarEstadoPedidoSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+
+    @base_serializercheck_decorator
+    def patch(self, request, *args, **kwargs):
+        serialized_data = kwargs['serialized_data']
+        try:
+            if pedido:=Pedidos.objects.filter(numero_de_orden=serialized_data['numero_orden']):
+                pedido = pedido[0]
+                pedido.estado = EstadoEnum.CANCELADO if serialized_data['cancelado']==True else EstadoEnum.FINALIZADO
+                pedido.save()
+                if pedido.estado == EstadoEnum.FINALIZADO:
+                    # aca se manda el correo con la factura
+                    pass
+                return JsonResponse({'modificado':True}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({'error' : 'pedido_not_found'}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+

@@ -5,7 +5,7 @@ class ProductoAPI {
 
   private constructor() {}
 
-  // Metodo para obtener la instancia
+  // Singleton
   public static getInstance(): ProductoAPI {
     if (!ProductoAPI.instance) {
       ProductoAPI.instance = new ProductoAPI();
@@ -14,9 +14,9 @@ class ProductoAPI {
   }
 
   // Metodo para obtener el Producto
-  // Cambiar T por Producto[]
   public async obtenerListaProductos(): Promise<Producto[] | null> {
     const url = `http://localhost:8000/api/productos/all_productos/`;
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -32,6 +32,7 @@ class ProductoAPI {
     return data.productos;
   }
 
+  // Obtener producto dado id
   public async obtenerProducto(id: number): Promise<Producto | null> {
     const url = `http://localhost:8000/api/productos/${encodeURIComponent(id)}`;
 
