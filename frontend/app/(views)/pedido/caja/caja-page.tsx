@@ -16,8 +16,6 @@ export default function CajaPage({
 }: {
   direccion: DireccionEntrega | undefined;
 }) {
-  console.log("Direccion: ", direccion);
-
   // Zustand
   const { cartItems } = usePedidoStore();
   const [precios, setPrices] = useState<Precios>({

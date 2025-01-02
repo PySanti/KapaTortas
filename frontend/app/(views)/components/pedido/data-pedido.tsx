@@ -22,6 +22,7 @@ import { useState } from "react";
 import { MetodoEntrega, MetodoPago } from "@/app/models/Pedido";
 
 import redirectToWhatsapp from "@/app/controladores/utilities/redirect-to-whatsapp";
+import { usePedidoStore } from "@/src/usePedidoStore";
 
 // Default values
 const deliveryMetodosList = [
@@ -40,6 +41,7 @@ export default function DataPedido({
   deliveryPriceHandler: (item: number) => void;
   total: number;
 }) {
+  const { cartItems } = usePedidoStore();
   // Opciones
   const [delivery, setDelivery] = useState<MetodoEntrega>(
     MetodoEntrega.DELIVERY,
@@ -153,7 +155,11 @@ export default function DataPedido({
         </div>
 
         <PaymentSelector pago={pago} setPago={setPago} />
-        <Button type="submit" className="mt-8 text-xl text-center ml-4">
+        <Button
+          type="submit"
+          className="mt-8 text-xl text-center ml-4"
+          disabled={cartItems.length <= 0}
+        >
           Procesar Pedido
         </Button>
       </form>

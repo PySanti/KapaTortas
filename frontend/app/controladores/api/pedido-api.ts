@@ -1,4 +1,4 @@
-import { Pedido } from '@/app/models/Pedido';
+import { Pedido } from "@/app/models/Pedido";
 
 // Tiene un singleton
 class PedidoAPI {
@@ -16,16 +16,16 @@ class PedidoAPI {
 
   public async obtenerPedidos(email: string): Promise<Pedido[] | null> {
     const url = `http://localhost:8000/api/perfiles/buscar_pedidos_cliente/${encodeURIComponent(
-      email
+      email,
     )}`;
 
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        cache: 'no-store',
+        cache: "no-store",
       });
 
       if (!response.ok) throw new Error(`Error: ${response.status}`);
@@ -34,10 +34,13 @@ class PedidoAPI {
 
       return data.pedidos;
     } catch (err) {
-      console.error('Error en la peticion de consultar pedidos: ', err);
+      console.error("Error en la peticion de consultar pedidos: ", err);
       return null;
     }
   }
+
+  // // POST Pedido
+  // public async postPedido()
 }
 
 export default PedidoAPI.getInstance();
