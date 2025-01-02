@@ -26,7 +26,6 @@ interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
 export default function Navbar({ className, items, user }: NavbarProps) {
   const pathname = usePathname();
   const isActive = (path: string) => path === pathname;
-  // const isOnDashboard = pathname.includes("/dashboard");
 
   return (
     <>
@@ -35,7 +34,7 @@ export default function Navbar({ className, items, user }: NavbarProps) {
           <>
             <div
               className={cn(
-                "mx-auto bg-secondary max-w-full px-4 md:px-6 lg:px-8",
+                "mx-auto bg-secondary max-w-full px-6 md:px-8 lg:px-8",
                 className,
               )}
             >
@@ -66,7 +65,7 @@ export default function Navbar({ className, items, user }: NavbarProps) {
                 </div>
 
                 {/* Right Section - Buttons */}
-                <div className="lg:flex items-center justify-end space-x-4">
+                <div className="flex items-center justify-end space-x-4">
                   {user ? (
                     <UserDropdown user={user} />
                   ) : (

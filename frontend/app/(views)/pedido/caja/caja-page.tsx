@@ -75,6 +75,7 @@ export default function CajaPage({
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8 lg:pt-16">
         <MainPedido precios={precios} />
         <DataPedido
+          direccion={direccion}
           order={order}
           deliveryPriceHandler={handleDeliveryPrecios}
           total={precios.total}
