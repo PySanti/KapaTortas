@@ -1,8 +1,9 @@
 import { auth } from '@/auth';
-import { dashboardConfig } from '@/app/models/config/dashboard';
+import { dashboardConfig, dashboardConfigEmpleado } from '@/app/models/config/dashboard';
 import Navbar from '../components/main-nav';
 import Sidebar from '../components/sidebar';
 import { SessionProvider } from 'next-auth/react';
+import { Rol } from '@/app/models/RolEnum';
 
 export default async function DashboardLayout({
   children,
@@ -23,7 +24,11 @@ export default async function DashboardLayout({
         <div className='container flex-1 items-start md:grid md:grid-cols-[160px_minmax(0,1fr)] md:gap-2 lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-4'>
           <aside className='fixed top-14 pt-6 lg:pt-10 z-40 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 md:sticky md:block'>
             <div className='h-full pr-6'>
-              <Sidebar items={dashboardConfig.sidebarNav} />
+              {user?.rol === Rol.CLIENTE ? (
+                <Sidebar items={dashboardConfig.sidebarNav} />
+              ) : (
+                <Sidebar items={dashboardConfigEmpleado.sidebarNav} />
+              )}
             </div>
           </aside>
           <main className='flex-1 flex-col'>{children}</main>
