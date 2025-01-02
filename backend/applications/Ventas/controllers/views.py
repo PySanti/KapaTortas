@@ -111,9 +111,9 @@ class EditarEstadoPedidoAPI(APIView):
         try:
             if pedido:=Pedidos.objects.filter(numero_de_orden=serialized_data['numero_orden']):
                 pedido = pedido[0]
-                pedido.estado = EstadoEnum.CANCELADO if serialized_data['cancelado']==True else EstadoEnum.FINALIZADO
+                pedido.estado = EstadoEnum.CANCELADO.value if serialized_data['cancelado']==True else EstadoEnum.FINALIZADO.value
                 pedido.save()
-                if pedido.estado == EstadoEnum.FINALIZADO:
+                if pedido.estado == EstadoEnum.FINALIZADO.value:
                     # aca se manda el correo con la factura
                     pass
                 return JsonResponse({'modificado':True}, status=status.HTTP_200_OK)
