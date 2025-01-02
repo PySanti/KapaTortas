@@ -57,10 +57,6 @@ export default function DataPedido({
   deliveryPriceHandler: (item: number) => void;
   total: number;
 }) {
-  const session = getCurrentUser();
-  console.log(session?.email);
-  const perfilDir = ClienteAPI.obtenerDireccionesEnvio(session?.email);
-
   // Opciones
   const [delivery, setDelivery] = useState<MetodoEntrega>(
     MetodoEntrega.DELIVERY,
