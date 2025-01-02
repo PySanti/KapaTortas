@@ -9,6 +9,7 @@ import passwordsMatch from './app/controladores/utilities/passwords-match';
 import crearStripeId from './app/controladores/utilities/crear-stripeid';
 import correoVerificado from './app/controladores/utilities/correo-verificado';
 import { authRoutes, defaultLoginRedirect, publicRoutes } from './app/models/config/routes';
+import { Rol } from './app/models/RolEnum';
 // import { authRoutes, defaultLoginRedirect, publicRoutes } from './config/routes';
 
 export default {
@@ -60,16 +61,21 @@ export default {
           return null;
         }
 
-        if (isPasswordValid) {
-          console.log('Contraseña correcta');
-        } else {
-          console.log('Contraseña incorrecta');
-        }
+        // if (isPasswordValid) {
+        //   console.log('Contraseña correcta');
+        // } else {
+        //   console.log('Contraseña incorrecta');
+        // }
 
         //* Create a customer in stripe for the user (if not already created). This works only for the (credentialsProvider)
         //* This is created before the user is logged in for the first time
 
-        if (user.nombre_completo && user.correo && !user.stripeCustomerId) {
+        if (
+          user.nombre_completo &&
+          user.correo &&
+          user.rol === Rol.CLIENTE &&
+          !user.stripeCustomerId
+        ) {
           const customer = await stripe.customers.create({
             email: user.correo,
             name: user.nombre_completo,
@@ -78,7 +84,7 @@ export default {
           // 2. Actualizar el usuario con su id de cliente en Stripe
           await crearStripeId(user.correo, customer.id);
 
-          console.log('Usuario creado en stripe');
+          // console.log('Usuario creado en stripe');
         }
 
         // extend profile type and add auth_token
@@ -203,7 +209,7 @@ export default {
     },
     async jwt({ token, user, session, trigger }) {
       // console.log('jwt callback', { token, user, session });
-      console.log('im being called again');
+      // console.log('im being called again');
 
       const existingUser = await ClienteAPI.obtenerCliente(token?.email as string);
 
