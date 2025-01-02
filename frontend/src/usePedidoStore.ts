@@ -12,6 +12,7 @@ export type CartItem = {
 type PedidoState = {
   cartItems: CartItem[];
   quantity: number;
+  checkSameItem: (item: CartItem) => boolean;
   addToCart: (item: CartItem) => void;
   removeFromCart: (productId: string) => void;
   updateCartItem: (productId: string, quantity: number) => void;
@@ -20,9 +21,17 @@ type PedidoState = {
 
 export const usePedidoStore = create<PedidoState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       cartItems: [],
       quantity: 0,
+      checkSameItem: (item) => {
+        const state = get();
+        return state.cartItems.some(
+          (cartItem) =>
+            cartItem.product.id === item.product.id &&
+            cartItem.present?.id === item.present?.id,
+        );
+      },
       addToCart: (item) =>
         set((state) => {
           const existingItem = state.cartItems.find(
@@ -84,6 +93,14 @@ export const usePedidoStore = create<PedidoState>()(
     {
       name: "pedido-cache",
       partialize: (state) => ({ cartItems: state.cartItems }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.quantity = state.cartItems.reduce(
+            (total, cartItem) => total + cartItem.quantity,
+            0,
+          );
+        }
+      },
     },
   ),
 );

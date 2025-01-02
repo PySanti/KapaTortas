@@ -1,12 +1,17 @@
 "use client";
 
+import { useEffect } from "react";
 import { ShoppingCart } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { usePedidoStore } from "@/src/usePedidoStore";
 import Link from "next/link";
 
 export function CartIcon() {
-  const { quantity } = usePedidoStore();
+  const quantity = usePedidoStore((state) => state.quantity);
+
+  useEffect(() => {
+    usePedidoStore.persist.rehydrate();
+  }, []);
 
   return (
     <Link href="/pedido/caja">

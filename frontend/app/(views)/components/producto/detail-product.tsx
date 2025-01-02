@@ -25,7 +25,7 @@ export default function DetailProduct({
   extraList: Producto[] | undefined;
 }) {
   // Zustand
-  const { addToCart } = usePedidoStore();
+  const { addToCart, checkSameItem } = usePedidoStore();
   const router = useRouter();
   // Estados
   const [extras, setExtras] = useState<Producto[]>([]);
@@ -55,7 +55,15 @@ export default function DetailProduct({
 
   const handleCart = (type: string) => {
     const id = `${product.id}-${present?.id}`;
-    addToCart({ id, product, present, quantity: 1 });
+    // Checkeo si ya hy un valor igual
+    if (
+      !(
+        type === "realizar" &&
+        checkSameItem({ id, product, present, quantity: 1 })
+      )
+    ) {
+      addToCart({ id, product, present, quantity: 1 });
+    }
     if (extras.length > 0) {
       extras.map((product) => {
         const present = product.presentaciones[0] || undefined;
@@ -139,14 +147,14 @@ export default function DetailProduct({
                   variant={
                     !present?.stock || present.stock < 1 ? "ghost" : "secondary"
                   }
-                  className={`${(!present?.stock || present.stock < 1) && "hover:bg-red-500 hover:border-red-500"} m-4 mt-0 sm:m-auto text-center text-base py-7 w-auto rounded-full border-2 border-primary`}
+                  className={`${(!present?.stock || present.stock < 1) && "hover:bg-red-500 hover:border-red-500"} m-4 mt-0 sm:m-auto text-center text-base py-7 w-auto rounded-full border-2 border-primary transition-transform duration-200 active:scale-90`}
                   onClick={() => handleCart("addToCart")}
                 >
                   Añadir al Carrito
                 </Button>
                 <Button
                   type="button"
-                  className={`${(!present?.stock || present.stock < 1) && "hidden"} m-4 mt-0 sm:m-auto text-center text-base py-7 rounded-full`}
+                  className={`${(!present?.stock || present.stock < 1) && "hidden"} m-4 mt-0 sm:m-auto text-center text-base py-7 rounded-full transition-transform duration-200 active:scale-90`}
                   onClick={() => handleCart("realizar")}
                 >
                   Realizar Pedido
