@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.permissions import (
     AllowAny
 )
-from ..serializers.serializers import CrearDireccionEnvioSerializer, EliminarDireccionEnvioSerializer
+from ..serializers.serializers import CrearDireccionEnvioSerializer, EliminarDireccionEnvioSerializer,EditarDireccionEnvioSerializer
 
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
 from ..models import DireccionesEnvio
@@ -60,5 +60,38 @@ class EliminarDireccionEnvioAPI(APIView):
                 return JsonResponse({"error": "direccion_not_found"}, status=status.HTTP_404_NOT_FOUND)
         except:
             return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EditarDireccionEnvioAPI(APIView):
+    serializer_class        = EditarDireccionEnvioSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    @base_serializercheck_decorator
+    def patch(self, request, *args, **kwargs):
+        from applications.Clientes.models import Clientes
+        serialized_data = kwargs['serialized_data']
+        try:
+            if direccion := DireccionesEnvio.objects.filter(id=serialized_data['direccion_id']):
+                direccion=direccion[0]
+                if serialized_data["new_pais"]:
+                    direccion.pais = serialized_data["new_pais"]
+                if serialized_data["new_ciudad"]:
+                    direccion.ciudad = serialized_data["new_ciudad"]
+                if serialized_data["new_estado"]:
+                    direccion.estado = serialized_data["new_estado"]
+                if serialized_data["new_direccion"]:
+                    direccion.direccion = serialized_data["new_direccion"]
+                if serialized_data["new_referencia"]:
+                    direccion.referencia = serialized_data["new_referencia"]
+                if serialized_data["new_codigo_postal"]:
+                    direccion.codigo_postal = serialized_data["new_codigo_postal"]
+                direccion.save()
+                return JsonResponse({"editado": True}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"error": "direccion_not_found"}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
