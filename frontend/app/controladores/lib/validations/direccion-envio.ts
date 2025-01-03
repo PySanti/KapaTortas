@@ -6,7 +6,9 @@ export const DireccionEnvioSchema = z.object({
     estado: z.string().min(3, { message: "Por favor, ingresa un estado válido" }),
     direccion: z.string().min(3, { message: "Por favor, ingresa una dirección válida" }),
     referencia: z.string().min(3, { message: "Por favor, ingresa una referencia válida" }),
-    codigo_postal: z.number().min(3, { message: "Por favor, ingresa un código postal válido" }),
+    // Codigo postal message should trigger if the field is empty
+    
+    codigo_postal: z.number({ required_error: "Por favor, ingresa un código postal válido" }).min(3, { message: "Por favor, ingresa un código postal válido" }),
 });
 
 export type DireccionEnvioType = z.infer<typeof DireccionEnvioSchema>;

@@ -8,6 +8,7 @@ import { Rol } from "@/app/models/RolEnum";
 import { deleteDireccion } from "@/app/controladores/actions/delete-direccion";
 import { editDireccion } from "@/app/controladores/actions/edit-direccion";
 import FormAgregarDireccionEnvio from "../../components/form-agregar-direccion-envio";
+import DialogAgregarDireccion from "../../components/dialog-agregar-direccion-envio";
 
 export default async function DireccionesPage() {
   const session = await auth();
@@ -22,6 +23,7 @@ export default async function DireccionesPage() {
             heading="Direcciones"
             description="Edita, elimina o establece una dirección de envío predeterminada"
           />
+          <DialogAgregarDireccion />
 
           {direcciones && direcciones.length > 0 ? (
             direcciones.map((direccion) => (

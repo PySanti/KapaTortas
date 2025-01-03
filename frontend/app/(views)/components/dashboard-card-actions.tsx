@@ -62,9 +62,15 @@ export function CardClientActions({
     <>
       {!useEditDialog && actions?.edit && (
         <>
-          <Button variant="outline" onClick={handleEdit}>
-            <Pencil className="h-4 w-4" />
-          </Button>
+          {!actions.edit.label ? (
+            <Button variant="outline" onClick={handleEdit}>
+              <Pencil className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button variant="outline" onClick={handleEdit}>
+              {actions.edit.label}
+            </Button>
+          )}
           <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
             <DialogContent>
               <DialogHeader>
@@ -75,7 +81,7 @@ export function CardClientActions({
               </DialogHeader>
               {actions.edit.form}
               <div className="flex justify-end space-x-2">
-                <Button variant={"terciary"} className="text-white" onClick={handleEdit}>
+                <Button variant={"terciary"} onClick={handleEdit}>
                   Guardar
                 </Button>
               </div>
