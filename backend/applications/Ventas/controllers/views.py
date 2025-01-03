@@ -106,7 +106,6 @@ class EditarEstadoPedidoAPI(APIView):
     authentication_classes  = []
     permission_classes      = [AllowAny]
 
-
     @base_serializercheck_decorator
     def patch(self, request, *args, **kwargs):
         from applications.Ventas.models import Ventas
@@ -117,19 +116,19 @@ class EditarEstadoPedidoAPI(APIView):
                 pedido.estado = EstadoEnum.CANCELADO.value if serialized_data['cancelado']==True else EstadoEnum.FINALIZADO.value
                 pedido.save()
                 if pedido.estado == EstadoEnum.FINALIZADO.value:
-                    new_venta = Ventas.objects.create(pedido=pedido)
-                    new_factura = Facturas.objects.create(venta_asociada=new_venta)
-                    send_client_mail(
-                        subject=f"Factura {new_factura.fecha_emision_factura}",
-                        correo=pedido.cliente_asociado.perfil.correo,
-                        html_content=factura_mail_html_content(factura=new_factura)
-                    )
-                    pass
+                    if not Ventas.objects.filter(pedido=pedido).exists():
+                        new_venta = Ventas.objects.create(pedido=pedido)
+                        new_factura = Facturas.objects.create(venta_asociada=new_venta)
+                        send_client_mail(
+                            subject=f"Factura {new_factura.fecha_emision_factura}",
+                            correo=pedido.cliente_asociado.perfil.correo,
+                            html_content=factura_mail_html_content(factura=new_factura)
+                        )
                 return JsonResponse({'modificado':True}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({'error' : 'pedido_not_found'}, status=status.HTTP_404_NOT_FOUND)
-        except:
-            return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return JsonResponse({'error' : "unexpected_error", "detail" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
