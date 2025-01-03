@@ -1,6 +1,6 @@
-import { Card, CardContent, CardFooter, CardHeader } from '@/app/(views)/components/ui/card';
-import { Separator } from '@/app/(views)/components/ui/separator';
-import { CardClientActions } from './dashboard-card-actions';
+import { Card, CardContent, CardFooter, CardHeader } from "@/app/(views)/components/ui/card";
+import { Separator } from "@/app/(views)/components/ui/separator";
+import { CardClientActions } from "./dashboard-card-actions";
 
 interface DashboardCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
@@ -31,18 +31,20 @@ export default function DashboardCard({
   idElement,
   ...props
 }: DashboardCardProps) {
-
   return (
     <Card className={`max-w-xl ${className}`} {...props}>
       <CardHeader className="space-y-4">
         {badge && (
-          <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-sm font-medium text-gray-600">
-            {badge}
-          </span>
+          <>
+            <div className="max-w-fit p-1 bg-gray-200 rounded-md">
+              <p className="text-sm text-terciary">{badge}</p>
+            </div>
+            <Separator />
+          </>
         )}
         {title && (
           <>
-            <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+            <h3 className="text-lg text-terciary font-medium">{title}</h3>
             <Separator />
           </>
         )}
@@ -50,7 +52,12 @@ export default function DashboardCard({
       <CardContent className="space-y-2">{children}</CardContent>
       {(actions || useEditDialog) && (
         <CardFooter className="flex items-center gap-x-2">
-          <CardClientActions idElement={idElement!} actions={actions!} handleClick={handleClick} useEditDialog={useEditDialog} />
+          <CardClientActions
+            idElement={idElement!}
+            actions={actions!}
+            handleClick={handleClick}
+            useEditDialog={useEditDialog}
+          />
         </CardFooter>
       )}
     </Card>
