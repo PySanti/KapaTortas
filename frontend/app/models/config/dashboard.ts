@@ -54,5 +54,10 @@ export const dashboardConfigEmpleado: DashboardConfig = {
       href: '/dashboard/items',
       icon: 'shoppingCart',
     },
+    {
+      title: 'Perfil',
+      href: '/dashboard/ajustes',
+      icon: 'usuario',
+    },
   ],
 };
