@@ -16,7 +16,7 @@ import {
 import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { User } from 'next-auth';
 import passwordsMatch from '@/app/controladores/utilities/passwords-match';
-import ClienteAPI from '@/app/controladores/api/users/ClienteAPI';
+import ClienteAPI from '@/app/controladores/api/cliente-api';
 import { signOut } from 'next-auth/react';
 
 interface DeleteProfileDialogProps {

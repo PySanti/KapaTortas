@@ -4,7 +4,7 @@ import { loginSchema, loginType } from '@/app/controladores/lib/validations/auth
 import { signIn } from '@/auth';
 import { defaultLoginRedirect } from '@/app/models/config/routes';
 import { AuthError } from 'next-auth';
-import ClienteAPI from '../api/users/ClienteAPI';
+import ClienteAPI from '../api/cliente-api';
 
 export const login = async (data: loginType) => {
   const validatedData = loginSchema.safeParse(data);

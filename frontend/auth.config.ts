@@ -3,7 +3,7 @@ import type { NextAuthConfig } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import type { JWT } from 'next-auth/jwt';
-import ClienteAPI from './app/controladores/api/users/ClienteAPI';
+import ClienteAPI from './app/controladores/api/cliente-api';
 import { stripe } from '@/app/controladores/lib/stripe';
 import passwordsMatch from './app/controladores/utilities/passwords-match';
 import crearStripeId from './app/controladores/utilities/crear-stripeid';

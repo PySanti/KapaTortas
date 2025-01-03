@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { Cliente } from '@/app/models/Cliente';
-import ClienteAPI from '@/app/controladores/api/users/ClienteAPI';
+import ClienteAPI from '@/app/controladores/api/cliente-api';
 import MainHome from './main-home';
 import ItemProducto from './item-producto';
 import { useSmoothScroll } from '@/app/controladores/utilities/use-smooth-scroll';

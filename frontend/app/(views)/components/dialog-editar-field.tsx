@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from '@/app/(views)/components/ui/dialog';
 import { Input } from '@/app/(views)/components/ui/input';
-import ClienteAPI from '@/app/controladores/api/users/ClienteAPI';
+import ClienteAPI from '@/app/controladores/api/cliente-api';
 import { useSession } from 'next-auth/react';
 import { ajustesClienteSchema } from '@/app/controladores/lib/validations/ajustes-cliente';
 import { Eye, EyeOff } from 'lucide-react';

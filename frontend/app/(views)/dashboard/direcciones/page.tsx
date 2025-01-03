@@ -4,7 +4,7 @@ import { DashboardHeader } from '../../components/dashboard-header';
 import DireccionEnvioCard from '../../components/dashboard-card';
 import DashboardCard from '../../components/dashboard-card';
 import { auth } from '@/auth';
-import ClienteAPI from '@/app/controladores/api/users/ClienteAPI';
+import ClienteAPI from '@/app/controladores/api/cliente-api';
 import { Rol } from '@/app/models/RolEnum';
 
 export default async function DireccionesPage() {
