@@ -13,7 +13,6 @@ import { Button } from "../ui/button";
 import { RadioGroup, Label, Description, Radio } from "@headlessui/react";
 import { CheckCircleIcon } from "lucide-react";
 import classNames from "@/app/controladores/utilities/classNames";
-import { OrderDetails } from "@/app/models/Pedido";
 
 import { ShippingSelector } from "./data/shipping-selector";
 import { PaymentSelector } from "./data/payment-selector";
