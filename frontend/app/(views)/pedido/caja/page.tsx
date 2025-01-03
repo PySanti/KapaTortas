@@ -8,5 +8,5 @@ export default async function PedidoServerPage() {
   const direcciones = await ClienteAPI.obtenerDireccionesEnvio(
     session?.user?.email || "",
   );
-  return <CajaPage direccion={direcciones} />;
+  return <CajaPage direcciones={direcciones} />;
 }

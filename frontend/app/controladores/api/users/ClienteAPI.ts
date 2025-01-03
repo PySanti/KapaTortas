@@ -143,7 +143,40 @@ class ClienteAPI {
   }
 
   // Postear dirección
-  // public async crearDireccionCliente()
+  public async crearDireccionCliente(
+    email: string,
+    direccion: string,
+    codigo_postal: number,
+    ref?: string,
+  ): Promise<DireccionEntrega | null> {
+    const url = `http://localhost:8000/api/clientes/crear_direccion`;
+
+    const body = JSON.stringify({
+      correo_cliente: email,
+      // Cambiar esto pronto
+      estado: "Dto Capital",
+      direccion: direccion,
+      referencia: ref,
+      codigo_postal: codigo_postal,
+    });
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error("Error al postear la dirección: ", err);
+      return null;
+    }
+  }
 }
 
 export default ClienteAPI.getInstance();

@@ -1,4 +1,5 @@
 import { Pedido } from "@/app/models/Pedido";
+import { CartItem } from "@/src/usePedidoStore";
 
 // Tiene un singleton
 class PedidoAPI {
@@ -40,7 +41,46 @@ class PedidoAPI {
   }
 
   // // POST Pedido
-  // public async postPedido()
+  public async postPedido(
+    cliente_id: number,
+    metodo_entrega: string,
+    metodo_pago: string,
+    direccion_entrega_id: number,
+    items: CartItem[],
+  ): Promise<Pedido | null> {
+    const url = `http://localhost:8000/api/pedidos/crear`;
+
+    const body = JSON.stringify({
+      cliente_id: cliente_id,
+      metodo_entrega: metodo_entrega,
+      metodo_pago: metodo_pago,
+      direccion_entrega_id: direccion_entrega_id,
+      descripciones: items.map((item) => {
+        return {
+          cantidad: item.quantity,
+          id_producto: item.product.id,
+          id_presentacion: item.present?.id,
+        };
+      }),
+    });
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error("Error al postear el pedido: ", err);
+      return null;
+    }
+  }
 }
 
 export default PedidoAPI.getInstance();

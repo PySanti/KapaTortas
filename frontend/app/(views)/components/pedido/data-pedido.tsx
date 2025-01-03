@@ -22,6 +22,9 @@ import { MetodoEntrega, MetodoPago } from "@/app/models/Pedido";
 
 import redirectToWhatsapp from "@/app/controladores/utilities/redirect-to-whatsapp";
 import { usePedidoStore } from "@/src/usePedidoStore";
+import getCurrentUser from "@/app/controladores/utilities/get-current-user";
+import ClienteAPI from "@/app/controladores/api/users/ClienteAPI";
+import pedidoApi from "@/app/controladores/api/pedido-api";
 
 // Default values
 const deliveryMetodosList = [
@@ -35,28 +38,30 @@ export default function DataPedido({
   deliveryPriceHandler,
   total,
 }: {
-  direcciones: DireccionEntrega[] | undefined;
+  direcciones: DireccionEntrega[] | null;
   order: ItemFormat[];
   deliveryPriceHandler: (item: number) => void;
   total: number;
 }) {
+  // Current user
+  const session = getCurrentUser();
+  // Zustand
   const { cartItems } = usePedidoStore();
-  // Opciones
+
   const [delivery, setDelivery] = useState<MetodoEntrega>(
     MetodoEntrega.DELIVERY,
   );
   const [pago, setPago] = useState<MetodoPago>(MetodoPago.PAGO_MOVIL);
 
   // Direccion Preferida
-  const direccion = direcciones?.find((item) => item.is_favorite);
-
-  console.log(direccion);
+  const direccionPreferida = direcciones?.find((item) => item.is_favorite);
+  console.log(direcciones);
 
   const defaultValues = {
-    direccion: direccion?.direccion || "",
-    referencia: direccion?.referencia || "",
-    codigo_postal: direccion?.codigo_postal
-      ? parseInt(direccion.codigo_postal.toString(), 10)
+    direccion: direccionPreferida?.direccion || "",
+    referencia: direccionPreferida?.referencia || "",
+    codigo_postal: direccionPreferida?.codigo_postal
+      ? parseInt(direccionPreferida.codigo_postal.toString(), 10)
       : 1000,
   };
 
@@ -71,16 +76,69 @@ export default function DataPedido({
     mode: "onChange",
   });
 
-  // On submit, build the complete order details object
-  const onSubmit = (data: DireccionFormData) => {
-    // Checkeo si ya hay direccion
-    const checkDireccion = direcciones?.find(
-      (direccion) => direccion.direccion === data.direccion,
-    );
-    // if(!checkDireccion) {
+  const onSubmit = async (data: DireccionFormData) => {
+    try {
+      // Verificar si la dirección ya existe
+      const checkDireccion = direcciones?.find(
+        (direccion) => direccion.direccion === data.direccion,
+      );
 
-    // }
-    //
+      let direccionId: number | null = null;
+
+      // Si no existe, crear una nueva dirección
+      if (!checkDireccion) {
+        direccionId = await handleNuevaDireccion(data);
+      } else {
+        direccionId = checkDireccion.id;
+      }
+
+      // Si tenemos un ID de dirección, proceder a crear el pedido
+      if (direccionId) {
+        await handleCrearPedido(direccionId);
+      } else {
+        console.error("No se pudo obtener un ID de dirección.");
+      }
+    } catch (error) {
+      console.error("Error al procesar el formulario:", error);
+    }
+  };
+
+  // Manejar la creación de una nueva dirección
+  const handleNuevaDireccion = async (
+    data: DireccionFormData,
+  ): Promise<number | null> => {
+    const direccionNueva = await ClienteAPI.crearDireccionCliente(
+      session?.email || "",
+      data.direccion,
+      data.codigo_postal,
+      data?.referencia,
+    );
+
+    if (direccionNueva) {
+      console.log("Nueva dirección creada:", direccionNueva);
+      return direccionNueva.id;
+    } else {
+      console.error("Error al crear una nueva dirección.");
+      return null;
+    }
+  };
+
+  // Manejar la creación del pedido
+  const handleCrearPedido = async (direccionId: number) => {
+    const cliente = await ClienteAPI.obtenerCliente(session?.email || "");
+
+    if (cliente) {
+      await pedidoApi.postPedido(
+        cliente.perfil.id,
+        delivery,
+        pago,
+        direccionId,
+        cartItems,
+      );
+      console.log("Pedido creado con éxito.");
+    } else {
+      console.error("Error al obtener el cliente.");
+    }
   };
 
   return (

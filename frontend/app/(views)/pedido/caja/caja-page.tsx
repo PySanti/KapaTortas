@@ -14,7 +14,7 @@ import { DireccionEntrega } from "@/app/models/Pedido";
 export default function CajaPage({
   direcciones,
 }: {
-  direcciones: DireccionEntrega[] | undefined;
+  direcciones: DireccionEntrega[] | null;
 }) {
   // Zustand
   const { cartItems } = usePedidoStore();
