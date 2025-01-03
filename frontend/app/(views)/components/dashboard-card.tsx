@@ -1,58 +1,55 @@
 import { Card, CardContent, CardFooter, CardHeader } from '@/app/(views)/components/ui/card';
 import { Separator } from '@/app/(views)/components/ui/separator';
-import { Button } from '@/app/(views)/components/ui/button';
-import { Trash } from 'lucide-react';
+import { CardClientActions } from './dashboard-card-actions';
 
 interface DashboardCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  title?: string; // Optional titulo para el header del card
-  highlight?: string; // Optional highlight titulo (e.g., "Dirección preferido")
-  children: React.ReactNode; // Contenido del card
-  editable?: boolean; //  Optional Activa el botón de editar
-  deletable?: boolean; // Optional Activa el botón de eliminar
-  onEdit?: () => void; // Add this prop
+  title?: string;
+  badge?: string;
+  children: React.ReactNode;
+  actions?: {
+    edit?: {
+      label: string;
+      action?: (id: number) => Promise<any>;
+    };
+    delete?: {
+      action?: (id: number) => Promise<any>;
+    };
+  };
+  useEditDialog?: boolean;
+  idElement?: number;
 }
 
 export default function DashboardCard({
   title,
-  highlight,
-  editable,
-  deletable,
-  onEdit, // Destructure the onEdit prop
+  badge,
+  actions,
   children,
   className,
+  useEditDialog,
+  idElement,
   ...props
 }: DashboardCardProps) {
   return (
     <Card className={`max-w-xl ${className}`} {...props}>
-      <CardHeader>
-        {highlight && (
-          <>
-            <div className='max-w-fit p-1 bg-gray-200 rounded-md'>
-              <p className='text-sm text-terciary'>{highlight}</p>
-            </div>
-            <Separator />
-          </>
+      <CardHeader className="space-y-4">
+        {badge && (
+          <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-sm font-medium text-gray-600">
+            {badge}
+          </span>
         )}
         {title && (
           <>
-            <h3 className='text-lg text-terciary font-medium'>{title}</h3>
+            <h3 className="text-lg font-medium text-gray-900">{title}</h3>
             <Separator />
           </>
         )}
       </CardHeader>
-      <CardContent className='space-y-2'>{children}</CardContent>
-      <CardFooter className='flex items-center gap-x-2'>
-        {editable && onEdit && (
-          <Button className='bg-white text-terciary hover:bg-gray-50 border-2' onClick={onEdit}>
-            Editar
-          </Button>
-        )}
-        {deletable && (
-          <Button className='bg-white text-terciary hover:bg-gray-50 border-2'>
-            <Trash />
-          </Button>
-        )}
-      </CardFooter>
+      <CardContent className="space-y-2">{children}</CardContent>
+      {actions && (
+        <CardFooter className="flex items-center gap-x-2">
+          <CardClientActions actions={actions} useEditDialog={useEditDialog} idElement={idElement!} />
+        </CardFooter>
+      )}
     </Card>
   );
 }

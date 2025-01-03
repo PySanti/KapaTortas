@@ -6,11 +6,16 @@ import DashboardCard from '../../components/dashboard-card';
 import { auth } from '@/auth';
 import ClienteAPI from '@/app/controladores/api/cliente-api';
 import { Rol } from '@/app/models/RolEnum';
+import { deleteDireccion } from '@/app/controladores/actions/delete-direccion';
+import { editDireccion } from '@/app/controladores/actions/edit-direccion';
 
 export default async function DireccionesPage() {
   const session = await auth();
 
   const direcciones = await ClienteAPI.obtenerDireccionesEnvio(session?.user.email!);
+
+  const boundEditDireccion = editDireccion.bind(null);
+  const boundDeleteDireccion = deleteDireccion.bind(null);
 
   return (
     <DashboardContainer>
@@ -25,9 +30,17 @@ export default async function DireccionesPage() {
             direcciones.map((direccion) => (
               <DashboardCard
                 key={direccion.id}
-                highlight={direccion.is_favorite ? 'Dirección de envío preferida' : undefined}
-                editable
-                deletable
+                badge={direccion.is_favorite ? 'Dirección de envío preferida' : undefined}
+                idElement={direccion.id}
+                actions={{
+                  edit: {
+                    label: 'Editar',
+                    action: editDireccion
+                  },
+                  delete: {
+                    action: deleteDireccion
+                  }
+                }}
               >
                 <p>{session?.user.name}</p>
                 <p>{`${direccion.direccion}, ${direccion.referencia}, ${direccion.ciudad}, ${direccion.estado}, ${direccion.codigo_postal}`}</p>
