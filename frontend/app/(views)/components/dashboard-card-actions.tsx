@@ -17,6 +17,7 @@ interface CardClientActionsProps {
     edit?: {
       label: string;
       action?: (id: number) => Promise<void>;
+      form?: React.ReactNode;
     };
     delete?: {
       action?: (id: number) => Promise<void>;
@@ -72,10 +73,8 @@ export function CardClientActions({
                   ¿Estás seguro de querer modificar este elemento?
                 </DialogDescription>
               </DialogHeader>
+              {actions.edit.form}
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
-                  Cancelar
-                </Button>
                 <Button variant={"terciary"} className="text-white" onClick={handleEdit}>
                   Guardar
                 </Button>

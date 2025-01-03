@@ -10,9 +10,11 @@ interface DashboardCardProps extends React.HTMLAttributes<HTMLDivElement> {
     edit?: {
       label: string;
       action?: (id: number) => Promise<any>;
+      form?: React.ReactNode;
     };
     delete?: {
       action?: (id: number) => Promise<any>;
+      form?: React.ReactNode;
     };
   };
   handleClick?: () => void;
