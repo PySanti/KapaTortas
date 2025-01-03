@@ -40,24 +40,19 @@ export const dashboardConfigEmpleado: DashboardConfig = {
   ],
   sidebarNav: [
     {
-      title: 'Pedidos',
-      href: '/dashboard/ordenes',
-      icon: 'paquete',
-    },
-    {
       title: 'Ventas',
       href: '/dashboard/ventas',
       icon: 'wallet',
     },
     {
+      title: 'Pedidos',
+      href: '/dashboard/ordenes',
+      icon: 'paquete',
+    },
+    {
       title: 'Productos',
       href: '/dashboard/items',
       icon: 'shoppingCart',
-    },
-    {
-      title: 'Perfil',
-      href: '/dashboard/ajustes',
-      icon: 'usuario',
     },
   ],
 };

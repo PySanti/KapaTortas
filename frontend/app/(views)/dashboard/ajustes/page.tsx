@@ -47,7 +47,7 @@ export default function AjustesPage() {
 
   return (
     <DashboardContainer>
-      {user && (
+      {user && user.rol === Rol.CLIENTE ? (
         <>
           <DashboardHeader heading="Datos Personales" />
           <DashboardCard
@@ -71,8 +71,10 @@ export default function AjustesPage() {
           >
             <p>{user.phone_number}</p>
           </DashboardCard>
-          {user.rol === Rol.CLIENTE && <DeleteProfileDialog user={{ email: user?.email }} />}
+          <DeleteProfileDialog user={{ email: user?.email }} />
         </>
+      ) : (
+        <DashboardHeader heading="No estás autorizado para ver esta página" />
       )}
       {editingField && (
         <DialogEditar
