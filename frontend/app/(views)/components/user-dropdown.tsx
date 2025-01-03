@@ -12,15 +12,28 @@ import UserAvatar from './user-avatar';
 import Link from 'next/link';
 import { Icons } from './icons';
 import { signOut } from 'next-auth/react';
-import { dashboardConfig } from '@/app/models/config/dashboard';
+import { dashboardConfig, dashboardConfigEmpleado } from '@/app/models/config/dashboard';
+import { Rol } from '@/app/models/RolEnum';
 
 interface UserDropdownProps {
   children?: React.ReactNode;
-  user: Pick<User, 'name' | 'image' | 'email'>;
+  user: Pick<User, 'name' | 'image' | 'email' | 'rol'>;
+}
+
+function getItemsByRol(rol: Rol) {
+  if (rol === Rol.EMPLEADO) {
+    return dashboardConfigEmpleado.sidebarNav;
+  }
+
+  // else if (rol === Rol.ADMIN) {
+  //   return dashboardConfigEmpleado.sidebarNav;
+  // }
+  return dashboardConfig.sidebarNav;
 }
 
 export default function UserDropdown({ user }: UserDropdownProps) {
-  const items = dashboardConfig.sidebarNav;
+  const items = getItemsByRol(user.rol);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='focus-visible:outline-0'>
@@ -47,7 +60,6 @@ export default function UserDropdown({ user }: UserDropdownProps) {
               </Link>
             </DropdownMenuItem>
           ))}
-
         <DropdownMenuSeparator />
 
         <DropdownMenuItem

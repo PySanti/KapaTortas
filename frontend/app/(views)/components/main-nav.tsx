@@ -15,7 +15,7 @@ import UserDropdown from './user-dropdown';
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: MainNavItem[];
   children?: React.ReactNode;
-  user?: Pick<User, 'name' | 'image' | 'email'>;
+  user?: Pick<User, 'name' | 'image' | 'email' | 'rol'>;
 }
 
 export default function Navbar({ className, items, user, children }: NavbarProps) {

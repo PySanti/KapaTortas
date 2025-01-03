@@ -7,6 +7,17 @@ import { DashboardHeader } from '../../components/dashboard-header';
 import { DialogEditar } from '../../components/dialog-editar-field';
 import getCurrentUser from '@/app/controladores/utilities/get-current-user';
 import DeleteProfileDialog from '../../components/dialog-eliminar-perfil';
+import { Rol } from '@/app/models/RolEnum';
+
+interface CardActions {
+  edit?: {
+    label: string;
+    onClick?: () => void;
+  };
+  delete?: {
+    onClick?: () => void;
+  };
+}
 
 export default function AjustesPage() {
   const user = getCurrentUser();
@@ -36,26 +47,34 @@ export default function AjustesPage() {
 
   return (
     <DashboardContainer>
-      <DashboardHeader heading='Datos Personales' />
-      {user && (
+      {user && user.rol === Rol.CLIENTE ? (
         <>
-          <DashboardCard title='Nombre completo' editable onEdit={() => handleEdit('name')}>
+          <DashboardHeader heading='Datos Personales' />
+          <DashboardCard 
+            title='Nombre completo'
+            useEditDialog={true}
+            handleClick={() => handleEdit('name')}
+          >
             <p>{user.name}</p>
           </DashboardCard>
-          <DashboardCard title='Contraseña' editable onEdit={() => handleEdit('password')}>
+          <DashboardCard 
+            title='Contraseña'
+            handleClick={() => handleEdit('password')}
+            useEditDialog={true}
+          >
             <p>********</p>
           </DashboardCard>
           <DashboardCard
             title='Número de Teléfono'
-            editable
-            onEdit={() => handleEdit('phone_number')}
+            handleClick={() => handleEdit('phone_number')}
+            useEditDialog={true}
           >
             <p>{user.phone_number}</p>
           </DashboardCard>
-          {/* <DashboardCard title='Fecha de Nacimiento' editable onEdit={() => handleEdit('phone_number')}>
-            <p>{user.phone_number}</p>
-          </DashboardCard> */}
+          <DeleteProfileDialog user={{ email: user?.email }} />
         </>
+      ) : (
+        <DashboardHeader heading='No estás autorizado para ver esta página' />
       )}
       {editingField && (
         <DialogEditar
@@ -66,7 +85,6 @@ export default function AjustesPage() {
           onClose={closeEditModal}
         />
       )}
-      <DeleteProfileDialog user={{ email: user?.email }} />
     </DashboardContainer>
   );
 }
