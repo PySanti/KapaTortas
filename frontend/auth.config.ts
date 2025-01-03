@@ -8,9 +8,8 @@ import { stripe } from '@/app/controladores/lib/stripe';
 import passwordsMatch from './app/controladores/utilities/passwords-match';
 import crearStripeId from './app/controladores/utilities/crear-stripeid';
 import correoVerificado from './app/controladores/utilities/correo-verificado';
-import { authRoutes, defaultLoginRedirect, publicRoutes } from './app/models/config/routes';
+import { authRoutes, defaultLoginRedirectCliente, defaultLoginRedirectEmpleado, publicRoutes } from './app/models/config/routes';
 import { Rol } from './app/models/RolEnum';
-// import { authRoutes, defaultLoginRedirect, publicRoutes } from './config/routes';
 
 export default {
   pages: {
@@ -192,8 +191,10 @@ export default {
       if (isOnAuthPage) {
         //* Redirect to /dashboard if logged in and is on an auth page
         if (isLoggedIn) {
+          //* If its not cliente redirect to /dashboard/ventas, if not use the defaultLoginRedirect for clientes dashboard/ajustes
+          const redirectUrl = auth.user.rol !== Rol.CLIENTE ? defaultLoginRedirectEmpleado : defaultLoginRedirectCliente;
           // console.log('Redirecting to dashboard from auth page');
-          return Response.redirect(new URL(defaultLoginRedirect, nextUrl));
+          return Response.redirect(new URL(redirectUrl, nextUrl));
         }
       } else if (isProtectedPage) {
         //* Redirect to /login if not logged in but is on a protected page

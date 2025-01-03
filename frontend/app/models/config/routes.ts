@@ -5,6 +5,8 @@ export const publicRoutes = ["/products/", "/verify-email", "/pedido/"];
 export const authRoutes = ["/login", "/register"];
 // export const authRoutes = ['/login', '/register', '/reset-password', '/new-password'];
 
-export const defaultLoginRedirect = "/dashboard/ajustes";
+//* Default routes for login redirect by rol
+export const defaultLoginRedirectCliente = "/dashboard/ajustes";
+export const defaultLoginRedirectEmpleado = "/dashboard/ventas";
 
 //* Protected routes are those that require the user to be logged in, this is managed on auth.config.ts
