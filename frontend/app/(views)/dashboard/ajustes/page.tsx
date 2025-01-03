@@ -9,6 +9,16 @@ import getCurrentUser from '@/app/controladores/utilities/get-current-user';
 import DeleteProfileDialog from '../../components/dialog-eliminar-perfil';
 import { Rol } from '@/app/models/RolEnum';
 
+interface CardActions {
+  edit?: {
+    label: string;
+    onClick?: () => void;
+  };
+  delete?: {
+    onClick?: () => void;
+  };
+}
+
 export default function AjustesPage() {
   const user = getCurrentUser();
   const [editingField, setEditingField] = useState<string | null>(null);
@@ -40,16 +50,24 @@ export default function AjustesPage() {
       {user && user.rol === Rol.CLIENTE ? (
         <>
           <DashboardHeader heading='Datos Personales' />
-          <DashboardCard title='Nombre completo' editable onEdit={() => handleEdit('name')}>
+          <DashboardCard 
+            title='Nombre completo'
+            useEditDialog={true}
+            handleClick={() => handleEdit('name')}
+          >
             <p>{user.name}</p>
           </DashboardCard>
-          <DashboardCard title='Contraseña' editable onEdit={() => handleEdit('password')}>
+          <DashboardCard 
+            title='Contraseña'
+            handleClick={() => handleEdit('password')}
+            useEditDialog={true}
+          >
             <p>********</p>
           </DashboardCard>
           <DashboardCard
             title='Número de Teléfono'
-            editable
-            onEdit={() => handleEdit('phone_number')}
+            handleClick={() => handleEdit('phone_number')}
+            useEditDialog={true}
           >
             <p>{user.phone_number}</p>
           </DashboardCard>

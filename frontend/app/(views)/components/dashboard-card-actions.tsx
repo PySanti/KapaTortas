@@ -22,10 +22,11 @@ interface CardClientActionsProps {
       action?: (id: number) => Promise<void>;
     };
   };
+  handleClick?: () => void;
   useEditDialog?: boolean;
 }
 
-export function CardClientActions({ idElement, actions, useEditDialog = false }: CardClientActionsProps) {
+export function CardClientActions({ idElement, actions, handleClick, useEditDialog }: CardClientActionsProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleEdit = async () => {
@@ -50,47 +51,52 @@ export function CardClientActions({ idElement, actions, useEditDialog = false }:
 
   return (
     <>
-      {actions.edit && (
+     {!useEditDialog && actions?.edit && (
         <>
           <Button variant="outline" onClick={handleEdit}>
             <Pencil className="h-4 w-4" />
           </Button>
-
-          {!useEditDialog && (
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Editar</DialogTitle>
-                  <DialogDescription>
-                    ¿Estás seguro de querer modificar este elemento?
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="flex justify-end space-x-2">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => setDialogOpen(false)}
-                  >
-                    Cancelar
-                  </Button>
-                  <Button 
-                    onClick={handleEdit}
-                  >
-                    Guardar cambios
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-          )}
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Editar</DialogTitle>
+                <DialogDescription>
+                  ¿Estás seguro de querer modificar este elemento?
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-end space-x-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setDialogOpen(false)}
+                >
+                  Cancelar
+                </Button>
+                <Button 
+                  onClick={handleEdit}
+                >
+                  Guardar cambios
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </>
       )}
-      
-      {actions.delete && (
+
+      {!useEditDialog && actions?.delete && (
         <Button 
           variant="outline" 
           onClick={handleDelete}
         >
           <Trash className="h-4 w-4" />
         </Button>
+      )}
+
+      {useEditDialog && (
+        <>
+          <Button className='bg-white text-terciary hover:bg-gray-50 border-2' onClick={handleClick}>
+            Editar
+          </Button>
+        </>
       )}
     </>
   );
