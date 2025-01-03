@@ -143,7 +143,7 @@ export default function DataPedido({
 
     if (cliente) {
       await pedidoApi.postPedido(
-        cliente.perfil.id,
+        session?.email || "",
         delivery,
         pago,
         direccionId,

@@ -34,7 +34,7 @@ class CrearPedidoAPI(APIView):
         from applications.Productos.models import (Productos,Presentaciones)
         try:
             serialized_data = kwargs['serialized_data']
-            if cliente:=Clientes.objects.filter(id=serialized_data["cliente_id"]):
+            if cliente:=Clientes.objects.filter(perfil__correo=serialized_data["correo_cliente"]):
                 new_pedido = Pedidos.objects.create(
                     numero_de_orden=randint(10000, 99999),
                     cliente_asociado=cliente[0],

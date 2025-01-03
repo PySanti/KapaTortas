@@ -42,16 +42,16 @@ class PedidoAPI {
 
   // // POST Pedido
   public async postPedido(
-    cliente_id: number,
+    correo_cliente: string,
     metodo_entrega: string,
     metodo_pago: string,
     direccion_entrega_id: number,
     items: CartItem[],
   ): Promise<Pedido | null> {
-    const url = `http://localhost:8000/api/pedidos/crear`;
+    const url = `http://localhost:8000/api/pedidos/crear/`;
 
     const body = JSON.stringify({
-      cliente_id: cliente_id,
+      correo_cliente: correo_cliente,
       metodo_entrega: metodo_entrega,
       metodo_pago: metodo_pago,
       direccion_entrega_id: direccion_entrega_id,
@@ -72,6 +72,8 @@ class PedidoAPI {
         headers: { "Content-Type": "application/json" },
         body: body,
       });
+
+      console.log(response);
 
       if (!response.ok) {
         throw new Error(`HTTP error, Status: ${response.status}`);
