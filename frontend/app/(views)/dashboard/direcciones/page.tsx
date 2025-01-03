@@ -23,7 +23,7 @@ export default async function DireccionesPage() {
             heading="Direcciones"
             description="Edita, elimina o establece una dirección de envío predeterminada"
           />
-          <DialogAgregarDireccion />
+          <DialogAgregarDireccion email={session?.user.email!} />
 
           {direcciones && direcciones.length > 0 ? (
             direcciones.map((direccion) => (

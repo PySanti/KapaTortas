@@ -11,7 +11,11 @@ import {
 import FormAgregarDireccionEnvio from "@/app/(views)/components/form-agregar-direccion-envio";
 import { Separator } from "@/app/(views)/components/ui/separator";
 
-export default function DialogAgregarDireccion() {
+type DialogAgregarDireccionProps = {
+  email: string;
+};
+
+export default function DialogAgregarDireccion({ email }: DialogAgregarDireccionProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -22,7 +26,7 @@ export default function DialogAgregarDireccion() {
           <DialogTitle className="text-2xl text-terciary">Agregar nueva dirección</DialogTitle>
           <Separator />
         </DialogHeader>
-        <FormAgregarDireccionEnvio />
+        <FormAgregarDireccionEnvio email={email} />
         {/* <DialogFooter>
         </DialogFooter> */}
       </DialogContent>

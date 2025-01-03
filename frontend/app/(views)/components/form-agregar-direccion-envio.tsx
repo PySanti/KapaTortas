@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/app/(views)/components/ui/button";
 import { Input } from "@/app/(views)/components/ui/input";
@@ -16,11 +17,22 @@ import {
   DireccionEnvioSchema,
   DireccionEnvioType,
 } from "@/app/controladores/lib/validations/direccion-envio";
+import clienteApi from "@/app/controladores/api/cliente-api";
+import FormErrorMessage from "./form-error-msg";
+import FormSuccessMessage from "./form-success-msg";
 
-export default function FormAgregarDireccionEnvio() {
+type FormAgregarDireccionEnvioProps = {
+  email: string;
+};
+
+export default function FormAgregarDireccionEnvio({ email }: FormAgregarDireccionEnvioProps) {
+  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [successMsg, setSuccessMsg] = useState<string>("");
+
   const form = useForm<DireccionEnvioType>({
     resolver: zodResolver(DireccionEnvioSchema),
     defaultValues: {
+      // pais: "VENEZUELA",
       ciudad: "",
       estado: "",
       direccion: "",
@@ -37,8 +49,39 @@ export default function FormAgregarDireccionEnvio() {
   } = form;
 
   const onSubmit = async (data: DireccionEnvioType) => {
-    // Handle form submission logic here
-    console.log(data);
+    const formData = {
+      ...data,
+      pais: "VENEZUELA",
+      correo_cliente: email,
+    };
+
+    try {
+      // Check if address already exists
+      const direccionesCliente = await clienteApi.obtenerDireccionesEnvio(email);
+
+      const existingAddress = direccionesCliente?.find(
+        (address) => address.direccion === formData.direccion
+      );
+
+      if (existingAddress) {
+        setErrorMsg("Esta dirección ya existe");
+        return;
+      }
+
+      const res = await clienteApi.agregarDireccionEnvio(formData);
+
+      if (!res.ok) {
+        setErrorMsg("Error al agregar dirección");
+        setSuccessMsg("");
+      } else {
+        setSuccessMsg("Dirección agregada correctamente");
+        setErrorMsg("");
+        // const responseData: DireccionEnvioType = await res.json(); // Parse the JSON if needed
+        // console.log("Dirección agregada:", responseData);
+      }
+    } catch (error) {
+      console.log("Error al agregar dirección:", error);
+    }
   };
 
   return (
@@ -115,6 +158,8 @@ export default function FormAgregarDireccionEnvio() {
             )}
           />
         </div>
+        <FormErrorMessage message={errorMsg} />
+        <FormSuccessMessage message={successMsg} />
         <div className="flex justify-end">
           <Button type="submit" variant={"terciary"}>
             Agregar Dirección
