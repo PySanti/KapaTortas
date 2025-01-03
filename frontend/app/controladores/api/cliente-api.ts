@@ -148,7 +148,6 @@ class ClienteAPI {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                id: direccion.id,
                 pais: direccion.pais,
                 ciudad: direccion.ciudad,
                 estado: direccion.estado,
