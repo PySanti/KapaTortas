@@ -64,6 +64,8 @@ class PedidoAPI {
       }),
     });
 
+    console.log("BODY", body);
+
     try {
       const response = await fetch(url, {
         method: "POST",

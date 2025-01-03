@@ -148,8 +148,8 @@ class ClienteAPI {
     direccion: string,
     codigo_postal: number,
     ref?: string,
-  ): Promise<DireccionEntrega | null> {
-    const url = `http://localhost:8000/api/clientes/crear_direccion`;
+  ): Promise<number | null> {
+    const url = `http://localhost:8000/api/clientes/crear_direccion/`;
 
     const body = JSON.stringify({
       correo_cliente: email,
@@ -171,7 +171,8 @@ class ClienteAPI {
         throw new Error(`HTTP error, Status: ${response.status}`);
       }
 
-      return response.json();
+      const data = await response.json();
+      return data?.new_direccion.id;
     } catch (err) {
       console.error("Error al postear la dirección: ", err);
       return null;

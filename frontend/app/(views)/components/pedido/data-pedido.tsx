@@ -55,25 +55,27 @@ export default function DataPedido({
 
   // Direccion Preferida
   const direccionPreferida = direcciones?.find((item) => item.is_favorite);
-  console.log(direcciones);
 
-  const defaultValues = {
+  const defaultValues: {
+    direccion: string;
+    referencia?: string;
+    codigo_postal: string;
+  } = {
     direccion: direccionPreferida?.direccion || "",
     referencia: direccionPreferida?.referencia || "",
     codigo_postal: direccionPreferida?.codigo_postal
-      ? parseInt(direccionPreferida.codigo_postal.toString(), 10)
-      : 1000,
+      ? direccionPreferida.codigo_postal.toString()
+      : "1000",
   };
 
   // Schema
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<DireccionFormData>({
     resolver: zodResolver(direccionSchema),
     defaultValues,
-    mode: "onChange",
   });
 
   const onSubmit = async (data: DireccionFormData) => {
@@ -107,18 +109,29 @@ export default function DataPedido({
   const handleNuevaDireccion = async (
     data: DireccionFormData,
   ): Promise<number | null> => {
-    const direccionNueva = await ClienteAPI.crearDireccionCliente(
-      session?.email || "",
-      data.direccion,
-      data.codigo_postal,
-      data?.referencia,
-    );
+    try {
+      const direccionNueva = await ClienteAPI.crearDireccionCliente(
+        session?.email || "",
+        data.direccion,
+        data.codigo_postal,
+        data?.referencia,
+      );
 
-    if (direccionNueva) {
-      console.log("Nueva dirección creada:", direccionNueva);
-      return direccionNueva.id;
-    } else {
-      console.error("Error al crear una nueva dirección.");
+      if (direccionNueva) {
+        console.log("Nueva dirección creada:", direccionNueva);
+        return direccionNueva;
+      } else {
+        console.error(
+          "Error: La dirección creada no tiene un ID válido.",
+          direccionNueva,
+        );
+        return null;
+      }
+    } catch (error) {
+      console.error(
+        "Error al manejar la creación de una nueva dirección:",
+        error,
+      );
       return null;
     }
   };
@@ -126,6 +139,7 @@ export default function DataPedido({
   // Manejar la creación del pedido
   const handleCrearPedido = async (direccionId: number) => {
     const cliente = await ClienteAPI.obtenerCliente(session?.email || "");
+    console.log(cliente);
 
     if (cliente) {
       await pedidoApi.postPedido(
@@ -142,7 +156,7 @@ export default function DataPedido({
   };
 
   return (
-    <section className="py-16">
+    <section className="py-16 px-8">
       <form onSubmit={handleSubmit(onSubmit)}>
         <ShippingSelector register={register} errors={errors} />
 
@@ -216,7 +230,7 @@ export default function DataPedido({
         <Button
           type="submit"
           className="mt-8 text-xl text-center ml-4"
-          disabled={!isValid || cartItems.length <= 0}
+          disabled={cartItems.length <= 0}
         >
           Procesar Pedido
         </Button>
