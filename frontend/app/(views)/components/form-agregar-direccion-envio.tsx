@@ -65,6 +65,7 @@ export default function FormAgregarDireccionEnvio({ email }: FormAgregarDireccio
 
       if (existingAddress) {
         setErrorMsg("Esta dirección ya existe");
+        setSuccessMsg("");
         return;
       }
 
@@ -81,6 +82,8 @@ export default function FormAgregarDireccionEnvio({ email }: FormAgregarDireccio
       }
     } catch (error) {
       console.log("Error al agregar dirección:", error);
+      setErrorMsg("Error al agregar dirección");
+      setSuccessMsg("");
     }
   };
 
