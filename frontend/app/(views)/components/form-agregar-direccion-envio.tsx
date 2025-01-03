@@ -16,18 +16,17 @@ import {
   DireccionEnvioSchema,
   DireccionEnvioType,
 } from "@/app/controladores/lib/validations/direccion-envio";
-import { z } from "zod";
 
 export default function FormAgregarDireccionEnvio() {
   const form = useForm<DireccionEnvioType>({
     resolver: zodResolver(DireccionEnvioSchema),
     defaultValues: {
-      // pais: "VENEZUELA", Default value for pais
       ciudad: "",
       estado: "",
       direccion: "",
       referencia: "",
-      // codigo_postal: ,
+      // @ts-ignore (Zod coerce string to number)
+      codigo_postal: "",
     },
     mode: "onChange",
   });

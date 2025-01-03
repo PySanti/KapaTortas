@@ -1,6 +1,7 @@
 import { Cliente } from '@/app/models/Cliente';
 import { DireccionEntrega } from '@/app/models/Pedido';
 import { Perfil } from '@/app/models/Perfil';
+import { DireccionEnvioType } from '../lib/validations/direccion-envio';
 
 // Tiene un singleton
 class ClienteAPI {
@@ -134,6 +135,39 @@ class ClienteAPI {
     } catch (error) {
       console.error('Error al eliminar el perfil: ', error);
       return false;
+    }
+  }
+
+  public async agregarDireccionEnvio(direccion: DireccionEnvioType): Promise<DireccionEnvioType> {
+    const url = 'http://localhost:8000/api/clientes/crear_direccion/';
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: direccion.id,
+          pais: direccion.pais,
+          ciudad: direccion.ciudad,
+          estado: direccion.estado,
+          direccion: direccion.direccion,
+          referencia: direccion.referencia,
+          codigo_postal: direccion.codigo_postal,
+          correo_cliente: direccion.correo_cliente
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.new_direccion;
+    } catch (error) {
+      console.error('Error al agregar nueva dirección:', error);
+      throw error;
     }
   }
 }
