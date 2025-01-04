@@ -1,25 +1,16 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisVertical, CircleCheck } from "lucide-react";
 import DisplayOnHover from "./display-on-hover";
-import { MetodoPago, Pedido } from "@/app/models/Pedido";
+import { Pedido } from "@/app/models/Pedido";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { transformMetodoPago } from "@/app/controladores/utilities/transform-metodo-pago";
 
 interface PedidoHistorialProps extends React.HTMLAttributes<HTMLDivElement> {
   pedidos: Pedido[];
   nombreUsuario: string;
 }
-
-const metodoPagoArray = [
-  { metodo: MetodoPago.ZELLE, label: "Zelle" },
-  { metodo: MetodoPago.PAGO_MOVIL, label: "Pago Móvil" },
-];
-
-const transformMetodoPago = (metodoPago: MetodoPago): string => {
-  const metodo = metodoPagoArray.find((metodo) => metodo.metodo === metodoPago);
-  return metodo ? metodo.label : "Método de pago no disponible";
-};
 
 export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistorialProps) {
   return (
