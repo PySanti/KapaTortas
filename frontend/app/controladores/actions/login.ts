@@ -18,15 +18,15 @@ export const login = async (data: loginType) => {
 
   const existingUser = await ClienteAPI.obtenerCliente(email);
 
+  // If the user does not exist or has no profile, return an error
   if (!existingUser || !existingUser.perfil) {
-    return null;
+    return { error: 'Correo o contraseña incorrectos' };
   }
 
   const { perfil: user } = existingUser;
 
-  // If the user does not exist, return an error
   if (!user.correo || !user.contraseña) {
-    return { error: 'Correo no existe' };
+   return { error: 'Correo no existe' };
   }
 
   if (!user.is_active) {
@@ -34,10 +34,10 @@ export const login = async (data: loginType) => {
   }
 
   try {
-   if(user.rol === Rol.CLIENTE) {
-    await signIn('credentials', {
-      email: data.email,
-      password: data.password,
+    if (user.rol === Rol.CLIENTE) {
+      await signIn('credentials', {
+        email: data.email,
+        password: data.password,
         redirectTo: defaultLoginRedirectCliente,
       });
     } else {
