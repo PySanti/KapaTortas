@@ -33,12 +33,6 @@ from applications.Clientes.models import Clientes
 from backend.utils.get_info_dict import get_info_dict
 from rest_framework import serializers
 
-import logging
-
-logger = logging.getLogger(__name__)
-
-
-
 class ConsultarPerfilAPI(APIView):
     serializer_class        = ConsultarPerfilSerializer
     authentication_classes  = []

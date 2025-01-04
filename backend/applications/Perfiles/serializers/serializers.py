@@ -5,10 +5,6 @@ from backend.utils.google import Google
 from backend.utils.register import register_social_user
 from rest_framework.exceptions import AuthenticationFailed
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 class ConsultarPerfilSerializer(serializers.Serializer):
     pass
 

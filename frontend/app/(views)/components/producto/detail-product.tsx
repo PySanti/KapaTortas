@@ -60,7 +60,7 @@ export default function DetailProduct({
       !(
         type === "realizar" &&
         checkSameItem({ id, product, present, quantity: 1 })
-      ) ||
+      ) &&
       !(present.stock < 1)
     ) {
       addToCart({ id, product, present, quantity: 1 });

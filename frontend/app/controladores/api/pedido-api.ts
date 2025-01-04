@@ -97,6 +97,7 @@ class PedidoAPI {
     correo_cliente: string,
     metodo_entrega: string,
     metodo_pago: string,
+    total: number,
     direccion_entrega_id: number,
     items: CartItem[],
   ): Promise<Pedido | null> {
@@ -106,6 +107,7 @@ class PedidoAPI {
       correo_cliente: correo_cliente,
       metodo_entrega: metodo_entrega,
       metodo_pago: metodo_pago,
+      precio: total,
       direccion_entrega_id: direccion_entrega_id,
       descripciones: items.map((item) => {
         return {

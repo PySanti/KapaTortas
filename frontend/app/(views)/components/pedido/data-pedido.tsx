@@ -147,6 +147,7 @@ export default function DataPedido({
         session?.email || "",
         delivery,
         pago,
+        total,
         direccionId,
         cartItems,
       );
