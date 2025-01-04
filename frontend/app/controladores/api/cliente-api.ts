@@ -119,7 +119,11 @@ class ClienteAPI {
   }
 
   public async eliminarPerfil(email: string): Promise<boolean> {
-    const url = `http://localhost:8000/api/perfiles/eliminar/${encodeURIComponent(email)}`;
+    const url = `http://localhost:8000/api/perfiles/eliminar/${encodeURIComponent(
+      email,
+    )}/`;
+
+    console.log(email);
 
     try {
       const response = await fetch(url, {
