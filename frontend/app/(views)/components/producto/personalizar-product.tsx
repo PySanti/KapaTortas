@@ -9,7 +9,6 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { motion } from "framer-motion";
 import { Capa, sabores } from "@/app/models/capas";
 import TortaModel from "./torta-model";
-import { CircleX } from "lucide-react";
 import { usePedidoStore } from "@/src/usePedidoStore";
 
 export default function PersonalizarProduct() {
