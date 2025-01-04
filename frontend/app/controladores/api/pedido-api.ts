@@ -118,8 +118,6 @@ class PedidoAPI {
       }),
     });
 
-    console.log("BODY", body);
-
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -127,13 +125,13 @@ class PedidoAPI {
         body: body,
       });
 
-      console.log(response);
-
       if (!response.ok) {
         throw new Error(`HTTP error, Status: ${response.status}`);
       }
 
-      return response.json();
+      const data = await response.json();
+      console.log(data?.pedido);
+      return data?.pedido;
     } catch (err) {
       console.error("Error al postear el pedido: ", err);
       return null;
