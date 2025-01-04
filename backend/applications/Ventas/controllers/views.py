@@ -40,11 +40,17 @@ class CrearPedidoAPI(APIView):
                     cliente_asociado=cliente[0],
                     metodo_entrega=serialized_data["metodo_entrega"],
                     metodo_pago=serialized_data["metodo_pago"],
+                    # Lo hice yo Daniel
+                    iva = serialized_data["iva"],
+                    nota = serialized_data["nota"],
+                    ##
                     estado = "pendiente",
                     direccion_entrega=DireccionesEnvio.objects.get(id=serialized_data['direccion_entrega_id'])
                 )
                 # Lo hice yo Daniel
                 monto_total = serialized_data["precio"];
+
+
                 for d in serialized_data["descripciones"]:
                     new_descripcion = DescripcionesPedido.objects.create(
                         cantidad=d["cantidad"],

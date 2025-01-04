@@ -28,7 +28,9 @@ class Pedidos(models.Model):
     fecha_pedido            = models.DateTimeField(null=True, blank=True, default=get_current_time)
     fecha_entrega           = models.DateTimeField(null=True, blank=True)
     cliente_asociado        = models.ForeignKey(Clientes, on_delete=models.SET_NULL, null=True, related_name="pedidos")
+    iva                     = models.FloatField(null=True, blank=True)
     monto_total             = models.FloatField(null=True, blank=True)
+    nota                    = models.TextField(null=True, blank=True, default=None)
     estado                  = models.CharField(choices=[(role.value, role.name) for role in EstadoEnum], default=EstadoEnum.PENDIENTE)
     metodo_pago             = models.CharField(choices=[(role.value, role.name) for role in MetodoPagoEnum], default=MetodoPagoEnum.PAGO_MOVIL)
     metodo_entrega          = models.CharField(choices=[(role.value, role.name) for role in MetodoEntregaEnum], default=MetodoEntregaEnum.PICKUP)
@@ -78,7 +80,7 @@ class Facturas(models.Model):
     numero_telefonico_empresa           = models.CharField(blank=True, default=DEFAULT_NUMERO_TELEFONICO_EMPRESA)
     rif_empresa                         = models.CharField(blank=True, default=DEFAULT_RIF_EMPRESA)
     correo_electronico_empresa          = models.EmailField(blank=True, default=DEFAULT_CORREO_EMPRESA)
-    
+
     objects = FacturasManager()
 
     class Meta:
@@ -87,4 +89,3 @@ class Facturas(models.Model):
 
     def __str__(self):
         return f"{self.id} : {self.fecha_emision_factura}"
-

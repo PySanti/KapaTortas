@@ -76,7 +76,7 @@ export default function CajaPage({
           direcciones={direcciones}
           order={order}
           deliveryPriceHandler={handleDeliveryPrecios}
-          total={precios.total}
+          precios={precios}
         />
       </div>
     </div>

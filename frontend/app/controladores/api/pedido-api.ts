@@ -97,9 +97,11 @@ class PedidoAPI {
     correo_cliente: string,
     metodo_entrega: string,
     metodo_pago: string,
+    iva: number,
     total: number,
     direccion_entrega_id: number,
     items: CartItem[],
+    nota?: string | undefined,
   ): Promise<Pedido | null> {
     const url = `http://localhost:8000/api/pedidos/crear/`;
 
@@ -107,7 +109,9 @@ class PedidoAPI {
       correo_cliente: correo_cliente,
       metodo_entrega: metodo_entrega,
       metodo_pago: metodo_pago,
+      iva: iva,
       precio: total,
+      nota: nota,
       direccion_entrega_id: direccion_entrega_id,
       descripciones: items.map((item) => {
         return {

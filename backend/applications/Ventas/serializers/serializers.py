@@ -15,7 +15,9 @@ class CrearPedidoSerializer(serializers.Serializer):
     metodo_pago = serializers.ChoiceField(
         choices=[(role.value, role.name) for role in MetodoPagoEnum],
     )
+    iva = serializers.FloatField()
     precio = serializers.FloatField()
+    nota = serializers.CharField(required=False, allow_blank=True, default=None)
     metodo_entrega = serializers.ChoiceField(
         choices=[(role.value, role.name) for role in MetodoEntregaEnum]
     )

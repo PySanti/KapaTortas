@@ -1,4 +1,5 @@
 export enum Categoria {
+  ESPECIAL = "especial",
   POSTRE = "postre",
   EXTRA = "extra",
 }

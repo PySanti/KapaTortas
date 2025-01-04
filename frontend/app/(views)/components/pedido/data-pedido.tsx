@@ -8,7 +8,12 @@ import {
   DireccionFormData,
 } from "@/app/controladores/lib/validations/direccion-schema";
 
-import { DireccionEntrega, ItemFormat, Pedido } from "@/app/models/Pedido";
+import {
+  DireccionEntrega,
+  ItemFormat,
+  Pedido,
+  Precios,
+} from "@/app/models/Pedido";
 import { Button } from "../ui/button";
 import { RadioGroup, Label, Description, Radio } from "@headlessui/react";
 import { CheckCircleIcon } from "lucide-react";
@@ -28,20 +33,20 @@ import redirectToWhatsapp from "@/app/controladores/utilities/redirect-to-whatsa
 
 // Default values
 const deliveryMetodosList = [
-  { metodo: "delivery", precio: 3 },
   { metodo: "pickup", precio: 0 },
+  { metodo: "delivery", precio: 3 },
 ];
 
 export default function DataPedido({
   direcciones,
   order,
   deliveryPriceHandler,
-  total,
+  precios,
 }: {
   direcciones: DireccionEntrega[] | null;
   order: ItemFormat[];
   deliveryPriceHandler: (item: number) => void;
-  total: number;
+  precios: Precios;
 }) {
   // Current user
   const session = getCurrentUser();
@@ -50,9 +55,7 @@ export default function DataPedido({
   // Zustand
   const { cartItems, clearCart } = usePedidoStore();
 
-  const [delivery, setDelivery] = useState<MetodoEntrega>(
-    MetodoEntrega.DELIVERY,
-  );
+  const [delivery, setDelivery] = useState<MetodoEntrega>(MetodoEntrega.PICKUP);
   const [pago, setPago] = useState<MetodoPago>(MetodoPago.PAGO_MOVIL);
 
   // Direccion Preferida
@@ -154,9 +157,11 @@ export default function DataPedido({
         session?.email || "",
         delivery,
         pago,
-        total,
+        precios.iva,
+        precios.total,
         direccionId,
         cartItems,
+        "hola",
       );
       console.log("Pedido creado con éxito.");
       return pedido;
@@ -173,65 +178,67 @@ export default function DataPedido({
 
         {/* Metodo Delivery */}
         <div className="mt-10 border-t border-primary-light pt-10">
-          <RadioGroup value={delivery} onChange={setDelivery}>
+          <RadioGroup
+            value={delivery}
+            onChange={(value) => {
+              setDelivery(value);
+              const selectedOption = deliveryMetodosList.find(
+                (option) => option.metodo === value,
+              );
+              if (selectedOption) {
+                deliveryPriceHandler(selectedOption.precio);
+              }
+            }}
+          >
             <h3 className="text-xl font-medium text-terciary">
               Método de Entrega
             </h3>
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
               {deliveryMetodosList.map((option, index) => (
-                <button
+                <Radio
                   key={index}
-                  type="button"
-                  onClick={() => {
-                    deliveryPriceHandler(option.precio);
-                  }}
+                  value={option.metodo}
+                  className={({ checked, disabled }) =>
+                    classNames(
+                      checked ? "border-transparent" : "border-gray-300",
+                      disabled ? "ring-2 ring-primary-light" : "",
+                      "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none",
+                    )
+                  }
                 >
-                  <Radio
-                    key={index}
-                    value={option.metodo}
-                    className={({ checked, disabled }) =>
-                      classNames(
-                        checked ? "border-transparent" : "border-gray-300",
-                        disabled ? "ring-2  ring-primary-light" : "",
-                        "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none",
-                      )
-                    }
-                  >
-                    {({ checked, disabled }) => (
-                      <>
-                        <span className="flex flex-1">
-                          <span className="flex flex-col">
-                            <Label
-                              as="span"
-                              className="block text-base font-medium text-terciary"
-                            >
-                              {option.metodo}
-                            </Label>
-                            <Description
-                              as="span"
-                              className="mt-1 flex items-center text-lg text-terciary"
-                            >
-                              ${option.precio}
-                            </Description>
-                          </span>
+                  {({ checked }) => (
+                    <>
+                      <span className="flex flex-1">
+                        <span className="flex flex-col">
+                          <Label
+                            as="span"
+                            className="block text-base font-medium text-terciary"
+                          >
+                            {option.metodo}
+                          </Label>
+                          <Description
+                            as="span"
+                            className="mt-1 flex items-center text-lg text-terciary"
+                          >
+                            ${option.precio}
+                          </Description>
                         </span>
-                        {checked ? (
-                          <CheckCircleIcon className="h-5 w-5 text-terciary-muted" />
-                        ) : null}
-                        <span
-                          className={classNames(
-                            disabled ? "border" : "border-2",
-                            checked
-                              ? "border-indigo-500"
-                              : "border-transparent",
-                            "pointer-events-none absolute -inset-px rounded-lg",
-                          )}
-                          aria-hidden="true"
-                        />
-                      </>
-                    )}
-                  </Radio>
-                </button>
+                      </span>
+                      {checked ? (
+                        <CheckCircleIcon className="h-5 w-5 text-terciary-muted" />
+                      ) : null}
+                      <span
+                        className={classNames(
+                          "pointer-events-none absolute -inset-px rounded-lg",
+                          checked
+                            ? "border-2 border-indigo-500"
+                            : "border border-transparent",
+                        )}
+                        aria-hidden="true"
+                      />
+                    </>
+                  )}
+                </Radio>
               ))}
             </div>
           </RadioGroup>

@@ -9,8 +9,12 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { motion } from "framer-motion";
 import { Capa, sabores } from "@/app/models/capas";
 import TortaModel from "./torta-model";
+import { CircleX } from "lucide-react";
+import { usePedidoStore } from "@/src/usePedidoStore";
 
 export default function PersonalizarProduct() {
+  // zustand
+  const { cartItems, addTocart } = usePedidoStore();
   const [capas, setCapas] = useState<Capa[]>([]);
   const [selectedSabor, setSelectedSabor] = useState(sabores[0]);
 
@@ -91,6 +95,35 @@ export default function PersonalizarProduct() {
               Quita la Capa
             </Button>
           </div>
+          {/*
+          <div className="flex flex-col mt-10 text-center">
+            <div className="flex flex-col w-auto space sm:flex-row justify-evenly">
+              <Button
+                type="button"
+                variant={
+                  !present?.stock || present.stock < 1 ? "ghost" : "secondary"
+                }
+                className={`${(!present?.stock || present.stock < 1) && "hover:bg-red-500 hover:border-red-500"} m-4 mt-0 sm:m-auto text-center text-base py-7 w-auto rounded-full border-2 border-primary transition-transform duration-200 active:scale-90`}
+                onClick={() => handleCart("addToCart")}
+                disabled={present?.stock < 1 || present === undefined}
+              >
+                Añadir al Carrito
+              </Button>
+              <Button
+                type="button"
+                className={`${(!present?.stock || present.stock < 1) && "hidden"} m-4 mt-0 sm:m-auto text-center text-base py-7 rounded-full transition-transform duration-200 active:scale-90`}
+                onClick={() => handleCart("realizar")}
+              >
+                Realizar Pedido
+              </Button>
+            </div>
+            {(!present?.stock || present.stock < 1) && (
+              <div className="flex justify-center items-center p-2 text-center">
+                <CircleX className="h-5 w-5 flex-shrink-0 text-red-500 mr-2" />
+                <Label className=" text-red-500">No hay stock disponible</Label>
+              </div>
+            )}
+          </div> */}
 
           <div className="space-y-2">
             <Label>Capas Agregadas:</Label>
