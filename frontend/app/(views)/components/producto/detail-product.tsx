@@ -25,7 +25,7 @@ export default function DetailProduct({
   extraList: Producto[] | undefined;
 }) {
   // Zustand
-  const { addToCart } = usePedidoStore();
+  const { addToCart, checkSameItem } = usePedidoStore();
   const router = useRouter();
   // Estados
   const [extras, setExtras] = useState<Producto[]>([]);
@@ -55,7 +55,16 @@ export default function DetailProduct({
 
   const handleCart = (type: string) => {
     const id = `${product.id}-${present?.id}`;
-    addToCart({ id, product, present, quantity: 1 });
+    // Checkeo si ya hy un valor igual
+    if (
+      !(
+        type === "realizar" &&
+        checkSameItem({ id, product, present, quantity: 1 })
+      ) ||
+      !(present.stock < 1)
+    ) {
+      addToCart({ id, product, present, quantity: 1 });
+    }
     if (extras.length > 0) {
       extras.map((product) => {
         const present = product.presentaciones[0] || undefined;
@@ -66,6 +75,8 @@ export default function DetailProduct({
       router.push("/pedido/caja");
     }
   };
+
+  console.log(present);
 
   return (
     <div className="max-w-2xl mx-4 px-8 py-16 pt-6 sm:px-6 sm:py-24 sm:pt-6 sm:mx-8 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 xl:max-w-full">
@@ -139,14 +150,15 @@ export default function DetailProduct({
                   variant={
                     !present?.stock || present.stock < 1 ? "ghost" : "secondary"
                   }
-                  className={`${(!present?.stock || present.stock < 1) && "hover:bg-red-500 hover:border-red-500"} m-4 mt-0 sm:m-auto text-center text-base py-7 w-auto rounded-full border-2 border-primary`}
+                  className={`${(!present?.stock || present.stock < 1) && "hover:bg-red-500 hover:border-red-500"} m-4 mt-0 sm:m-auto text-center text-base py-7 w-auto rounded-full border-2 border-primary transition-transform duration-200 active:scale-90`}
                   onClick={() => handleCart("addToCart")}
+                  disabled={present?.stock < 1 || present === undefined}
                 >
                   Añadir al Carrito
                 </Button>
                 <Button
                   type="button"
-                  className={`${(!present?.stock || present.stock < 1) && "hidden"} m-4 mt-0 sm:m-auto text-center text-base py-7 rounded-full`}
+                  className={`${(!present?.stock || present.stock < 1) && "hidden"} m-4 mt-0 sm:m-auto text-center text-base py-7 rounded-full transition-transform duration-200 active:scale-90`}
                   onClick={() => handleCart("realizar")}
                 >
                   Realizar Pedido

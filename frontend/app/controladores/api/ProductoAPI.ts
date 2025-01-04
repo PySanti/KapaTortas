@@ -1,4 +1,4 @@
-import { Producto } from '@/app/models/Producto';
+import { Producto } from "@/app/models/Producto";
 
 class ProductoAPI {
   private static instance: ProductoAPI;
@@ -15,18 +15,20 @@ class ProductoAPI {
 
   // Metodo para obtener el Producto
   public async obtenerListaProductos(): Promise<Producto[] | null> {
-    const url = `http://localhost:8000/api/productos/all_productos`;
+    const url = `http://localhost:8000/api/productos/all_productos/`;
+
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      cache: 'no-store',
+      cache: "no-store",
     });
 
     if (!response.ok) throw new Error(`Error: ${response.status}`);
 
     const data = await response.json();
+
     return data.productos;
   }
 
@@ -36,9 +38,9 @@ class ProductoAPI {
 
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -52,7 +54,7 @@ class ProductoAPI {
 
       return data.producto;
     } catch (err) {
-      console.error('Error en la petición del producto: ', err);
+      console.error("Error en la petición del producto: ", err);
       return null;
     }
   }

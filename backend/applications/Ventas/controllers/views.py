@@ -34,7 +34,7 @@ class CrearPedidoAPI(APIView):
         from applications.Productos.models import (Productos,Presentaciones)
         try:
             serialized_data = kwargs['serialized_data']
-            if cliente:=Clientes.objects.filter(id=serialized_data["cliente_id"]):
+            if cliente:=Clientes.objects.filter(perfil__correo=serialized_data["correo_cliente"]):
                 new_pedido = Pedidos.objects.create(
                     numero_de_orden=randint(10000, 99999),
                     cliente_asociado=cliente[0],
@@ -47,13 +47,15 @@ class CrearPedidoAPI(APIView):
                 for d in serialized_data["descripciones"]:
                     new_descripcion = DescripcionesPedido.objects.create(
                         cantidad=d["cantidad"],
-                        producto_asociado=Productos.objects.get(id=d["id_producto"]),
                         presentacion_asociada=Presentaciones.objects.get(id=d["id_presentacion"]),
                         pedido_asociado=new_pedido
                     )
-                    monto_total += new_descripcion.presentacion_asociada.precio*new_descripcion.cantidad
+                    # Access producto_asociado via presentacion_asociada if needed
+                    monto_total += new_descripcion.presentacion_asociada.precio * new_descripcion.cantidad
+
                 new_pedido.monto_total = monto_total
                 new_pedido.save()
+
                 return JsonResponse({'pedido' : Pedidos.objects.get_pedido_json(new_pedido)}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({'error' : "no_cliente_found"}, status=status.HTTP_400_BAD_REQUEST)
@@ -130,6 +132,3 @@ class EditarEstadoPedidoAPI(APIView):
                 return JsonResponse({'error' : 'pedido_not_found'}, status=status.HTTP_404_NOT_FOUND)
         except:
             return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-

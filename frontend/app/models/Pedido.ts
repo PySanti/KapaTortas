@@ -1,25 +1,34 @@
 // Cambiar esto
 export enum EstadoEnum {
-  PENDIENTE = 'pendiente',
-  CANCELADO = 'cancelado',
-  FINALIZADO = 'finalizado',
+  PENDIENTE = "pendiente",
+  CANCELADO = "cancelado",
+  FINALIZADO = "finalizado",
 }
 
 export enum MetodoPago {
-  ZELLE = 'zelle',
-  PAGO_MOVIL = 'pago_movil',
-  STRIPE = 'stripe',
+  ZELLE = "zelle",
+  PAGO_MOVIL = "pago_movil",
+  STRIPE = "stripe",
 }
 
 export enum MetodoEntrega {
-  PICKUP = 'pickup',
-  DELIVERY = 'delivery',
+  PICKUP = "pickup",
+  DELIVERY = "delivery",
 }
 
 export type formatDescripciones = {
   cantidad: number;
   id_producto: number;
   id_presentacion: number;
+};
+
+// Precios front
+
+export type Precios = {
+  subtotal: number;
+  iva: number;
+  total: number;
+  deliveryPrice: number;
 };
 
 // WS
@@ -61,7 +70,7 @@ export interface DireccionEntrega {
   direccion: string;
   referencia: string;
   codigo_postal: number;
-  is_favorite: boolean;
+  is_favorite?: boolean;
 }
 
 export interface Descripcion {

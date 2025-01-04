@@ -1,5 +1,6 @@
-import { Pedido } from '@/app/models/Pedido';
-import { Venta } from '@/app/models/venta';
+import { Pedido } from "@/app/models/Pedido";
+import { CartItem } from "@/src/usePedidoStore";
+import { Venta } from "@/app/models/venta";
 
 // Tiene un singleton
 class PedidoAPI {
@@ -17,16 +18,16 @@ class PedidoAPI {
   // Trae todos los pedidos del cliente iniciado
   public async obtenerPedidosCliente(email: string): Promise<Pedido[] | null> {
     const url = `http://localhost:8000/api/perfiles/buscar_pedidos_cliente/${encodeURIComponent(
-      email
+      email,
     )}`;
 
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        cache: 'no-store',
+        cache: "no-store",
       });
 
       if (!response.ok) throw new Error(`Error: ${response.status}`);
@@ -35,7 +36,10 @@ class PedidoAPI {
 
       return data.pedidos;
     } catch (err) {
-      console.error('Error en la peticion de consultar pedidos del cliente: ', err);
+      console.error(
+        "Error en la peticion de consultar pedidos del cliente: ",
+        err,
+      );
       return null;
     }
   }
@@ -46,11 +50,11 @@ class PedidoAPI {
 
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        cache: 'no-store',
+        cache: "no-store",
       });
 
       if (!response.ok) throw new Error(`Error: ${response.status}`);
@@ -59,7 +63,7 @@ class PedidoAPI {
 
       return data.pedidos;
     } catch (err) {
-      console.error('Error en la peticion de consultar pedidos: ', err);
+      console.error("Error en la peticion de consultar pedidos: ", err);
       return null;
     }
   }
@@ -70,11 +74,11 @@ class PedidoAPI {
 
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        cache: 'no-store',
+        cache: "no-store",
       });
 
       if (!response.ok) throw new Error(`Error: ${response.status}`);
@@ -83,7 +87,53 @@ class PedidoAPI {
 
       return data.ventas;
     } catch (err) {
-      console.error('Error en la peticion de consultar ventas: ', err);
+      console.error("Error en la peticion de consultar ventas: ", err);
+      return null;
+    }
+  }
+
+  // // POST Pedido
+  public async postPedido(
+    correo_cliente: string,
+    metodo_entrega: string,
+    metodo_pago: string,
+    direccion_entrega_id: number,
+    items: CartItem[],
+  ): Promise<Pedido | null> {
+    const url = `http://localhost:8000/api/pedidos/crear/`;
+
+    const body = JSON.stringify({
+      correo_cliente: correo_cliente,
+      metodo_entrega: metodo_entrega,
+      metodo_pago: metodo_pago,
+      direccion_entrega_id: direccion_entrega_id,
+      descripciones: items.map((item) => {
+        return {
+          cantidad: item.quantity,
+          id_producto: item.product.id,
+          id_presentacion: item.present?.id,
+        };
+      }),
+    });
+
+    console.log("BODY", body);
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body,
+      });
+
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error("Error al postear el pedido: ", err);
       return null;
     }
   }

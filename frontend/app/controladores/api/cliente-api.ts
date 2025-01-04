@@ -1,7 +1,7 @@
-import { Cliente } from '@/app/models/Cliente';
-import { DireccionEntrega } from '@/app/models/Pedido';
-import { Perfil } from '@/app/models/Perfil';
-import { DireccionEnvioType } from '../lib/validations/direccion-envio';
+import { Cliente } from "@/app/models/Cliente";
+import { DireccionEntrega } from "@/app/models/Pedido";
+import { Perfil } from "@/app/models/Perfil";
+import { DireccionEnvioType } from "../lib/validations/direccion-envio";
 
 // Tiene un singleton
 class ClienteAPI {
@@ -22,11 +22,11 @@ class ClienteAPI {
     const url = `http://localhost:8000/api/perfiles/${encodeURIComponent(email)}`;
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        cache: 'no-cache',
+        cache: "no-cache",
       });
 
       if (!response.ok) {
@@ -38,24 +38,26 @@ class ClienteAPI {
       return data;
     } catch (err) {
       console.error(email);
-      console.error('Error en la peticion de consultar cliente: ', err);
+      console.error("Error en la peticion de consultar cliente: ", err);
       return null;
     }
   }
 
   // Metodo para obtener direcciones de envio del Cliente
-  public async obtenerDireccionesEnvio(email: string): Promise<DireccionEntrega[] | null> {
+  public async obtenerDireccionesEnvio(
+    email: string,
+  ): Promise<DireccionEntrega[] | null> {
     const url = `http://localhost:8000/api/perfiles/buscar_direcciones_cliente/${encodeURIComponent(
-      email
+      email,
     )}`;
 
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        cache: 'no-store',
+        cache: "no-store",
       });
 
       if (!response.ok) {
@@ -66,7 +68,10 @@ class ClienteAPI {
       // console.log(data);
       return data.direcciones;
     } catch (err) {
-      console.error('Error en la peticion de consultar direcciones de envio: ', err);
+      console.error(
+        "Error en la peticion de consultar direcciones de envio: ",
+        err,
+      );
       return null;
     }
   }
@@ -77,7 +82,7 @@ class ClienteAPI {
     new_nombre_completo?: string | null,
     new_password?: string | null,
     new_numero_telefonico?: string | null,
-    new_fecha_nacimiento?: string | null
+    new_fecha_nacimiento?: string | null,
   ): Promise<Perfil | null> {
     const url = `http://127.0.0.1:8000/api/perfiles/editar/`;
 
@@ -92,9 +97,9 @@ class ClienteAPI {
 
     try {
       const response = await fetch(url, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: body,
       });
@@ -105,10 +110,10 @@ class ClienteAPI {
 
       // Handle the response data, you can return success or additional data
       const data = await response.json();
-      console.log('Datos actualizados:', data);
+      console.log("Datos actualizados:", data);
       return data.new_profile;
     } catch (err) {
-      console.error('Error al actualizar la información del cliente: ', err);
+      console.error("Error al actualizar la información del cliente: ", err);
       return null;
     }
   }
@@ -118,9 +123,9 @@ class ClienteAPI {
 
     try {
       const response = await fetch(url, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -130,44 +135,82 @@ class ClienteAPI {
 
       // Handle the response data, you can return success or additional data
       const data = await response.json();
-      console.log('Perfil eliminado:', data);
+      console.log("Perfil eliminado:", data);
       return true;
     } catch (error) {
-      console.error('Error al eliminar el perfil: ', error);
+      console.error("Error al eliminar el perfil: ", error);
       return false;
     }
   }
 
-  public async agregarDireccionEnvio(direccion: DireccionEnvioType): Promise<Response> {
-    const url = 'http://localhost:8000/api/clientes/crear_direccion/';
+  public async agregarDireccionEnvio(
+    direccion: DireccionEnvioType,
+  ): Promise<Response> {
+    const url = "http://localhost:8000/api/clientes/crear_direccion/";
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: direccion.id,
-                pais: direccion.pais,
-                ciudad: direccion.ciudad,
-                estado: direccion.estado,
-                direccion: direccion.direccion,
-                referencia: direccion.referencia,
-                codigo_postal: direccion.codigo_postal,
-                correo_cliente: direccion.correo_cliente
-            }),
-        });
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: direccion.id,
+          pais: direccion.pais,
+          ciudad: direccion.ciudad,
+          estado: direccion.estado,
+          direccion: direccion.direccion,
+          referencia: direccion.referencia,
+          codigo_postal: direccion.codigo_postal,
+          correo_cliente: direccion.correo_cliente,
+        }),
+      });
 
-        // Check if the response is ok
-        if (!response.ok) {
-            throw new Error(`HTTP error, Status: ${response.status}`);
-        }
+      // Check if the response is ok
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
 
-        return response; // Return the Response object
+      return response; // Return the Response object
     } catch (error) {
-        console.error('Error al agregar nueva dirección:', error);
-        throw error;
+      console.error("Error al agregar nueva dirección:", error);
+      throw error;
+    }
+  }
+  // Postear dirección
+  public async crearDireccionCliente(
+    email: string,
+    direccion: string,
+    codigo_postal: number,
+    ref?: string,
+  ): Promise<number | null> {
+    const url = `http://localhost:8000/api/clientes/crear_direccion/`;
+
+    const body = JSON.stringify({
+      correo_cliente: email,
+      // Cambiar esto pronto
+      estado: "Dto Capital",
+      direccion: direccion,
+      referencia: ref,
+      codigo_postal: codigo_postal,
+    });
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data?.new_direccion.id;
+    } catch (err) {
+      console.error("Error al postear la dirección: ", err);
+      return null;
     }
   }
 }
