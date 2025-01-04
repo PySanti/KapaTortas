@@ -66,9 +66,24 @@ export default function DetailProduct({
       addToCart({ id, product, present, quantity: 1 });
     }
     if (extras.length > 0) {
-      extras.map((product) => {
-        const present = product.presentaciones[0] || undefined;
-        addToCart({ id, product, present, quantity: 1 });
+      extras.map((extra) => {
+        const presentExtra = extra.presentaciones[0] || undefined;
+        const idExtra = `${extra.id}-${presentExtra?.id}`;
+        if (
+          !checkSameItem({
+            id: idExtra,
+            product: extra,
+            present: presentExtra,
+            quantity: 1,
+          })
+        ) {
+          return addToCart({
+            id: idExtra,
+            product: extra,
+            present: presentExtra,
+            quantity: 1,
+          });
+        }
       });
     }
     if (type === "realizar") {
