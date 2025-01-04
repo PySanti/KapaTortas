@@ -98,13 +98,13 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                       Número de orden: {pedido.numero_de_orden}
                     </div>
                     <div className="flex space-x-4">
-                      <Button
+                      {/* <Button
                         // href={`/pedido/${pedido.numero_de_orden}`}
                         className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
                       >
                         <span>Ver Orden</span>
                         <span className="sr-only">{pedido.numero_de_orden}</span>
-                      </Button>
+                      </Button> */}
                       <Button
                         // href={`/pedido/${pedido.numero_de_orden}`}
                         className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
