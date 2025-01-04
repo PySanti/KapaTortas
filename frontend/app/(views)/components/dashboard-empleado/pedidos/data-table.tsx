@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   ColumnDef,
@@ -10,7 +10,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -19,11 +19,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/app/(views)/components/ui/table';
-import { useState } from 'react';
-
-import { Button } from '@/app/(views)/components/ui/button';
-import { Input } from '@/app/(views)/components/ui/input';
+} from "@/app/(views)/components/ui/table";
+import { useState } from "react";
+import { Button } from "@/app/(views)/components/ui/button";
+import { Input } from "@/app/(views)/components/ui/input";
+import { DialogCambiarEstadoPedido } from "../../dialog-cambiar-estado-pedido";
+import { Pedido } from "@/app/models/Pedido";
+import { EstadoEnum } from "@/app/models/Pedido";
 
 interface DataTablePedidosProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,7 +35,7 @@ interface DataTablePedidosProps<TData, TValue> {
 export function DataTablePedidos<TData, TValue>({
   columns,
   data,
-}: DataTablePedidosProps<TData, TValue>) {
+}: DataTablePedidosProps<Pedido, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -63,17 +65,17 @@ export function DataTablePedidos<TData, TValue>({
 
   return (
     <>
-      <div className='flex items-center py-4'>
+      <div className="flex items-center py-4">
         <Input
-          placeholder='Filtrar por nro de orden'
-          value={(table.getColumn('numero_de_orden')?.getFilterValue() as string) ?? ''}
+          placeholder="Filtrar por nro de orden"
+          value={(table.getColumn("numero_de_orden")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn('numero_de_orden')?.setFilterValue(event.target.value)
+            table.getColumn("numero_de_orden")?.setFilterValue(event.target.value)
           }
-          className='max-w-sm'
+          className="max-w-sm"
         />
       </div>
-      <div className='rounded-md border'>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -97,17 +99,27 @@ export function DataTablePedidos<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {cell.column.id === "estado" ? (
+                        <div className="flex items-center gap-2">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          <DialogCambiarEstadoPedido
+                            orderId={String(row.original.numero_de_orden)}
+                            currentStatus={row.original.estado as EstadoEnum}
+                          />
+                        </div>
+                      ) : (
+                        flexRender(cell.column.columnDef.cell, cell.getContext())
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className='h-24 text-center'>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
@@ -115,23 +127,23 @@ export function DataTablePedidos<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
-        <div className='flex-1 text-sm text-muted-foreground'>
-          {table.getFilteredSelectedRowModel().rows.length} de{' '}
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} de{" "}
           {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s)
         </div>
-        <div className='space-x-2'>
+        <div className="space-x-2">
           <Button
-            variant='outline'
-            size='sm'
+            variant="outline"
+            size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
             Anterior
           </Button>
           <Button
-            variant='outline'
-            size='sm'
+            variant="outline"
+            size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
