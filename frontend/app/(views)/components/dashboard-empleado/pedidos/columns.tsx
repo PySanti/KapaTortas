@@ -19,8 +19,10 @@ import { cn } from "@/app/controladores/lib/utils";
 // Helper para obtener el estilo de un badge según el estado del pedido
 function getBadgeVariant(estado: string) {
   switch (estado) {
-    case EstadoEnum.PENDIENTE:
-      return "default"; // Style for 'pendiente'
+    case EstadoEnum.RECIBIDO:
+      return "gray"; // Style for 'recibido'
+    case EstadoEnum.EN_PROCESO:
+      return "default"; // Style for 'en_proceso'
     case EstadoEnum.CANCELADO:
       return "destructive"; // Style for 'en_proceso'
     case EstadoEnum.FINALIZADO:
@@ -156,7 +158,10 @@ export const columnsPedidos: ColumnDef<Pedido>[] = [
       return (
         <Badge
           variant={getBadgeVariant(estado)}
-          className={cn(estado === "pendiente" ? "text-black" : "text-white", "font-medium")}
+          className={cn(
+            estado === EstadoEnum.EN_PROCESO ? "text-white" : "text-black",
+            "font-medium"
+          )}
         >
           {capitalizeFirstLetter(estado)}
         </Badge>

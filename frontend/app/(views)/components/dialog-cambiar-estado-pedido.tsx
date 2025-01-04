@@ -23,9 +23,10 @@ import capitalizeFirstLetter from "@/app/controladores/utilities/capitalize-firs
 import { Badge } from "./ui/badge";
 
 const estados = [
-  // { label: "Pendiente", value: EstadoEnum.PENDIENTE },
-  { label: "Finalizado", value: EstadoEnum.FINALIZADO },
+  //{ label: "Recibido", value: EstadoEnum.RECIBIDO },
+  { label: "En proceso", value: EstadoEnum.EN_PROCESO },
   { label: "Cancelado", value: EstadoEnum.CANCELADO },
+  { label: "Finalizado", value: EstadoEnum.FINALIZADO },
 ];
 
 interface DialogCambiarEstadoPedidoProps {
