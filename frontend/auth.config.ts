@@ -140,6 +140,7 @@ export default {
             });
 
             if (!response.ok) {
+              console.log('Error en llamado al endpoint de google (backend) django');
               return false;
             }
 
