@@ -19,7 +19,7 @@ class ClienteAPI {
 
   // Metodo para obtener el Cliente
   public async obtenerCliente(email: string): Promise<Cliente | null> {
-    const url = `http://localhost:8000/api/perfiles/${encodeURIComponent(email)}`;
+    const url = `http://localhost:8000/api/perfiles/${encodeURIComponent(email)}/`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -49,7 +49,7 @@ class ClienteAPI {
   ): Promise<DireccionEntrega[] | null> {
     const url = `http://localhost:8000/api/perfiles/buscar_direcciones_cliente/${encodeURIComponent(
       email,
-    )}`;
+    )}/`;
 
     try {
       const response = await fetch(url, {
@@ -119,7 +119,7 @@ class ClienteAPI {
   }
 
   public async eliminarPerfil(email: string): Promise<boolean> {
-    const url = `http://localhost:8000/api/perfiles/eliminar/${encodeURIComponent(email)}`;
+    const url = `http://localhost:8000/api/perfiles/eliminar/${encodeURIComponent(email)}/`;
 
     try {
       const response = await fetch(url, {
