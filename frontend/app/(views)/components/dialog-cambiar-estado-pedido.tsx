@@ -51,7 +51,7 @@ export function DialogCambiarEstadoPedido({
   currentStatus,
 }: DialogCambiarEstadoPedidoProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [status, setStatus] = useState(EstadoEnum.FINALIZADO); // Default to Finalizado
+  const [status, setStatus] = useState(EstadoEnum.EN_PROCESO); // Default to En Proceso
 
   const handleStatusChange = () => {
     onStatusChange(orderId, status);
