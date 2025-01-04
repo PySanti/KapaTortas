@@ -149,22 +149,21 @@ class ClienteAPI {
     const url = "http://localhost:8000/api/clientes/crear_direccion/";
 
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: direccion.id,
-          pais: direccion.pais,
-          ciudad: direccion.ciudad,
-          estado: direccion.estado,
-          direccion: direccion.direccion,
-          referencia: direccion.referencia,
-          codigo_postal: direccion.codigo_postal,
-          correo_cliente: direccion.correo_cliente,
-        }),
-      });
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                pais: direccion.pais,
+                ciudad: direccion.ciudad,
+                estado: direccion.estado,
+                direccion: direccion.direccion,
+                referencia: direccion.referencia,
+                codigo_postal: direccion.codigo_postal,
+                correo_cliente: direccion.correo_cliente
+            }),
+        });
 
       // Check if the response is ok
       if (!response.ok) {
