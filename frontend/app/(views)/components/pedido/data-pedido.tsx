@@ -44,8 +44,9 @@ export default function DataPedido({
 }) {
   // Current user
   const session = getCurrentUser();
+
   // Zustand
-  const { cartItems } = usePedidoStore();
+  const { cartItems, clearCart } = usePedidoStore();
 
   const [delivery, setDelivery] = useState<MetodoEntrega>(
     MetodoEntrega.DELIVERY,
@@ -96,6 +97,7 @@ export default function DataPedido({
       // Si tenemos un ID de dirección, proceder a crear el pedido
       if (direccionId) {
         await handleCrearPedido(direccionId);
+        clearCart();
       } else {
         console.error("No se pudo obtener un ID de dirección.");
       }
@@ -226,13 +228,21 @@ export default function DataPedido({
         </div>
 
         <PaymentSelector pago={pago} setPago={setPago} />
-        <Button
-          type="submit"
-          className="mt-8 text-xl text-center ml-4"
-          disabled={cartItems.length <= 0}
-        >
-          Procesar Pedido
-        </Button>
+        <div className="flex flex-col items-center">
+          {" "}
+          <Button
+            type="submit"
+            className="mt-8 text-xl text-center ml-4"
+            disabled={!session || cartItems.length <= 0}
+          >
+            Procesar Pedido
+          </Button>
+          {!session && (
+            <span className="text-red-400 text-sm font-medium ml-4 mt-2">
+              No puedes realizar un pedido sin una sesión activa
+            </span>
+          )}
+        </div>
       </form>
     </section>
   );
