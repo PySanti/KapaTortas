@@ -32,7 +32,15 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('numero_de_orden', models.IntegerField()),
                 ('monto_total', models.DecimalField(decimal_places=2, max_digits=7)),
-                ('estado', models.CharField(choices=[('pendiente', 'PENDIENTE'), ('cancelado', 'CANCELADO'), ('finalizado', 'FINALIZADO')], default=backend.utils.constants.EstadoEnum['PENDIENTE'])),
+                ('estado', models.CharField(
+                            choices=[
+                                ('recibido', 'RECIBIDO'),
+                                ('en_proceso', 'EN_PROCESO'),
+                                ('cancelado', 'CANCELADO'),
+                                ('finalizado', 'FINALIZADO'),
+                            ],
+                            default=backend.utils.constants.EstadoEnum.RECIBIDO.value  # Fixed
+                        )),
                 ('metodo_pago', models.CharField(choices=[('zelle', 'ZELLE'), ('pago_movil', 'PAGO_MOVIL'), ('stripe', 'STRIPE')], default=backend.utils.constants.MetodoPagoEnum['PAGO_MOVIL'])),
                 ('metodo_entrega', models.CharField(choices=[('pickup', 'PICKUP'), ('delivery', 'DELIVERY')], default=backend.utils.constants.MetodoEntregaEnum['PICKUP'])),
                 ('cliente_asociado', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='pedidos', to='Clientes.clientes')),

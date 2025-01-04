@@ -1,28 +1,29 @@
 from rest_framework.response import Response
 from rest_framework import status
-from enum import Enum  
+from enum import Enum
 
-class DeliveryZoneEnum(Enum):  
-    CENTRO_HISTORICO = 1  
-    LA_CANDELARIA = 1  
-    SABANA_GRANDE = 2  
-    EL_ROSAL = 2  
-    CHACAO = 2  
-    ALTAMIRA = 3  
-    LAS_MERCEDES = 3  
-    LA_URBINA = 3  
-    PETARE = 4  
-    EL_HATILLO = 4  
-    LOS_TEQUES = 4  
+class DeliveryZoneEnum(Enum):
+    CENTRO_HISTORICO = 1
+    LA_CANDELARIA = 1
+    SABANA_GRANDE = 2
+    EL_ROSAL = 2
+    CHACAO = 2
+    ALTAMIRA = 3
+    LAS_MERCEDES = 3
+    LA_URBINA = 3
+    PETARE = 4
+    EL_HATILLO = 4
+    LOS_TEQUES = 4
 
-class RolEnum(Enum):  
-    ADMIN = 'administrador'  
-    EMPLEADO = 'empleado'  
+class RolEnum(Enum):
+    ADMIN = 'administrador'
+    EMPLEADO = 'empleado'
     CLIENTE = 'cliente'
 
 
 class EstadoEnum(Enum):
-    PENDIENTE = "pendiente"
+    RECIBIDO = "recibido"
+    EN_PROCESO = "en_proceso"
     CANCELADO = "cancelado"
     FINALIZADO = "finalizado"
 
