@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from backend.utils.constants import (
+    EstadoEnum,
     MetodoPagoEnum,
     MetodoEntregaEnum
 )
@@ -34,4 +35,7 @@ class ConsultarFacturaByIdSerializer(serializers.Serializer):
 
 class EditarEstadoPedidoSerializer(serializers.Serializer):
     numero_orden = serializers.IntegerField(required=True)
-    cancelado = serializers.BooleanField(required=True)
+    estado = serializers.ChoiceField(
+        choices=[(estado.value, estado.name) for estado in EstadoEnum],
+        required=True
+    )

@@ -31,7 +31,8 @@ class Pedidos(models.Model):
     iva                     = models.FloatField(null=True, blank=True)
     monto_total             = models.FloatField(null=True, blank=True)
     nota                    = models.TextField(null=True, blank=True, default=None)
-    estado                  = models.CharField(choices=[(role.value, role.name) for role in EstadoEnum], default=EstadoEnum.PENDIENTE)
+
+    estado                  = models.CharField(choices=[(role.value, role.name) for role in EstadoEnum], default=EstadoEnum.RECIBIDO)
     metodo_pago             = models.CharField(choices=[(role.value, role.name) for role in MetodoPagoEnum], default=MetodoPagoEnum.PAGO_MOVIL)
     metodo_entrega          = models.CharField(choices=[(role.value, role.name) for role in MetodoEntregaEnum], default=MetodoEntregaEnum.PICKUP)
     direccion_entrega       = models.ForeignKey(DireccionesEnvio, related_name="pedidos",null=True, on_delete=models.SET_NULL )

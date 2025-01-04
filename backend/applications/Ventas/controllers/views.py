@@ -44,12 +44,11 @@ class CrearPedidoAPI(APIView):
                     iva = serialized_data["iva"],
                     nota = serialized_data["nota"],
                     ##
-                    estado = "pendiente",
+                    estado = "recibido",
                     direccion_entrega=DireccionesEnvio.objects.get(id=serialized_data['direccion_entrega_id'])
                 )
                 # Lo hice yo Daniel
                 monto_total = serialized_data["precio"];
-
 
                 for d in serialized_data["descripciones"]:
                     new_descripcion = DescripcionesPedido.objects.create(
@@ -109,20 +108,23 @@ class ConsultarFacturaByIdAPI(APIView):
 
 
 class EditarEstadoPedidoAPI(APIView):
-    serializer_class        = EditarEstadoPedidoSerializer
-    authentication_classes  = []
-    permission_classes      = [AllowAny]
-
+    serializer_class = EditarEstadoPedidoSerializer
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     @base_serializercheck_decorator
     def patch(self, request, *args, **kwargs):
         from applications.Ventas.models import Ventas
+
         serialized_data = kwargs['serialized_data']
         try:
-            if pedido:=Pedidos.objects.filter(numero_de_orden=serialized_data['numero_orden']):
-                pedido = pedido[0]
-                pedido.estado = EstadoEnum.CANCELADO.value if serialized_data['cancelado']==True else EstadoEnum.FINALIZADO.value
+            # Find the pedido by numero_de_orden
+            if pedido := Pedidos.objects.filter(numero_de_orden=serialized_data['numero_orden']).first():
+                # Update the estado with the provided value
+                pedido.estado = serialized_data['estado']
                 pedido.save()
+
+                # Handle finalization logic
                 if pedido.estado == EstadoEnum.FINALIZADO.value:
                     new_venta = Ventas.objects.create(pedido=pedido)
                     new_factura = Facturas.objects.create(venta_asociada=new_venta)
@@ -131,9 +133,9 @@ class EditarEstadoPedidoAPI(APIView):
                         correo=pedido.cliente_asociado.perfil.correo,
                         html_content=factura_mail_html_content(factura=new_factura)
                     )
-                    pass
-                return JsonResponse({'modificado':True}, status=status.HTTP_200_OK)
+
+                return JsonResponse({'modificado': True}, status=status.HTTP_200_OK)
             else:
-                return JsonResponse({'error' : 'pedido_not_found'}, status=status.HTTP_404_NOT_FOUND)
-        except:
-            return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse({'error': 'pedido_not_found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return JsonResponse({'error': 'unexpected_error', 'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)

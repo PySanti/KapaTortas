@@ -22,7 +22,8 @@ class RolEnum(Enum):
 
 
 class EstadoEnum(Enum):
-    PENDIENTE = "pendiente"
+    RECIBIDO = "recibido"
+    EN_PROCESO = "en_proceso"
     CANCELADO = "cancelado"
     FINALIZADO = "finalizado"
 

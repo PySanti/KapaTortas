@@ -104,7 +104,7 @@ export default {
     //* Create a customer in stripe for the user. This works only for the google provider
     createUser: async ({ user }) => {
       // 1. Create a customer in Stripe
-      if (user.name && user.email) {
+      if (user.name && user.email && user.rol === Rol.CLIENTE) {
         const customer = await stripe.customers.create({
           email: user.email,
           name: user.name,
