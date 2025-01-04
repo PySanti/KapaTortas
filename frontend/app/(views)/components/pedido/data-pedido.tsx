@@ -8,7 +8,7 @@ import {
   DireccionFormData,
 } from "@/app/controladores/lib/validations/direccion-schema";
 
-import { DireccionEntrega, ItemFormat } from "@/app/models/Pedido";
+import { DireccionEntrega, ItemFormat, Pedido } from "@/app/models/Pedido";
 import { Button } from "../ui/button";
 import { RadioGroup, Label, Description, Radio } from "@headlessui/react";
 import { CheckCircleIcon } from "lucide-react";
@@ -24,6 +24,7 @@ import { usePedidoStore } from "@/src/usePedidoStore";
 import getCurrentUser from "@/app/controladores/utilities/get-current-user";
 import ClienteAPI from "@/app/controladores/api/cliente-api";
 import pedidoApi from "@/app/controladores/api/pedido-api";
+import redirectToWhatsapp from "@/app/controladores/utilities/redirect-to-whatsapp";
 
 // Default values
 const deliveryMetodosList = [
@@ -44,6 +45,7 @@ export default function DataPedido({
 }) {
   // Current user
   const session = getCurrentUser();
+  console.log(session);
 
   // Zustand
   const { cartItems, clearCart } = usePedidoStore();
@@ -96,7 +98,11 @@ export default function DataPedido({
 
       // Si tenemos un ID de dirección, proceder a crear el pedido
       if (direccionId) {
-        await handleCrearPedido(direccionId);
+        const pedido = await handleCrearPedido(direccionId);
+        redirectToWhatsapp({
+          pedidoDetails: pedido,
+          name: session?.name || "Cliente",
+        });
         clearCart();
       } else {
         console.error("No se pudo obtener un ID de dirección.");
@@ -138,12 +144,13 @@ export default function DataPedido({
   };
 
   // Manejar la creación del pedido
-  const handleCrearPedido = async (direccionId: number) => {
+  const handleCrearPedido = async (
+    direccionId: number,
+  ): Promise<Pedido | null> => {
     const cliente = await ClienteAPI.obtenerCliente(session?.email || "");
-    console.log(cliente);
 
     if (cliente) {
-      await pedidoApi.postPedido(
+      const pedido = await pedidoApi.postPedido(
         session?.email || "",
         delivery,
         pago,
@@ -152,8 +159,10 @@ export default function DataPedido({
         cartItems,
       );
       console.log("Pedido creado con éxito.");
+      return pedido;
     } else {
       console.error("Error al obtener el cliente.");
+      return null;
     }
   };
 
