@@ -32,21 +32,21 @@ export default function PersonalizarProduct() {
   };
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2 gap-8 p-6 lg:p-12">
-      {/* Información y controles */}
-      <div className="flex flex-col gap-8">
+    <div className="min-h-screen grid gap-8 lg:grid-cols-2 p-4 sm:p-6 lg:p-12">
+      {/* Information and Controls */}
+      <div className="flex flex-col gap-6">
         <div>
-          <h1 className="text-3xl lg:text-4xl font-bold text-primary mb-2">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-2">
             Crea tu Torta
           </h1>
-          <p className="text-sm lg:text-base text-terciary">
+          <p className="text-sm sm:text-base text-terciary">
             Selecciona los sabores para crear tu torta preferida, capa por capa
           </p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div>
-            <Label className="text-base lg:text-lg mb-4">
+            <Label className="text-base sm:text-lg mb-2 sm:mb-4">
               Selecciona el sabor (3 sabores)
             </Label>
             <RadioGroup
@@ -64,7 +64,7 @@ export default function PersonalizarProduct() {
                   className="flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-secondary [&:has(:checked)]:bg-secondary"
                 >
                   <RadioGroupItem value={sabor.id} id={sabor.id} />
-                  <span className="text-sm lg:text-base">{sabor.name}</span>
+                  <span className="text-sm sm:text-base">{sabor.name}</span>
                   <div
                     className="ml-auto w-6 h-6 rounded-full border"
                     style={{ backgroundColor: sabor.color }}
@@ -96,7 +96,7 @@ export default function PersonalizarProduct() {
             <Label>Capas Agregadas:</Label>
             <div className="space-y-2">
               {capas.length === 0 ? (
-                <p className="text-sm lg:text-base text-muted">
+                <p className="text-sm sm:text-base text-muted">
                   No hay capas agregadas aún
                 </p>
               ) : (
@@ -111,7 +111,7 @@ export default function PersonalizarProduct() {
                       className="w-4 h-4 rounded-full"
                       style={{ backgroundColor: capa.color }}
                     />
-                    <span className="text-sm lg:text-base">
+                    <span className="text-sm sm:text-base">
                       Capa {index + 1}: {capa.sabor}
                     </span>
                   </motion.div>
@@ -122,8 +122,8 @@ export default function PersonalizarProduct() {
         </div>
       </div>
 
-      {/* Vista 3D */}
-      <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] bg-secondary-light rounded-lg">
+      {/* 3D View */}
+      <div className="relative h-[300px] sm:h-[400px] lg:h-[600px] bg-secondary-light rounded-lg">
         <Canvas camera={{ position: [0, 2, 5], fov: 75 }}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
