@@ -3,9 +3,11 @@ from django.conf import settings
 from backend.utils.constants import RolEnum
 from backend.utils.google import Google
 from backend.utils.register import register_social_user
-from rest_framework.exceptions import AuthenticationFailed  
+from rest_framework.exceptions import AuthenticationFailed
 
+import logging
 
+logger = logging.getLogger(__name__)
 
 class ConsultarPerfilSerializer(serializers.Serializer):
     pass
@@ -15,8 +17,8 @@ class CrearPerfilSerializer(serializers.Serializer):
     email = serializers.EmailField()
     nombre_completo = serializers.CharField()
     password = serializers.CharField()
-    rol = serializers.ChoiceField(  
-        choices=[(role.value, role.name) for role in RolEnum],  
+    rol = serializers.ChoiceField(
+        choices=[(role.value, role.name) for role in RolEnum],
     )
     cedula = serializers.CharField()
     numero_telefonico = serializers.CharField()
@@ -39,17 +41,26 @@ class ActivarPerfilByTokenSerializer(serializers.Serializer):
 
 class GoogleSocialAuthSerializer(serializers.Serializer):
     auth_token = serializers.CharField()
+
     def validate_auth_token(self, auth_token):
-        user_data = Google.validate(auth_token)
-        try:
-            user_data['sub']
-        except:
-            raise serializers.ValidationError(
-                'The token is invalid or expired. Please login again.'
+            user_data = Google.validate(auth_token)
+
+            if not user_data:
+                raise serializers.ValidationError("Invalid token: No user data returned.")
+
+            try:
+                user_data['sub']
+            except KeyError:
+                raise serializers.ValidationError("Invalid token: 'sub' not found in user data.")
+
+            if user_data['aud'] != settings.GOOGLE_CLIENT_ID:
+                raise AuthenticationFailed("Invalid client ID.")
+
+            return register_social_user(
+                provider="google",
+                email=user_data["email"],
+                name=user_data["name"]
             )
-        if user_data['aud'] != settings.GOOGLE_CLIENT_ID:
-            raise AuthenticationFailed('oops, who are you?')
-        return register_social_user(provider="google", email=user_data["email"], name=user_data["name"])
 
 class SendVerificationMailSerializer(serializers.Serializer):
     email = serializers.EmailField()

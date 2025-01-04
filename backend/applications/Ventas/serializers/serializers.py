@@ -15,6 +15,7 @@ class CrearPedidoSerializer(serializers.Serializer):
     metodo_pago = serializers.ChoiceField(
         choices=[(role.value, role.name) for role in MetodoPagoEnum],
     )
+    precio = serializers.IntegerField()
     metodo_entrega = serializers.ChoiceField(
         choices=[(role.value, role.name) for role in MetodoEntregaEnum]
     )

@@ -43,15 +43,14 @@ class CrearPedidoAPI(APIView):
                     estado = "pendiente",
                     direccion_entrega=DireccionesEnvio.objects.get(id=serialized_data['direccion_entrega_id'])
                 )
-                monto_total = 0
+                # Lo hice yo Daniel
+                monto_total = serialized_data["precio"];
                 for d in serialized_data["descripciones"]:
                     new_descripcion = DescripcionesPedido.objects.create(
                         cantidad=d["cantidad"],
                         presentacion_asociada=Presentaciones.objects.get(id=d["id_presentacion"]),
                         pedido_asociado=new_pedido
                     )
-                    # Access producto_asociado via presentacion_asociada if needed
-                    monto_total += new_descripcion.presentacion_asociada.precio * new_descripcion.cantidad
 
                 new_pedido.monto_total = monto_total
                 new_pedido.save()
