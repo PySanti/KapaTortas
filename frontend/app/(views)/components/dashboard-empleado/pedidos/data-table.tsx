@@ -23,7 +23,7 @@ import {
 import { useState } from "react";
 import { Button } from "@/app/(views)/components/ui/button";
 import { Input } from "@/app/(views)/components/ui/input";
-import { DialogCambiarEstadoPedido } from "../../dialog-cambiar-estado-pedido";
+import { DialogEditarEstadoPedido } from "@/app/(views)/components/dialog-editar-estado-pedido";
 import { Pedido } from "@/app/models/Pedido";
 import { EstadoEnum } from "@/app/models/Pedido";
 
@@ -105,8 +105,8 @@ export function DataTablePedidos<TData, TValue>({
                       {cell.column.id === "estado" ? (
                         <div className="flex items-center gap-2">
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          <DialogCambiarEstadoPedido
-                            orderId={String(row.original.numero_de_orden)}
+                          <DialogEditarEstadoPedido
+                            orderId={Number(row.original.numero_de_orden)}
                             currentStatus={row.original.estado as EstadoEnum}
                           />
                         </div>

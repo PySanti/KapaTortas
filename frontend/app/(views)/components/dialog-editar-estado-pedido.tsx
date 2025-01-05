@@ -19,42 +19,50 @@ import {
   SelectValue,
 } from "@/app/(views)/components/ui/select";
 import { EstadoEnum } from "@/app/models/Pedido";
-import capitalizeFirstLetter from "@/app/controladores/utilities/capitalize-firstletter";
-import { Badge } from "./ui/badge";
+import { transformEstadoPedido } from "@/app/controladores/utilities/transform-estado-pedido";
+import pedidoApi from "@/app/controladores/api/pedido-api";
+import { useRouter } from "next/navigation";
 
-const estados = [
-  //{ label: "Recibido", value: EstadoEnum.RECIBIDO },
+interface DialogEditarEstadoPedidoProps {
+  orderId: number;
+  currentStatus: EstadoEnum;
+}
+
+export const estadosCambioPedido = [
   { label: "En proceso", value: EstadoEnum.EN_PROCESO },
   { label: "Cancelado", value: EstadoEnum.CANCELADO },
   { label: "Finalizado", value: EstadoEnum.FINALIZADO },
 ];
 
-interface DialogCambiarEstadoPedidoProps {
-  orderId: string;
-  currentStatus: EstadoEnum;
-}
-
-const onStatusChange = async (orderId: string, newStatus: EstadoEnum) => {
+const onStatusChange = async (router: any, orderId: number, newStatus: EstadoEnum) => {
   try {
     // Implement your API call here to update the order status
-    console.log(`Updating order ${orderId} to status ${newStatus}`);
+    //console.log(`Updating order ${orderId} to status ${newStatus}`);
+    const estadoActualizado = await pedidoApi.editarEstadoPedido(orderId, newStatus);
 
-    // After successful update, you might want to refresh your data
-    // await refetchData()
+    if (estadoActualizado) {
+      console.log("Estado actualizado con éxito");
+    } else {
+      console.error("Error al actualizar el estado del pedido");
+    }
+
+    // Refresh page luego de editar el estado del pedido
+    router.refresh();
   } catch (error) {
-    console.error("Error updating order status:", error);
+    console.error("Error editando el estado del pedido:", error);
   }
 };
 
-export function DialogCambiarEstadoPedido({
+export function DialogEditarEstadoPedido({
   orderId,
   currentStatus,
-}: DialogCambiarEstadoPedidoProps) {
+}: DialogEditarEstadoPedidoProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState(EstadoEnum.EN_PROCESO); // Default to En Proceso
+  const router = useRouter();
 
   const handleStatusChange = () => {
-    onStatusChange(orderId, status);
+    onStatusChange(router, orderId, status);
     setIsOpen(false);
   };
 
@@ -73,7 +81,7 @@ export function DialogCambiarEstadoPedido({
         <div className="grid gap-6 py-4">
           <div className="gap-y-2">
             <p className="text-sm text-terciary font-medium">
-              Estado actual: {capitalizeFirstLetter(currentStatus)}
+              Estado actual: {transformEstadoPedido(currentStatus)}
             </p>
           </div>
           <div className="gap-y-2">
@@ -83,7 +91,7 @@ export function DialogCambiarEstadoPedido({
                 <SelectValue placeholder="Seleccionar estado" />
               </SelectTrigger>
               <SelectContent>
-                {estados.map((estado) => (
+                {estadosCambioPedido.map((estado) => (
                   <SelectItem key={estado.value} value={estado.value}>
                     {estado.label}
                   </SelectItem>

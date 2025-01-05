@@ -35,12 +35,10 @@ function getBadgeVariant(estado: string) {
 
 function getBadgeTextColor(estado: string) {
   switch (estado) {
-    case EstadoEnum.CANCELADO:
-      return "text-white";
-    case EstadoEnum.EN_PROCESO:
-      return "text-white";
-    default:
+    case EstadoEnum.RECIBIDO:
       return "text-black";
+    default:
+      return "text-white";
   }
 }
 
