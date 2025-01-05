@@ -92,10 +92,13 @@ class ObtenerListaPedidosAPI(APIView):
     authentication_classes  = []
     permission_classes      = [AllowAny]
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request,sort_type, *args, **kwargs):
         try:
-            pedidos = Pedidos.objects.get_pedidos_list_json()
-            return JsonResponse({'pedidos' : pedidos}, status=status.HTTP_200_OK)
+            if sort_type.lower() in ['sorted', 'not_sorted']:
+                pedidos = Pedidos.objects.get_pedidos_list_json(sort_type.lower()=="sorted")
+                return JsonResponse({'pedidos' : pedidos}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({'error' : 'sort type not found'}, status=status.HTTP_404_NOT_FOUND)
         except:
             return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
 

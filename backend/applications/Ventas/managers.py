@@ -1,6 +1,7 @@
 from django.db.models.manager import Manager
-from backend.utils.constants import BASE_PEDIDOS_SHOWABLE_FIELDS, BASE_DIRECCIONES_SHOWABLE_FIELDS, BASE_VENTAS_LIST_SHOWABLE_FIELDS, BASE_FACTURAS_SHOWABLE_FIELDS
+from backend.utils.constants import BASE_PEDIDOS_SHOWABLE_FIELDS, BASE_DIRECCIONES_SHOWABLE_FIELDS, BASE_VENTAS_LIST_SHOWABLE_FIELDS, BASE_FACTURAS_SHOWABLE_FIELDS, EstadoEnum
 from backend.utils.get_info_dict import get_info_dict
+from django.db.models import Case, When, IntegerField
 
 class PedidosManager(Manager):
     def get_pedido_json(self, pedido):
@@ -13,7 +14,15 @@ class PedidosManager(Manager):
     def get_pedidos_list_json(self, sorted):
         basic_query = self.all().order_by('-id')
         if sorted:
-            pass
+            basic_query.order_by(  
+            Case(  
+                When(status=EstadoEnum.EN_PROCESO, then=0),  
+                When(status=EstadoEnum.RECIBIDO, then=1),  
+                When(status=EstadoEnum.FINALIZADO, then=2),  
+                When(status=EstadoEnum.CANCELADO, then=3),  
+                output_field=IntegerField(),  
+            )) 
+
         return [self.get_pedido_json(p) for p in basic_query]
 
 class DescripcionesPedidosManager(Manager):
