@@ -93,19 +93,25 @@ class ObtenerListaPedidosAPI(APIView):
         except:
             return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
 
-class ConsultarFacturaByIdAPI(APIView):
+class ConsultarFacturaByOrderAPI(APIView):
     serializer_class        = ConsultarFacturaByIdSerializer
     authentication_classes  = []
     permission_classes      = [AllowAny]
 
-    def get(self, request, id_factura, *args, **kwargs):
-        try:
-            if factura:=Facturas.objects.filter(id=id_factura):
-                return JsonResponse({'factura' : Facturas.objects.get_factura_json(factura[0])}, status=status.HTTP_200_OK)
-            else:
-                return JsonResponse({'error' : 'factura_not_found'}, status=status.HTTP_404_NOT_FOUND)
-        except:
-            return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, numero_de_orden, *args, **kwargs):
+            try:
+                # Filtrar la factura basada en el número de orden del pedido
+                factura = Facturas.objects.filter(venta_asociada__pedido__numero_de_orden=numero_de_orden).first()
+
+                if factura:
+                    # Suponiendo que get_factura_json es un método que devuelve un dict con los detalles de la factura
+                    return JsonResponse({'factura': Facturas.objects.get_factura_json(factura)}, status=status.HTTP_200_OK)
+                else:
+                    return JsonResponse({'error': 'factura_not_found'}, status=status.HTTP_404_NOT_FOUND)
+
+            except Exception as e:
+                return JsonResponse({'error': 'unexpected_error', 'details': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class EditarEstadoPedidoAPI(APIView):
@@ -121,21 +127,20 @@ class EditarEstadoPedidoAPI(APIView):
         try:
             # Find the pedido by numero_de_orden
             if pedido := Pedidos.objects.filter(numero_de_orden=serialized_data['numero_orden']).first():
-                # Update the estado with the provided value
-                pedido.estado = serialized_data['estado']
-                pedido.save()
-
-                # Handle finalization logic
-                if pedido.estado == EstadoEnum.FINALIZADO.value:
-                    new_venta = Ventas.objects.create(pedido=pedido)
-                    new_factura = Facturas.objects.create(venta_asociada=new_venta)
-                    send_client_mail(
-                        subject=f"Factura {new_factura.fecha_emision_factura}",
-                        correo=pedido.cliente_asociado.perfil.correo,
-                        html_content=factura_mail_html_content(factura=new_factura)
-                    )
-
-                return JsonResponse({'modificado': True}, status=status.HTTP_200_OK)
+                if (serialized_data['estado'] == EstadoEnum.FINALIZADO.value) and (Ventas.objects.filter(pedido__id=pedido.id)):
+                    return JsonResponse({'error': "This pedido has a venta"}, status=status.HTTP_404_NOT_FOUND)
+                else:
+                    pedido.estado = serialized_data['estado']
+                    pedido.save()
+                    if pedido.estado == EstadoEnum.FINALIZADO.value:
+                        new_venta = Ventas.objects.create(pedido=pedido)
+                        new_factura = Facturas.objects.create(venta_asociada=new_venta)
+                        send_client_mail(
+                            subject=f"Factura {new_factura.fecha_emision_factura}",
+                            correo=pedido.cliente_asociado.perfil.correo,
+                            html_content=factura_mail_html_content(factura=new_factura)
+                        )
+                    return JsonResponse({'modificado': True}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({'error': 'pedido_not_found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
