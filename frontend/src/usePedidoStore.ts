@@ -13,13 +13,12 @@ export type CartItem = {
 type PedidoState = {
   cartItems: CartItem[];
   quantity: number;
-  nota: string;
   checkSameItem: (item: CartItem) => boolean;
   addToCart: (item: CartItem) => void;
   removeFromCart: (productId: string) => void;
   updateCartItem: (productId: string, quantity: number) => void;
   clearCart: () => void;
-  setNota: (message: string | undefined) => void;
+  setNota: (message: string | undefined) => string;
 };
 
 export const usePedidoStore = create<PedidoState>()(
@@ -27,7 +26,6 @@ export const usePedidoStore = create<PedidoState>()(
     (set, get) => ({
       cartItems: [],
       quantity: 0,
-      nota: "",
       checkSameItem: (item) => {
         const state = get();
 
@@ -102,15 +100,14 @@ export const usePedidoStore = create<PedidoState>()(
         const state = get();
         const formattedMessage = state.cartItems
           .map((cartItem) => {
-            const baseMessage = `Producto: ${cartItem.product.titulo}, Cantidad: ${cartItem.quantity}`;
-            if (cartItem.product.categoria === Categoria.ESPECIAL) {
-              return `Sabores: ${cartItem.id}, Cantidad: ${cartItem.quantity}`;
-            }
-            return baseMessage;
+            return cartItem.product.categoria === Categoria.ESPECIAL
+              ? `${cartItem.product.titulo}: \n Sabores: ${cartItem.id}, Cantidad: ${cartItem.quantity}`
+              : null;
           })
+          .filter(Boolean)
           .join("\n");
 
-        set({ nota: [message, formattedMessage].join("\n") });
+        return [message, formattedMessage].join("\n" + "\n");
       },
     }),
     {

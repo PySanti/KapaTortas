@@ -9,7 +9,7 @@ class PedidosManager(Manager):
         pedido_dict["direccion_entrega"] = get_info_dict(pedido.direccion_entrega, BASE_DIRECCIONES_SHOWABLE_FIELDS) if pedido.direccion_entrega else None
         pedido_dict["descripciones"] = [DescripcionesPedido.objects.get_descripcion_json(p) for p in pedido.descripciones_pedido.all()];
         return pedido_dict
-    
+
     def get_pedidos_list_json(self):
         return [self.get_pedido_json(p) for p in self.all()]
 
@@ -19,10 +19,12 @@ class DescripcionesPedidosManager(Manager):
         return {
             'titulo' : producto_asociado.titulo,
             'id_producto_asociado' : producto_asociado.id,
+            'categoria' : producto_asociado.categoria,
             'presentacion' : descripcion.presentacion_asociada.proporcion if descripcion.presentacion_asociada else None,
             "precio_presentacion" : descripcion.presentacion_asociada.precio if descripcion.presentacion_asociada else None,
             'cantidad' : descripcion.cantidad,
-            'imagenes_producto' : producto_asociado.imagenes
+            'imagenes_producto' : producto_asociado.imagenes,
+            'sabor': descripcion.sabor
         }
 
 

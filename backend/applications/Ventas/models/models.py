@@ -30,8 +30,7 @@ class Pedidos(models.Model):
     cliente_asociado        = models.ForeignKey(Clientes, on_delete=models.SET_NULL, null=True, related_name="pedidos")
     iva                     = models.FloatField(null=True, blank=True)
     monto_total             = models.FloatField(null=True, blank=True)
-    nota                    = models.TextField(null=True, blank=True, default=None)
-
+    nota                    = models.TextField(blank=True, null=True)
     estado                  = models.CharField(choices=[(role.value, role.name) for role in EstadoEnum], default=EstadoEnum.RECIBIDO)
     metodo_pago             = models.CharField(choices=[(role.value, role.name) for role in MetodoPagoEnum], default=MetodoPagoEnum.PAGO_MOVIL)
     metodo_entrega          = models.CharField(choices=[(role.value, role.name) for role in MetodoEntregaEnum], default=MetodoEntregaEnum.PICKUP)
@@ -50,10 +49,11 @@ class DescripcionesPedido(models.Model):
     cantidad                    = models.IntegerField()
     pedido_asociado             = models.ForeignKey(Pedidos, related_name="descripciones_pedido", on_delete=models.SET_NULL, null=True)
     presentacion_asociada       = models.ForeignKey(Presentaciones, related_name="descripciones_pedido", on_delete=models.SET_NULL, null=True)
+    sabor                    = models.TextField(blank=True, null=True)
 
     objects = DescripcionesPedidosManager()
     def __str__(self):
-        return f"{self.cantidad} : {self.presentacion_asociada.producto_asociado.titulo}"
+        return f"{self.cantidad} : {self.presentacion_asociada.producto_asociado.titulo} : {self.presentacion_asociada.producto_asociado.categoria}"
     class Meta:
         verbose_name = 'Descripción de pedido'
         verbose_name_plural = 'Descripciones de pedidos'

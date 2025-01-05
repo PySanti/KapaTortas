@@ -44,6 +44,7 @@ export interface Pedido {
   fecha_pedido: string;
   fecha_entrega: string;
   monto_total: number;
+  nota: string;
   estado: EstadoEnum;
   metodo_pago: MetodoPago;
   metodo_entrega: MetodoEntrega;
@@ -65,6 +66,8 @@ export interface DireccionEntrega {
 export interface Descripcion {
   titulo: string;
   id_producto_asociado: number;
+  sabor?: string;
+  categoria: string;
   presentacion: string;
   precio_presentacion: number;
   cantidad: number;

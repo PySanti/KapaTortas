@@ -39,7 +39,6 @@ const deliveryMetodosList = [
 
 export default function DataPedido({
   direcciones,
-  order,
   deliveryPriceHandler,
   precios,
 }: {
@@ -52,7 +51,7 @@ export default function DataPedido({
   const session = getCurrentUser();
 
   // Zustand
-  const { cartItems, clearCart, nota, setNota } = usePedidoStore();
+  const { cartItems, clearCart, setNota } = usePedidoStore();
 
   const [delivery, setDelivery] = useState<MetodoEntrega>(MetodoEntrega.PICKUP);
   const [pago, setPago] = useState<MetodoPago>(MetodoPago.PAGO_MOVIL);
@@ -102,11 +101,12 @@ export default function DataPedido({
         direccionId = checkDireccion.id;
       }
 
-      console.log("NOTAAA", nota);
-
       // Si tenemos un ID de dirección, proceder a crear el pedido
       if (direccionId) {
-        const pedido = await handleCrearPedido(direccionId);
+        const pedido = await handleCrearPedido(
+          direccionId,
+          setNota(data?.nota),
+        );
         redirectToWhatsapp({
           pedidoDetails: pedido,
           name: session?.name || "Cliente",
@@ -154,6 +154,7 @@ export default function DataPedido({
   // Manejar la creación del pedido
   const handleCrearPedido = async (
     direccionId: number,
+    nota: string,
   ): Promise<Pedido | null> => {
     const cliente = await ClienteAPI.obtenerCliente(session?.email || "");
 
@@ -166,7 +167,7 @@ export default function DataPedido({
         precios.total,
         direccionId,
         cartItems,
-        "hola",
+        nota,
       );
       console.log("Pedido creado con éxito.");
       return pedido;
