@@ -50,6 +50,10 @@ class CrearPedidoAPI(APIView):
                 )
                 # Lo hice yo Daniel
                 monto_total = serialized_data["precio"];
+                if serialized_data['metodo_entrega'] == "pickup":
+                    precio_delivery = 0;
+                else:
+                    precio_delivery = 3
 
                 for d in serialized_data["descripciones"]:
                     new_descripcion = DescripcionesPedido.objects.create(
@@ -60,6 +64,7 @@ class CrearPedidoAPI(APIView):
                     )
 
                 new_pedido.monto_total = monto_total
+                new_pedido.precio_delivery = precio_delivery
                 new_pedido.save()
 
                 return JsonResponse({'pedido' : Pedidos.objects.get_pedido_json(new_pedido)}, status=status.HTTP_200_OK)
@@ -143,7 +148,7 @@ class EditarEstadoPedidoAPI(APIView):
                         )
                         send_client_mail(
                             subject=f"Factura {new_factura.fecha_emision_factura}",
-                            correo=pedido.cliente_asociado.perfil.correo,
+                                correo=pedido.cliente_asociado.perfil.correo,
                             html_content=factura_mail_html_content(factura=new_factura),
                             factura=new_factura
                         )
