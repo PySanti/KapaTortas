@@ -88,16 +88,6 @@ def factura_mail_html_content(factura):
         </thead>
         <tbody>
             {table_string}
-            <tr>
-                <td colSpan="2"></td>
-            <th>IVA</th>
-                <td>{factura.iva}</td>
-            </tr>
-            <tr>
-                <td colSpan="2"></td>
-            <th>Monto Total</th>
-                <td>{factura.monto_total}</td>
-            </tr>
         </tbody>
       </table>
 
