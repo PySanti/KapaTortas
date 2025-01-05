@@ -1,4 +1,4 @@
-import { Pedido } from "@/app/models/Pedido";
+import { EstadoEnum, Pedido } from "@/app/models/Pedido";
 import { CartItem } from "@/src/usePedidoStore";
 import { Venta } from "@/app/models/venta";
 
@@ -92,7 +92,7 @@ class PedidoAPI {
     }
   }
 
-  // // POST Pedido
+  // Crear un pedido en la db
   public async postPedido(
     correo_cliente: string,
     metodo_entrega: string,
@@ -135,6 +135,31 @@ class PedidoAPI {
     } catch (err) {
       console.error("Error al postear el pedido: ", err);
       return null;
+    }
+  }
+
+  // Editar el estado de un pedido en la db
+  public async editarEstadoPedido(numeroOrden: number, estado: EstadoEnum): Promise<boolean> {
+    const url = `http://localhost:8000/api/pedidos/editar_estado/`;
+
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          numero_orden: numeroOrden, 
+          estado: estado 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      return true;
+    } catch (err) {
+      console.error("Error al actualizar el estado del pedido: ", err);
+      return false;
     }
   }
 }
