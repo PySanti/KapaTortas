@@ -13,11 +13,13 @@ export type CartItem = {
 type PedidoState = {
   cartItems: CartItem[];
   quantity: number;
+  nota: string;
   checkSameItem: (item: CartItem) => boolean;
   addToCart: (item: CartItem) => void;
   removeFromCart: (productId: string) => void;
   updateCartItem: (productId: string, quantity: number) => void;
   clearCart: () => void;
+  setNota: (message: string | undefined) => void;
 };
 
 export const usePedidoStore = create<PedidoState>()(
@@ -25,6 +27,7 @@ export const usePedidoStore = create<PedidoState>()(
     (set, get) => ({
       cartItems: [],
       quantity: 0,
+      nota: "",
       checkSameItem: (item) => {
         const state = get();
 
@@ -95,6 +98,20 @@ export const usePedidoStore = create<PedidoState>()(
           };
         }),
       clearCart: () => set({ cartItems: [], quantity: 0 }),
+      setNota: (message) => {
+        const state = get();
+        const formattedMessage = state.cartItems
+          .map((cartItem) => {
+            const baseMessage = `Producto: ${cartItem.product.titulo}, Cantidad: ${cartItem.quantity}`;
+            if (cartItem.product.categoria === Categoria.ESPECIAL) {
+              return `Sabores: ${cartItem.id}, Cantidad: ${cartItem.quantity}`;
+            }
+            return baseMessage;
+          })
+          .join("\n");
+
+        set({ nota: [message, formattedMessage].join("\n") });
+      },
     }),
     {
       name: "pedido-cache",

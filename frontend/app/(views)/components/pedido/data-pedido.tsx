@@ -50,10 +50,9 @@ export default function DataPedido({
 }) {
   // Current user
   const session = getCurrentUser();
-  console.log(session);
 
   // Zustand
-  const { cartItems, clearCart } = usePedidoStore();
+  const { cartItems, clearCart, nota, setNota } = usePedidoStore();
 
   const [delivery, setDelivery] = useState<MetodoEntrega>(MetodoEntrega.PICKUP);
   const [pago, setPago] = useState<MetodoPago>(MetodoPago.PAGO_MOVIL);
@@ -65,12 +64,14 @@ export default function DataPedido({
     direccion: string;
     referencia?: string;
     codigo_postal: string;
+    nota: string;
   } = {
     direccion: direccionPreferida?.direccion || "",
     referencia: direccionPreferida?.referencia || "",
     codigo_postal: direccionPreferida?.codigo_postal
       ? direccionPreferida.codigo_postal.toString()
       : "1000",
+    nota: "",
   };
 
   // Schema
@@ -85,6 +86,8 @@ export default function DataPedido({
 
   const onSubmit = async (data: DireccionFormData) => {
     try {
+      // Seteo nota rapidito
+      setNota(data?.nota);
       // Verificar si la dirección ya existe
       const checkDireccion = direcciones?.find(
         (direccion) => direccion.direccion === data.direccion,
@@ -98,6 +101,8 @@ export default function DataPedido({
       } else {
         direccionId = checkDireccion.id;
       }
+
+      console.log("NOTAAA", nota);
 
       // Si tenemos un ID de dirección, proceder a crear el pedido
       if (direccionId) {
@@ -245,6 +250,7 @@ export default function DataPedido({
         </div>
 
         <PaymentSelector pago={pago} setPago={setPago} />
+
         <div className="flex flex-col items-center">
           {" "}
           <Button

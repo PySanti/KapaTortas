@@ -12,7 +12,7 @@ import { Capa, sabores } from "@/app/models/capas";
 import TortaModel from "./torta-model";
 import { usePedidoStore } from "@/src/usePedidoStore";
 import { Producto } from "@/app/models/Producto";
-import { CircleX } from "lucide-react";
+import ReviewProduct from "./review-product";
 
 export default function PersonalizarProduct({
   product,
@@ -200,6 +200,9 @@ export default function PersonalizarProduct({
           />
         </Canvas>
       </div>
+
+      {/* Reviews */}
+      <ReviewProduct product={product} />
     </div>
   );
 }
