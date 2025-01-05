@@ -16,6 +16,7 @@ import { EstadoEnum, Pedido } from "@/app/models/Pedido";
 import capitalizeFirstLetter from "@/app/controladores/utilities/capitalize-firstletter";
 import { cn } from "@/app/controladores/lib/utils";
 import { transformEstadoPedido } from "@/app/controladores/utilities/transform-estado-pedido";
+import DisplayOnHover from "../../display-on-hover";
 
 // Helper para obtener el estilo de un badge según el estado del pedido
 function getBadgeVariant(estado: string) {
@@ -107,30 +108,51 @@ export const columnsPedidos: ColumnDef<Pedido>[] = [
     },
   },
   {
-    accessorKey: "fecha_entrega",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="px-0"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Fecha Entrega
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    accessorKey: "presentaciones",
+    header: "Pedido en preparación",
     cell: ({ row }) => {
-      const date = new Date(row.getValue("fecha_entrega"));
-      const formattedDate = date.toLocaleString("es-VE", {
-        timeZone: "America/Caracas",
-      });
-      return <div>{formattedDate}</div>;
+      const pedido = row.original;
+
+      if (pedido.estado === EstadoEnum.EN_PROCESO) {
+        return (
+          <DisplayOnHover
+            mainInfo="Ver productos"
+            extraInfo={pedido.descripciones.map((d) => `${d.cantidad}x ${d.presentacion}`)}
+          />
+        );
+      }
+
+      return <div>No</div>;
     },
     meta: {
       headerClassName: "w-[200px]",
     },
   },
+  // {
+  //   accessorKey: "fecha_entrega",
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         className="px-0"
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //       >
+  //         Fecha Entrega
+  //         <ArrowUpDown className="ml-2 h-4 w-4" />
+  //       </Button>
+  //     );
+  //   },
+  //   cell: ({ row }) => {
+  //     const date = new Date(row.getValue("fecha_entrega"));
+  //     const formattedDate = date.toLocaleString("es-VE", {
+  //       timeZone: "America/Caracas",
+  //     });
+  //     return <div>{formattedDate}</div>;
+  //   },
+  //   meta: {
+  //     headerClassName: "w-[200px]",
+  //   },
+  // },
   {
     accessorKey: "monto_total",
     header: ({ column }) => {
@@ -177,7 +199,7 @@ export const columnsPedidos: ColumnDef<Pedido>[] = [
   },
 
   {
-    accessorKey: "pedido_asociado.descripciones",
+    accessorKey: "descripciones",
     header: "Productos",
     cell: ({ row }) => {
       const descripciones = row.original?.descripciones;
