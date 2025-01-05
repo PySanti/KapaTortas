@@ -2,6 +2,7 @@ import { EstadoEnum, Pedido } from "@/app/models/Pedido";
 import { CartItem } from "@/src/usePedidoStore";
 import { Venta } from "@/app/models/venta";
 import { Categoria } from "@/app/models/Producto";
+import { Factura } from "@/app/models/factura";
 
 // Tiene un singleton
 class PedidoAPI {
@@ -148,16 +149,19 @@ class PedidoAPI {
   }
 
   // Editar el estado de un pedido en la db
-  public async editarEstadoPedido(numeroOrden: number, estado: EstadoEnum): Promise<boolean> {
+  public async editarEstadoPedido(
+    numeroOrden: number,
+    estado: EstadoEnum,
+  ): Promise<boolean> {
     const url = `http://localhost:8000/api/pedidos/editar_estado/`;
 
     try {
       const response = await fetch(url, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          numero_orden: numeroOrden, 
-          estado: estado 
+        body: JSON.stringify({
+          numero_orden: numeroOrden,
+          estado: estado,
         }),
       });
 
@@ -169,6 +173,53 @@ class PedidoAPI {
     } catch (err) {
       console.error("Error al actualizar el estado del pedido: ", err);
       return false;
+    }
+  }
+
+  // Facturita
+  public async getFactura(nro_orden: number): Promise<Factura | null> {
+    const url = `http://localhost:8000/api/pedidos/facturas/${nro_orden}/download/`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const content = response.headers.get("Content-Disposition");
+      const filename = content
+        ? content.split("filename=")[1].replace(/['"]/g, "")
+        : `factura-${nro_orden}.pdf`;
+
+      const blob = await response.blob();
+
+      const downloadUrl = window.URL.createObjectURL(blob);
+
+      // Create and trigger download
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+
+      return {
+        pdf_url: downloadUrl,
+        filename: filename,
+      };
+    } catch (err) {
+      console.error("Error downloading factura:", err);
+      return null;
     }
   }
 }
