@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import { Button } from "@/app/(views)/components/ui/button";
 import {
   Dialog,
@@ -16,8 +18,10 @@ type DialogAgregarDireccionProps = {
 };
 
 export default function DialogAgregarDireccion({ email }: DialogAgregarDireccionProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Agregar Dirección</Button>
       </DialogTrigger>
@@ -26,7 +30,7 @@ export default function DialogAgregarDireccion({ email }: DialogAgregarDireccion
           <DialogTitle className="text-2xl text-terciary">Agregar nueva dirección</DialogTitle>
           <Separator />
         </DialogHeader>
-        <FormAgregarDireccionEnvio email={email} />
+        <FormAgregarDireccionEnvio email={email} isOpen={isOpen} setIsOpen={setIsOpen} />
         {/* <DialogFooter>
         </DialogFooter> */}
       </DialogContent>

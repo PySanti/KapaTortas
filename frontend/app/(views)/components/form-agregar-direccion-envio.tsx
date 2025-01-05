@@ -20,14 +20,24 @@ import {
 import clienteApi from "@/app/controladores/api/cliente-api";
 import FormErrorMessage from "./form-error-msg";
 import FormSuccessMessage from "./form-success-msg";
+import { useRouter } from "next/navigation";
 
 type FormAgregarDireccionEnvioProps = {
   email: string;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 };
 
-export default function FormAgregarDireccionEnvio({ email }: FormAgregarDireccionEnvioProps) {
+export default function FormAgregarDireccionEnvio({
+  email,
+  isOpen,
+  setIsOpen,
+}: FormAgregarDireccionEnvioProps) {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [successMsg, setSuccessMsg] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const router = useRouter();
 
   const form = useForm<DireccionEnvioType>({
     resolver: zodResolver(DireccionEnvioSchema),
@@ -56,6 +66,7 @@ export default function FormAgregarDireccionEnvio({ email }: FormAgregarDireccio
     };
 
     try {
+      setIsLoading(true);
       // Check if address already exists
       const direccionesCliente = await clienteApi.obtenerDireccionesEnvio(email);
 
@@ -65,6 +76,7 @@ export default function FormAgregarDireccionEnvio({ email }: FormAgregarDireccio
 
       if (existingAddress) {
         setErrorMsg("Esta dirección ya existe");
+        setIsLoading(false);
         return;
       }
 
@@ -73,9 +85,15 @@ export default function FormAgregarDireccionEnvio({ email }: FormAgregarDireccio
       if (!res.ok) {
         setErrorMsg("Error al agregar dirección");
         setSuccessMsg("");
+        setIsLoading(false);
       } else {
         setSuccessMsg("Dirección agregada correctamente");
         setErrorMsg("");
+        setTimeout(() => {
+          setIsLoading(false);
+          setIsOpen(false);
+        }, 2000);
+        router.refresh(); // Refresh page cuando se agrega una dirección
         // const responseData: DireccionEnvioType = await res.json(); // Parse the JSON if needed
         // console.log("Dirección agregada:", responseData);
       }
@@ -161,7 +179,7 @@ export default function FormAgregarDireccionEnvio({ email }: FormAgregarDireccio
         <FormErrorMessage message={errorMsg} />
         <FormSuccessMessage message={successMsg} />
         <div className="flex justify-end">
-          <Button type="submit" variant={"terciary"}>
+          <Button type="submit" disabled={isLoading} variant={"terciary"}>
             Agregar Dirección
           </Button>
         </div>
