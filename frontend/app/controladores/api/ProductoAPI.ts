@@ -50,9 +50,35 @@ class ProductoAPI {
 
       const data = await response.json();
 
-      console.log(data);
-
       return data.producto;
+    } catch (err) {
+      console.error("Error en la petición del producto: ", err);
+      return null;
+    }
+  }
+
+  // Obtener producto especial
+  public async obtenerProductoEspecial(): Promise<Producto | null> {
+    const url = `http://localhost:8000/api/productos/especial/`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error en la base de datos: ${response.status}`);
+      }
+
+      const rawData = await response.clone().json();
+      console.log("RAW DATA FROM API", rawData);
+
+      const data = await response.json();
+      return data?.producto;
     } catch (err) {
       console.error("Error en la petición del producto: ", err);
       return null;

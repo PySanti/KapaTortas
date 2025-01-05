@@ -134,7 +134,6 @@ class PedidoAPI {
       }
 
       const data = await response.json();
-      console.log(data?.pedido);
       return data?.pedido;
     } catch (err) {
       console.error("Error al postear el pedido: ", err);

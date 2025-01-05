@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Producto, Presentacion } from "@/app/models/Producto";
 import { persist } from "zustand/middleware";
+import { Categoria } from "@/app/models/Producto";
 
 export type CartItem = {
   id: string;
@@ -26,6 +27,11 @@ export const usePedidoStore = create<PedidoState>()(
       quantity: 0,
       checkSameItem: (item) => {
         const state = get();
+
+        if (item.product.categoria === Categoria.ESPECIAL) {
+          return state.cartItems.some((cartItem) => cartItem.id === item.id);
+        }
+
         return state.cartItems.some(
           (cartItem) =>
             cartItem.product.id === item.product.id &&
