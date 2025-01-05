@@ -1,6 +1,7 @@
 // Cambiar esto
 export enum EstadoEnum {
-  PENDIENTE = "pendiente",
+  RECIBIDO = "recibido",
+  EN_PROCESO = "en_proceso",
   CANCELADO = "cancelado",
   FINALIZADO = "finalizado",
 }

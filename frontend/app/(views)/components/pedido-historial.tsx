@@ -5,6 +5,7 @@ import { Pedido } from "@/app/models/Pedido";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { transformMetodoPago } from "@/app/controladores/utilities/transform-metodo-pago";
 
 interface PedidoHistorialProps extends React.HTMLAttributes<HTMLDivElement> {
   pedidos: Pedido[];
@@ -32,9 +33,9 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                   </time>
                 </h3>
 
-                <div className="flex items-center border-b border-gray-200 p-4 sm:grid sm:grid-cols-4 sm:gap-x-6 sm:p-6">
-                  <dl className="grid flex-1 gap-x-6 text-sm col-span-3 grid-cols-3 lg:col-span-2">
-                    <div className="sm:block">
+                <div className="flex items-center border-b border-gray-200 p-4 sm:grid sm:grid-cols-5 sm:gap-x-6 sm:p-6">
+                  <dl className="grid flex-1 gap-x-4 text-sm grid-cols-4 lg:col-span-4">
+                    <div className="sm:block col-span-1">
                       <dt className="font-medium text-terciary">Orden realizada</dt>
                       <dd className="mt-1 text-terciary-muted">
                         <time dateTime={pedido.fecha_pedido}>
@@ -42,14 +43,14 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                         </time>
                       </dd>
                     </div>
-                    <div>
+                    <div className="col-span-1">
                       <dt className="font-medium text-terciary">Total</dt>
                       <dd className="mt-1 text-terciary-muted">${pedido.monto_total}</dd>
                     </div>
-
                     <div>
                       <dt className="font-medium text-terciary">Enviar a</dt>
                       <DisplayOnHover
+                        className="mt-1"
                         mainInfo={nombreUsuario || "Nombre no disponible"}
                         extraInfo={[
                           pedido.direccion_entrega.direccion,
@@ -57,6 +58,12 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                           pedido.direccion_entrega.ciudad,
                         ]}
                       />
+                    </div>
+                    <div>
+                      <dt className="font-medium text-terciary">Método de pago</dt>
+                      <dd className="mt-1 text-terciary-muted">
+                        {transformMetodoPago(pedido.metodo_pago)}
+                      </dd>
                     </div>
                   </dl>
 
@@ -75,40 +82,22 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                       <div className="py-1">
                         <MenuItem>
                           <Link
-                            href={`/pedido/${pedido.numero_de_orden}`}
-                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-terciary"
-                          >
-                            Ver
-                          </Link>
-                        </MenuItem>
-                        <MenuItem>
-                          <Link
                             href={`/factura/${pedido.numero_de_orden}`}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-terciary"
                           >
-                            Factura
+                            Ver Factura
                           </Link>
                         </MenuItem>
                       </div>
                     </MenuItems>
                   </Menu>
 
-                  <div className="hidden lg:col-span-2 lg:flex lg:flex-col lg:items-end lg:space-y-4">
+                  <div className="hidden lg:flex lg:flex-col lg:items-end lg:space-y-4">
                     <div className="text-sm font-medium text-terciary">
                       Número de orden: {pedido.numero_de_orden}
                     </div>
                     <div className="flex space-x-4">
-                      {/* <Button
-                        // href={`/pedido/${pedido.numero_de_orden}`}
-                        className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                      >
-                        <span>Ver Orden</span>
-                        <span className="sr-only">{pedido.numero_de_orden}</span>
-                      </Button> */}
-                      <Button
-                        // href={`/pedido/${pedido.numero_de_orden}`}
-                        className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                      >
+                      <Button className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
                         <span>Ver Factura</span>
                         <span className="sr-only">para orden {pedido.numero_de_orden}</span>
                       </Button>

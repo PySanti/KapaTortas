@@ -15,18 +15,30 @@ import { Badge } from "@/app/(views)/components/ui/badge";
 import { EstadoEnum, Pedido } from "@/app/models/Pedido";
 import capitalizeFirstLetter from "@/app/controladores/utilities/capitalize-firstletter";
 import { cn } from "@/app/controladores/lib/utils";
+import { transformEstadoPedido } from "@/app/controladores/utilities/transform-estado-pedido";
 
 // Helper para obtener el estilo de un badge según el estado del pedido
 function getBadgeVariant(estado: string) {
   switch (estado) {
-    case EstadoEnum.PENDIENTE:
-      return "default"; // Style for 'pendiente'
+    case EstadoEnum.RECIBIDO:
+      return "gray"; // Style for 'recibido'
+    case EstadoEnum.EN_PROCESO:
+      return "default"; // Style for 'en_proceso'
     case EstadoEnum.CANCELADO:
       return "destructive"; // Style for 'en_proceso'
     case EstadoEnum.FINALIZADO:
       return "terciary"; // Style for 'finalizado'
     default:
       return "default"; // Fallback style
+  }
+}
+
+function getBadgeTextColor(estado: string) {
+  switch (estado) {
+    case EstadoEnum.RECIBIDO:
+      return "text-black";
+    default:
+      return "text-white";
   }
 }
 
@@ -156,9 +168,9 @@ export const columnsPedidos: ColumnDef<Pedido>[] = [
       return (
         <Badge
           variant={getBadgeVariant(estado)}
-          className={cn(estado === "pendiente" ? "text-black" : "text-white", "font-medium")}
+          className={cn(getBadgeTextColor(estado), "font-medium")}
         >
-          {capitalizeFirstLetter(estado)}
+          {transformEstadoPedido(estado as EstadoEnum)}
         </Badge>
       );
     },
