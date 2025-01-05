@@ -5,3 +5,4 @@ __pycache__/
 *.pyd
 backend/secrets.json
 frontend/env.local
+backend/media
