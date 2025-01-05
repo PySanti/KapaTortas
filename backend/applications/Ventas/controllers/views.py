@@ -1,4 +1,5 @@
 from django.shortcuts import render
+
 from ..models import Facturas
 from rest_framework.views import (
     APIView,
@@ -20,7 +21,7 @@ from ..models import Facturas
 from backend.utils.constants import EstadoEnum
 from backend.utils.send_client_mail import send_client_mail
 from backend.utils.factura_mail_html_content import factura_mail_html_content
-
+from backend.utils.crear_pdf import crear_pdf
 
 
 # Create your views here.
@@ -49,6 +50,10 @@ class CrearPedidoAPI(APIView):
                 )
                 # Lo hice yo Daniel
                 monto_total = serialized_data["precio"];
+                if serialized_data['metodo_entrega'] == "pickup":
+                    precio_delivery = 0;
+                else:
+                    precio_delivery = 3
 
                 for d in serialized_data["descripciones"]:
                     new_descripcion = DescripcionesPedido.objects.create(
@@ -59,6 +64,7 @@ class CrearPedidoAPI(APIView):
                     )
 
                 new_pedido.monto_total = monto_total
+                new_pedido.precio_delivery = precio_delivery
                 new_pedido.save()
 
                 return JsonResponse({'pedido' : Pedidos.objects.get_pedido_json(new_pedido)}, status=status.HTTP_200_OK)
@@ -135,10 +141,16 @@ class EditarEstadoPedidoAPI(APIView):
                     if pedido.estado == EstadoEnum.FINALIZADO.value:
                         new_venta = Ventas.objects.create(pedido=pedido)
                         new_factura = Facturas.objects.create(venta_asociada=new_venta)
+                        pdf_content = crear_pdf(new_factura)
+                        new_factura.pdf_file.save(
+                            f"factura_{new_factura.venta_asociada.pedido.numero_de_orden}.pdf",
+                            pdf_content
+                        )
                         send_client_mail(
                             subject=f"Factura {new_factura.fecha_emision_factura}",
-                            correo=pedido.cliente_asociado.perfil.correo,
-                            html_content=factura_mail_html_content(factura=new_factura)
+                                correo=pedido.cliente_asociado.perfil.correo,
+                            html_content=factura_mail_html_content(factura=new_factura),
+                            factura=new_factura
                         )
                     return JsonResponse({'modificado': True}, status=status.HTTP_200_OK)
             else:

@@ -89,9 +89,9 @@ def factura_mail_html_content(factura):
             {table_string}
         </tbody>
       </table>
-      <p><strong>IVA:</strong> { factura.venta_asociada.pedido.iva }</p>
-      <p><strong>Precio delivery:</strong> { factura.venta_asociada.pedido.precio_delivery }</p>
-      <p><strong>Total:</strong> { factura.venta_asociada.pedido.monto_total }</p>
+      <p><strong>IVA:</strong> ${ factura.venta_asociada.pedido.iva }</p>
+      <p><strong>Precio delivery:</strong> ${ factura.venta_asociada.pedido.precio_delivery }</p>
+      <p><strong>Total:</strong> ${ factura.venta_asociada.pedido.monto_total }</p>
       <p class="footer-text">
         Este mensaje fue producido por KapaTortas. © 2024. Todos los derechos reservados.
         <a href="https://kapatortas.com" target="_blank">KapaTortas</a>.

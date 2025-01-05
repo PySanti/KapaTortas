@@ -3,6 +3,7 @@ from rest_framework import status
 from enum import Enum
 
 class DeliveryZoneEnum(Enum):
+    PICK_UP = 0
     CENTRO_HISTORICO = 1
     LA_CANDELARIA = 1
     SABANA_GRANDE = 2
@@ -14,6 +15,7 @@ class DeliveryZoneEnum(Enum):
     PETARE = 4
     EL_HATILLO = 4
     LOS_TEQUES = 4
+    DEFAULT = 3
 
 class RolEnum(Enum):
     ADMIN = 'administrador'

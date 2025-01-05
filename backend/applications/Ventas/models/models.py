@@ -35,7 +35,7 @@ class Pedidos(models.Model):
     metodo_pago             = models.CharField(choices=[(role.value, role.name) for role in MetodoPagoEnum], default=MetodoPagoEnum.PAGO_MOVIL)
     metodo_entrega          = models.CharField(choices=[(role.value, role.name) for role in MetodoEntregaEnum], default=MetodoEntregaEnum.PICKUP)
     direccion_entrega       = models.ForeignKey(DireccionesEnvio, related_name="pedidos",null=True, on_delete=models.SET_NULL )
-    precio_delivery         = models.IntegerField(blank=True, null=True, choices=[(delzone.value, delzone.name) for delzone in DeliveryZoneEnum], default=1)
+    precio_delivery         = models.IntegerField(blank=True, null=True, choices=[(delzone.value, delzone.name) for delzone in DeliveryZoneEnum], default=3)
 
     objects                 = PedidosManager()
 
@@ -75,6 +75,7 @@ class Ventas(models.Model):
         verbose_name_plural = 'Ventas'
 
 class Facturas(models.Model):
+    pdf_file = models.FileField(upload_to='facturas/', null=True, blank=True)
     fecha_emision_factura               = models.DateTimeField(default=get_current_time)
     venta_asociada                      = models.OneToOneField(Ventas, on_delete=models.SET_NULL, null=True, related_name="factura")
     domicilio_fiscal                    = models.CharField(blank=True, default=DEFAULT_DOMICILIO_FISCAL)
