@@ -42,12 +42,11 @@ const onStatusChange = async (router: any, orderId: number, newStatus: EstadoEnu
 
     if (estadoActualizado) {
       console.log("Estado actualizado con éxito");
+      // Refresh page luego de editar el estado del pedido
+      router.refresh();
     } else {
       console.error("Error al actualizar el estado del pedido");
     }
-
-    // Refresh page luego de editar el estado del pedido
-    router.refresh();
   } catch (error) {
     console.error("Error editando el estado del pedido:", error);
   }
