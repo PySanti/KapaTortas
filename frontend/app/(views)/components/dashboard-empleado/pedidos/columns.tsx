@@ -116,8 +116,13 @@ export const columnsPedidos: ColumnDef<Pedido>[] = [
       if (pedido.estado === EstadoEnum.EN_PROCESO) {
         return (
           <DisplayOnHover
+            // className="text-black"
             mainInfo="Ver productos"
-            extraInfo={pedido.descripciones.map((d) => `${d.cantidad}x ${d.presentacion}`)}
+            displayMainInfo={false}
+            extraInfo={[
+              `Nota: ${pedido.nota}`,
+              ...pedido.descripciones.map((d) => `${d.cantidad}x ${d.presentacion}`),
+            ]}
           />
         );
       }
