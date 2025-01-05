@@ -2,43 +2,53 @@
 "use client";
 
 import pedidoApi from "@/app/controladores/api/pedido-api";
+import { transformEstadoPedido } from "@/app/controladores/utilities/transform-estado-pedido";
+import { EstadoEnum, Pedido } from "@/app/models/Pedido";
 import { Button } from "@react-email/components";
 
 interface DownloadFacturaButtonProps {
-  numeroOrden: number;
+  pedido: Pedido;
   className?: string;
   isMobile?: boolean;
 }
 
 export default function DownloadFacturaButton({
-  numeroOrden,
-  className,
+  pedido,
   isMobile = false,
 }: DownloadFacturaButtonProps) {
   const handleDownloadFactura = async () => {
-    console.log("MARICOOOON");
-    const factura = await pedidoApi.getFactura(numeroOrden);
+    const factura = await pedidoApi.getFactura(pedido.numero_de_orden);
     return factura;
   };
+
+  const estado = transformEstadoPedido(pedido?.estado);
 
   if (isMobile) {
     return (
       <button
-        onClick={handleDownloadFactura}
-        className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+        onClick={() =>
+          pedido?.estado === EstadoEnum.FINALIZADO && handleDownloadFactura()
+        }
+        className={`${pedido?.estado === EstadoEnum.FINALIZADO ? "bg-white hover:bg-gray-50" : "bg-primary text-white hover:bg-opacity-80"} inline-flex items-center justify-center rounded-md border border-gray-300 px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover: bg-gray-50`}
       >
-        Ver Factura
+        {" "}
+        {pedido?.estado === EstadoEnum.FINALIZADO ? "Ver Factura" : estado}{" "}
       </button>
     );
   }
 
   return (
     <Button
-      onClick={handleDownloadFactura}
-      className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+      onClick={() =>
+        pedido?.estado === EstadoEnum.FINALIZADO && handleDownloadFactura()
+      }
+      className={`${pedido?.estado === EstadoEnum.FINALIZADO ? "bg-white hover:bg-gray-50" : "bg-primary text-white hover:bg-opacity-80"} inline-flex items-center justify-center rounded-md border border-gray-300 px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover: bg-gray-50`}
     >
-      <span>Ver Factura</span>
-      <span className="sr-only">para orden {numeroOrden}</span>
+      <span>
+        {" "}
+        {pedido?.estado === EstadoEnum.FINALIZADO ? "Ver Factura" : estado}{" "}
+      </span>
+      <span className="sr-only">para orden {pedido.numero_de_orden}</span>
     </Button>
   );
 }

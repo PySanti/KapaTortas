@@ -114,10 +114,7 @@ export default function PedidoHistorial({
                       Número de orden: {pedido.numero_de_orden}
                     </div>
                     <div className="flex space-x-4">
-                      <DownloadFacturaButton
-                        numeroOrden={pedido.numero_de_orden}
-                        isMobile={true}
-                      />
+                      <DownloadFacturaButton pedido={pedido} isMobile={true} />
                     </div>
                   </div>
                 </div>
