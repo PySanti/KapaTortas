@@ -54,7 +54,8 @@ class CrearPedidoAPI(APIView):
                     new_descripcion = DescripcionesPedido.objects.create(
                         cantidad=d["cantidad"],
                         presentacion_asociada=Presentaciones.objects.get(id=d["id_presentacion"]),
-                        pedido_asociado=new_pedido
+                        pedido_asociado=new_pedido,
+                        sabor = d["sabor"]
                     )
 
                 new_pedido.monto_total = monto_total

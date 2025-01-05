@@ -1,6 +1,7 @@
 import { EstadoEnum, Pedido } from "@/app/models/Pedido";
 import { CartItem } from "@/src/usePedidoStore";
 import { Venta } from "@/app/models/venta";
+import { Categoria } from "@/app/models/Producto";
 
 // Tiene un singleton
 class PedidoAPI {
@@ -61,6 +62,8 @@ class PedidoAPI {
 
       const data = await response.json();
 
+      console.log(data.pedidos);
+
       return data.pedidos;
     } catch (err) {
       console.error("Error en la peticion de consultar pedidos: ", err);
@@ -101,7 +104,7 @@ class PedidoAPI {
     total: number,
     direccion_entrega_id: number,
     items: CartItem[],
-    nota?: string | undefined,
+    nota: string,
   ): Promise<Pedido | null> {
     const url = `http://localhost:8000/api/pedidos/crear/`;
 
@@ -118,6 +121,9 @@ class PedidoAPI {
           cantidad: item.quantity,
           id_producto: item.product.id,
           id_presentacion: item.present?.id,
+          ...(item.product.categoria === Categoria.ESPECIAL && {
+            sabor: item.id,
+          }),
         };
       }),
     });
@@ -134,7 +140,6 @@ class PedidoAPI {
       }
 
       const data = await response.json();
-      console.log(data?.pedido);
       return data?.pedido;
     } catch (err) {
       console.error("Error al postear el pedido: ", err);

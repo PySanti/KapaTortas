@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Producto, Presentacion } from "@/app/models/Producto";
 import { persist } from "zustand/middleware";
+import { Categoria } from "@/app/models/Producto";
 
 export type CartItem = {
   id: string;
@@ -17,6 +18,7 @@ type PedidoState = {
   removeFromCart: (productId: string) => void;
   updateCartItem: (productId: string, quantity: number) => void;
   clearCart: () => void;
+  setNota: (message: string | undefined) => string;
 };
 
 export const usePedidoStore = create<PedidoState>()(
@@ -26,6 +28,11 @@ export const usePedidoStore = create<PedidoState>()(
       quantity: 0,
       checkSameItem: (item) => {
         const state = get();
+
+        if (item.product.categoria === Categoria.ESPECIAL) {
+          return state.cartItems.some((cartItem) => cartItem.id === item.id);
+        }
+
         return state.cartItems.some(
           (cartItem) =>
             cartItem.product.id === item.product.id &&
@@ -89,6 +96,19 @@ export const usePedidoStore = create<PedidoState>()(
           };
         }),
       clearCart: () => set({ cartItems: [], quantity: 0 }),
+      setNota: (message) => {
+        const state = get();
+        const formattedMessage = state.cartItems
+          .map((cartItem) => {
+            return cartItem.product.categoria === Categoria.ESPECIAL
+              ? `${cartItem.product.titulo}: \n Sabores: ${cartItem.id}, Cantidad: ${cartItem.quantity}`
+              : null;
+          })
+          .filter(Boolean)
+          .join("\n");
+
+        return [message, formattedMessage].join("\n" + "\n");
+      },
     }),
     {
       name: "pedido-cache",

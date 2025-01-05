@@ -1,4 +1,5 @@
 import { Pedido } from "@/app/models/Pedido";
+import { Categoria } from "@/app/models/Producto";
 
 type OptionWhats = "contacto" | "pedido";
 
@@ -24,7 +25,7 @@ export default function redirectToWhatsapp({
   const itemDetails = pedidoDetails?.descripciones
     .map(
       (item) =>
-        `🍰 Producto: ${item.titulo} (Presentación: ${item.presentacion}) - Cantidad: ${item.cantidad}`,
+        `🍰 Producto: ${item.titulo} ${item.categoria === Categoria.ESPECIAL ? `(Sabores: ${item.sabor})` : `(Presentación: ${item.presentacion}) `} - Cantidad: ${item.cantidad}`,
     )
     .join("\n");
 
@@ -47,6 +48,8 @@ ${pedidoDetails?.metodo_entrega === "delivery" ? addressDetails : ""}
 💳 Método de pago: ${pedidoDetails?.metodo_pago}
 💰 Total: $${pedidoDetails?.monto_total.toFixed(2)}
 
+Nota: ${pedidoDetails?.nota}
+
 ¡Al realizar tú pago pondremos el pedido en preparación! 🎉
   `.trim();
 
@@ -55,5 +58,7 @@ ${pedidoDetails?.metodo_entrega === "delivery" ? addressDetails : ""}
 
   // Create WhatsApp Web URL and redirect
   const whatsappWebUrl = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
-  window.location.href = whatsappWebUrl;
+
+  // Open WhatsApp in a new window
+  window.open(whatsappWebUrl, "_blank");
 }

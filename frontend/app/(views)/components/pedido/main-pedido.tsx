@@ -7,6 +7,7 @@ import QuantityCard from "../quantity-card";
 import PriceSummary from "./price-summary";
 import DiscardItem from "./discard-item";
 import { usePedidoStore } from "@/src/usePedidoStore";
+import { Categoria } from "@/app/models/Producto";
 
 import { Precios } from "@/app/models/Pedido";
 
@@ -15,7 +16,7 @@ export default function MainPedido({ precios }: { precios: Precios }) {
     usePedidoStore();
 
   return (
-    <section className="bg-terciary py-6 md:py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto rounded-t-xl lg:w-full lg:max-w-lg">
+    <section className="bg-terciary border-4 border-terciary-muted py-6 md:py-12 text-indigo-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto rounded-t-xl lg:w-full lg:max-w-lg">
       <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
         <h2 className="sr-only">Order summary</h2>
 
@@ -63,7 +64,9 @@ export default function MainPedido({ precios }: { precios: Precios }) {
                     {item.product.titulo}
                   </h3>
                   <p className="text-secondary text-lg text-opacity-70">
-                    {item.present && item.present.proporcion}
+                    {item.product.categoria !== Categoria.ESPECIAL
+                      ? item.present && item.present.proporcion
+                      : item.id}
                   </p>
                 </div>
                 <h3 className="flex-none text-lg font-medium text-secondary">

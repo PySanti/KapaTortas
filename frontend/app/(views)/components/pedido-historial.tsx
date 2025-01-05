@@ -1,5 +1,5 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { EllipsisVertical, CircleCheck } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import DisplayOnHover from "./display-on-hover";
 import { Pedido } from "@/app/models/Pedido";
 import Image from "next/image";
@@ -12,7 +12,10 @@ interface PedidoHistorialProps extends React.HTMLAttributes<HTMLDivElement> {
   nombreUsuario: string;
 }
 
-export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistorialProps) {
+export default function PedidoHistorial({
+  pedidos,
+  nombreUsuario,
+}: PedidoHistorialProps) {
   return (
     <div className="">
       <div className="mt-16">
@@ -21,7 +24,7 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
         <div className="space-y-8 sm:px-4 lg:max-w-5xl lg:px-0">
           {pedidos &&
             pedidos.length > 0 &&
-            pedidos.map((pedido, i) => (
+            pedidos.map((pedido) => (
               <div
                 key={pedido.numero_de_orden}
                 className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
@@ -36,7 +39,9 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                 <div className="flex items-center border-b border-gray-200 p-4 sm:grid sm:grid-cols-5 sm:gap-x-6 sm:p-6">
                   <dl className="grid flex-1 gap-x-4 text-sm grid-cols-4 lg:col-span-4">
                     <div className="sm:block col-span-1">
-                      <dt className="font-medium text-terciary">Orden realizada</dt>
+                      <dt className="font-medium text-terciary">
+                        Orden realizada
+                      </dt>
                       <dd className="mt-1 text-terciary-muted">
                         <time dateTime={pedido.fecha_pedido}>
                           {new Date(pedido.fecha_pedido).toLocaleDateString()}
@@ -45,7 +50,9 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                     </div>
                     <div className="col-span-1">
                       <dt className="font-medium text-terciary">Total</dt>
-                      <dd className="mt-1 text-terciary-muted">${pedido.monto_total}</dd>
+                      <dd className="mt-1 text-terciary-muted">
+                        ${pedido.monto_total}
+                      </dd>
                     </div>
                     <div>
                       <dt className="font-medium text-terciary">Enviar a</dt>
@@ -60,18 +67,28 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                       />
                     </div>
                     <div>
-                      <dt className="font-medium text-terciary">Método de pago</dt>
+                      <dt className="font-medium text-terciary">
+                        Método de pago
+                      </dt>
                       <dd className="mt-1 text-terciary-muted">
                         {transformMetodoPago(pedido.metodo_pago)}
                       </dd>
                     </div>
                   </dl>
 
-                  <Menu as="div" className="relative flex justify-end lg:hidden">
+                  <Menu
+                    as="div"
+                    className="relative flex justify-end lg:hidden"
+                  >
                     <div className="flex items-center">
                       <MenuButton className="-m-2 flex items-center p-2 text-gray-400 hover:text-terciary-muted">
-                        <span className="sr-only">Opciones de orden {pedido.numero_de_orden}</span>
-                        <EllipsisVertical aria-hidden="true" className="h-6 w-6" />
+                        <span className="sr-only">
+                          Opciones de orden {pedido.numero_de_orden}
+                        </span>
+                        <EllipsisVertical
+                          aria-hidden="true"
+                          className="h-6 w-6"
+                        />
                       </MenuButton>
                     </div>
 
@@ -99,7 +116,9 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                     <div className="flex space-x-4">
                       <Button className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
                         <span>Ver Factura</span>
-                        <span className="sr-only">para orden {pedido.numero_de_orden}</span>
+                        <span className="sr-only">
+                          para orden {pedido.numero_de_orden}
+                        </span>
                       </Button>
                     </div>
                   </div>
@@ -123,10 +142,16 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                         <div className="ml-6 flex-1 text-base">
                           <div className="font-medium text-terciary sm:flex sm:justify-between">
                             <h5>{producto.titulo}</h5>
-                            <p className="mt-2 sm:mt-0">${producto.precio_presentacion}</p>
+                            <p className="mt-2 sm:mt-0">
+                              ${producto.precio_presentacion}
+                            </p>
                           </div>
                           <p className="text-sm text-terciary-muted sm:mt-2 sm:block">
-                            Tamaño: {producto.presentacion}
+                            {producto.categoria === "especial" ? (
+                              <>Sabores: {producto.sabor}</>
+                            ) : (
+                              <>Tamaño: {producto.presentacion}</>
+                            )}
                           </p>
                           <p className="text-sm text-terciary-muted sm:mt-2 sm:block">
                             Cantidad: {producto.cantidad}
@@ -156,7 +181,10 @@ export default function PedidoHistorial({ pedidos, nombreUsuario }: PedidoHistor
                             </Link>
                           </div>
                           <div className="flex flex-1 justify-center pl-4">
-                            <a href="#" className="whitespace-nowrap text-primary">
+                            <a
+                              href="#"
+                              className="whitespace-nowrap text-primary"
+                            >
                               Comprar de nuevo
                             </a>
                           </div>
