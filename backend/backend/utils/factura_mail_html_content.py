@@ -6,7 +6,6 @@ def factura_mail_html_content(factura):
             <td>{ dp.presentacion_asociada.ref }</td>
             <td>{ dp.cantidad }</td>
             <td>${ dp.presentacion_asociada.precio }</td>
-            <td>${ dp.cantidad*dp.presentacion_asociada.precio }</td>
           </tr>
           """
     return f"""
@@ -83,14 +82,14 @@ def factura_mail_html_content(factura):
             <th>Descripción</th>
             <th>Cantidad</th>
             <th>Precio Unitario</th>
-            <th>Total</th>
           </tr>
         </thead>
         <tbody>
             {table_string}
         </tbody>
       </table>
-
+      <p><strong>IVA:</strong> { factura.venta_asociada.pedido.iva }</p>
+      <p><strong>Total:</strong> { factura.venta_asociada.pedido.monto_total }</p>
       <p class="footer-text">
         Este mensaje fue producido por KapaTortas. © 2024. Todos los derechos reservados.
         <a href="https://kapatortas.com" target="_blank">KapaTortas</a>.
