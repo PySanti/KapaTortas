@@ -10,8 +10,11 @@ class PedidosManager(Manager):
         pedido_dict["descripciones"] = [DescripcionesPedido.objects.get_descripcion_json(p) for p in pedido.descripciones_pedido.all()];
         return pedido_dict
 
-    def get_pedidos_list_json(self):
-        return [self.get_pedido_json(p) for p in self.all()]
+    def get_pedidos_list_json(self, sorted):
+        basic_query = self.all().order_by('-id')
+        if sorted:
+            pass
+        return [self.get_pedido_json(p) for p in basic_query]
 
 class DescripcionesPedidosManager(Manager):
     def get_descripcion_json(self, descripcion):
