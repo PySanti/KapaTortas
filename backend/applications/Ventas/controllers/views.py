@@ -137,7 +137,10 @@ class EditarEstadoPedidoAPI(APIView):
                         new_venta = Ventas.objects.create(pedido=pedido)
                         new_factura = Facturas.objects.create(venta_asociada=new_venta)
                         pdf_content = crear_pdf(new_factura)
-                        new_factura.pdf_file.save(f"factura{new_factura.venta_asociada__pedido__numero_de_orden}.pdf", pdf_content)
+                        new_factura.pdf_file.save(
+                            f"factura_{new_factura.venta_asociada.pedido.numero_de_orden}.pdf",
+                            pdf_content
+                        )
                         send_client_mail(
                             subject=f"Factura {new_factura.fecha_emision_factura}",
                             correo=pedido.cliente_asociado.perfil.correo,

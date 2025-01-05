@@ -5,6 +5,9 @@ import smtplib
 
 
 def send_client_mail(subject, correo, html_content, factura=None):
+    if not correo:
+        raise ValueError("No email address provided to send the email.")
+
     try:
         # Create the email
         email = EmailMessage(

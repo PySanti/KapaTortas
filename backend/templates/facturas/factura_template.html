@@ -92,8 +92,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for dp in
-                    factura.venta_asociada.pedido.descripciones_pedido.all %}
+                    {% for dp in descripciones_pedido %}
                     <tr>
                         <td>{{ dp.presentacion_asociada.ref }}</td>
                         <td>{{ dp.cantidad }}</td>
