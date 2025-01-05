@@ -23,7 +23,7 @@ export interface Producto {
   titulo: string;
   categoria: string;
   descripcion: string;
-  presentaciones: Presentacion[];
   imagenes: string[];
   reviews: Review[];
+  presentaciones: Presentacion[];
 }

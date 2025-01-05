@@ -9,6 +9,12 @@ class DescripcionesPedidosSerializer(serializers.Serializer):
     id_producto = serializers.IntegerField()
     id_presentacion = serializers.IntegerField()
     cantidad = serializers.IntegerField()
+    sabor = serializers.CharField(
+            required=False,
+            allow_null=True,  # Aceptar valores nulos
+            allow_blank=True,
+        )
+
 
 class CrearPedidoSerializer(serializers.Serializer):
     correo_cliente = serializers.EmailField()
@@ -18,7 +24,7 @@ class CrearPedidoSerializer(serializers.Serializer):
     )
     iva = serializers.FloatField()
     precio = serializers.FloatField()
-    nota = serializers.CharField(required=False, allow_blank=True, default=None)
+    nota = serializers.CharField()
     metodo_entrega = serializers.ChoiceField(
         choices=[(role.value, role.name) for role in MetodoEntregaEnum]
     )

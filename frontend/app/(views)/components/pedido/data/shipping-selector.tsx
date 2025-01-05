@@ -75,6 +75,26 @@ export function ShippingSelector({
           )}
         </div>
       </div>
+
+      {/* Referencia */}
+      <div className="sm:col-span-3">
+        <label
+          htmlFor="nota"
+          className="block text-sm font-medium text-terciary"
+        >
+          Nota
+        </label>
+        <div className="mt-1">
+          <Textarea
+            {...register("nota")}
+            placeholder="Nota (Algún requerimiento especial que quieres en tú pedido o entrega)"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          />
+          {errors.nota && (
+            <span className="text-opacity-40">{errors.nota.message}</span>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

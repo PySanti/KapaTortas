@@ -53,7 +53,7 @@ BASE_DIRECCIONES_SHOWABLE_FIELDS = ["id", "direccion", "referencia", "codigo_pos
 BASE_PRODUCTOS_LIST_SHOWABLE_FIELDS = ["id", "titulo", "imagenes", "descripcion", "categoria"]
 BASE_PRESENTACIONES_SHOWABLE_FIELDS = ["id", "ref", "proporcion", "precio", "stock", "calorias"]
 BASE_REVIEWS_SHOWABLE_FIELDS = ["calificacion", "descripcion", ]
-BASE_PEDIDOS_SHOWABLE_FIELDS = ["numero_de_orden","fecha_pedido","fecha_entrega", "monto_total", "estado", "metodo_pago", "metodo_entrega"]
+BASE_PEDIDOS_SHOWABLE_FIELDS = ["numero_de_orden","fecha_pedido","fecha_entrega", "monto_total", "estado", "nota", "metodo_pago", "metodo_entrega"]
 BASE_VENTAS_LIST_SHOWABLE_FIELDS = ["id", "fecha", "nota"]
 BASE_FACTURAS_SHOWABLE_FIELDS = ["id", "fecha_emision_factura", "domicilio_fiscal", "numero_telefonico_empresa", "rif_empresa", "correo_electronico_empresa"]
 

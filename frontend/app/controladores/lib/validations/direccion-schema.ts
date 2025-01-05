@@ -10,6 +10,7 @@ export const direccionSchema = z.object({
     .refine((val) => !isNaN(val) && val >= 999 && val <= 99999, {
       message: "Código postal inválido",
     }),
+  nota: z.string().optional(),
 });
 
 // Direccion type
