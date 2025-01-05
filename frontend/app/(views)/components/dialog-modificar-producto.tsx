@@ -21,11 +21,11 @@ import {
 import { Separator } from "@/app/(views)/components/ui/separator";
 import FormModificarProducto from "./form-modificar-producto";
 import { MoreHorizontal } from "lucide-react";
-import { ModificarProductoType } from "@/app/controladores/lib/validations/modificar-producto";
+import { ModificarProductoFormType } from "@/app/controladores/lib/validations/modificar-producto";
 
 type DialogModificarProductoByIdProps = {
   productoId: number;
-  productData: ModificarProductoType;
+  productData: ModificarProductoFormType;
 };
 
 export function DialogModificarProductoById({

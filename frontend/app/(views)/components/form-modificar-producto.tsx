@@ -23,6 +23,7 @@ import FormErrorMessage from "./form-error-msg";
 import FormSuccessMessage from "./form-success-msg";
 import { Categoria } from "@/app/models/Producto";
 import { SelectCategorias } from "./select-categorias";
+import { useRouter } from "next/navigation";
 
 type FormModificarProductoProps = {
   id: number;
@@ -43,6 +44,9 @@ export default function FormModificarProducto({
 }: FormModificarProductoProps) {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [successMsg, setSuccessMsg] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const router = useRouter();
 
   const form = useForm<ModificarProductoFormType>({
     resolver: zodResolver(ModificarProductoFormSchema),
@@ -69,19 +73,24 @@ export default function FormModificarProducto({
     };
 
     try {
+      setIsLoading(true);
+
       const res = await ProductoAPI.modificarProductoById(id, formattedData);
 
       // If res is null (catch) handle the error
       if (res === null) {
         setErrorMsg("Error al modificar el producto");
         setSuccessMsg("");
+        setIsLoading(false);
       } else {
         setSuccessMsg("Producto actualizado exitosamente");
         setErrorMsg("");
 
         setTimeout(() => {
+          setIsLoading(false);
           handleCloseDialog();
         }, 2000);
+        router.refresh(); // Refresh page cuando se modifica un producto
       }
     } catch (error) {
       console.log("Error al modificar el producto:", error);
@@ -124,7 +133,7 @@ export default function FormModificarProducto({
             control={form.control}
             name="new_imagenes"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex-1">
                 <FormLabel>Imágenes URLs</FormLabel>
                 <FormControl>
                   <Input placeholder="URL1, URL2, URL3" {...field} />
@@ -156,7 +165,7 @@ export default function FormModificarProducto({
         <FormErrorMessage message={errorMsg} />
         <FormSuccessMessage message={successMsg} />
         <div className="flex justify-end">
-          <Button type="submit" variant={"terciary"}>
+          <Button type="submit" disabled={isLoading} variant={"terciary"}>
             Modificar Producto
           </Button>
         </div>

@@ -8,7 +8,7 @@ export const ModificarProductoFormSchema = z.object({
   new_categoria: z.nativeEnum(Categoria, {
     message: "Por favor, selecciona una categoría válida",
   }),
-
+  // This is the version for the form, the imagenes are converted to a string separated by commas
   new_imagenes: z
     .string()
     .refine(
@@ -26,6 +26,7 @@ export const ModificarProductoAPISchema = z.object({
   new_titulo: z.string().min(1, "El título es requerido"),
   new_descripcion: z.string().min(1, "La descripción es requerida"),
   new_categoria: z.nativeEnum(Categoria),
+  // This is the version for the API submission, the imagenes are an array of strings
   new_imagenes: z.array(z.string().url()),
 });
 
