@@ -29,3 +29,4 @@ soupsieve==2.6
 sqlparse==0.5.1
 typing-extensions==4.12.2
 urllib3==2.2.3
+weasyprint==61.2
