@@ -4,8 +4,8 @@ import DisplayOnHover from "./display-on-hover";
 import { Pedido } from "@/app/models/Pedido";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "./ui/button";
 import { transformMetodoPago } from "@/app/controladores/utilities/transform-metodo-pago";
+import DownloadFacturaButton from "./FacturaButton";
 
 interface PedidoHistorialProps extends React.HTMLAttributes<HTMLDivElement> {
   pedidos: Pedido[];
@@ -92,7 +92,7 @@ export default function PedidoHistorial({
                       </MenuButton>
                     </div>
 
-                    <MenuItems
+                    {/* <MenuItems
                       transition
                       className="absolute right-0 z-10 mt-2 w-40 origin-bottom-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                     >
@@ -106,7 +106,7 @@ export default function PedidoHistorial({
                           </Link>
                         </MenuItem>
                       </div>
-                    </MenuItems>
+                    </MenuItems> */}
                   </Menu>
 
                   <div className="hidden lg:flex lg:flex-col lg:items-end lg:space-y-4">
@@ -114,12 +114,7 @@ export default function PedidoHistorial({
                       Número de orden: {pedido.numero_de_orden}
                     </div>
                     <div className="flex space-x-4">
-                      <Button className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
-                        <span>Ver Factura</span>
-                        <span className="sr-only">
-                          para orden {pedido.numero_de_orden}
-                        </span>
-                      </Button>
+                      <DownloadFacturaButton pedido={pedido} isMobile={true} />
                     </div>
                   </div>
                 </div>

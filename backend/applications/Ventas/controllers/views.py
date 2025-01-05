@@ -22,6 +22,7 @@ from backend.utils.constants import EstadoEnum
 from backend.utils.send_client_mail import send_client_mail
 from backend.utils.factura_mail_html_content import factura_mail_html_content
 from backend.utils.crear_pdf import crear_pdf
+from django.http import FileResponse
 
 
 # Create your views here.
@@ -112,9 +113,15 @@ class ConsultarFacturaByOrderAPI(APIView):
                 # Filtrar la factura basada en el número de orden del pedido
                 factura = Facturas.objects.filter(venta_asociada__pedido__numero_de_orden=numero_de_orden).first()
 
-                if factura:
-                    # Suponiendo que get_factura_json es un método que devuelve un dict con los detalles de la factura
-                    return JsonResponse({'factura': Facturas.objects.get_factura_json(factura)}, status=status.HTTP_200_OK)
+                if factura.pdf_file:
+                    pdf_file = factura.pdf_file.open('rb')
+
+                    response = FileResponse(pdf_file, content_type='application/pdf')
+
+                    filename = factura.pdf_file.name.split('/')[-1]
+                    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+                    return response
                 else:
                     return JsonResponse({'error': 'factura_not_found'}, status=status.HTTP_404_NOT_FOUND)
 
