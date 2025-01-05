@@ -75,6 +75,7 @@ class Ventas(models.Model):
         verbose_name_plural = 'Ventas'
 
 class Facturas(models.Model):
+    pdf_file = models.FileField(upload_to='facturas/', null=True, blank=True)
     fecha_emision_factura               = models.DateTimeField(default=get_current_time)
     venta_asociada                      = models.OneToOneField(Ventas, on_delete=models.SET_NULL, null=True, related_name="factura")
     domicilio_fiscal                    = models.CharField(blank=True, default=DEFAULT_DOMICILIO_FISCAL)

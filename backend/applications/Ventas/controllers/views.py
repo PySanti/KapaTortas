@@ -1,4 +1,5 @@
 from django.shortcuts import render
+
 from ..models import Facturas
 from rest_framework.views import (
     APIView,
@@ -20,7 +21,7 @@ from ..models import Facturas
 from backend.utils.constants import EstadoEnum
 from backend.utils.send_client_mail import send_client_mail
 from backend.utils.factura_mail_html_content import factura_mail_html_content
-
+from backend.utils.crear_pdf import crear_pdf
 
 
 # Create your views here.
@@ -135,10 +136,13 @@ class EditarEstadoPedidoAPI(APIView):
                     if pedido.estado == EstadoEnum.FINALIZADO.value:
                         new_venta = Ventas.objects.create(pedido=pedido)
                         new_factura = Facturas.objects.create(venta_asociada=new_venta)
+                        pdf_content = crear_pdf(new_factura)
+                        new_factura.pdf_file.save(f"factura{new_factura.venta_asociada__pedido__numero_de_orden}.pdf", pdf_content)
                         send_client_mail(
                             subject=f"Factura {new_factura.fecha_emision_factura}",
                             correo=pedido.cliente_asociado.perfil.correo,
-                            html_content=factura_mail_html_content(factura=new_factura)
+                            html_content=factura_mail_html_content(factura=new_factura),
+                            factura=new_factura
                         )
                     return JsonResponse({'modificado': True}, status=status.HTTP_200_OK)
             else:

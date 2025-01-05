@@ -1,16 +1,26 @@
 from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.conf import settings
 import smtplib
 
-def send_client_mail(subject, correo, html_content):
+
+def send_client_mail(subject, correo, html_content, factura=None):
     try:
-        send_mail(
+        # Create the email
+        email = EmailMessage(
             subject=subject,
-            message='',
+            body=html_content,
             from_email='your_email@gmail.com',
-            recipient_list=[correo],
-            html_message=html_content,
+            to=[correo],
         )
+        email.content_subtype = 'html'  # Specify the email is HTML
+
+        # Attach the PDF if provided
+        if factura and factura.pdf_file:
+            email.attach_file(factura.pdf_file.path)
+
+        # Send the email
+        email.send()
     except smtplib.SMTPAuthenticationError as e:
         print(f"SMTP Authentication Error: {e}")
         raise

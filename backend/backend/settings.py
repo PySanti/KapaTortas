@@ -1,12 +1,16 @@
 from pathlib import Path
 import json
-
-
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 with open(BASE_DIR / 'secrets.json', 'r') as archivo:
     # Carga el contenido del archivo en un diccionario de Python
     secret_data = json.load(archivo)
+
+
+# Carpeta base para archivos subidos
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Carpeta "media" dentro del proyecto
+MEDIA_URL = '/media/'  # URL para servir los archivos subidos
 
 
 SECRET_KEY = secret_data['SECRET_KEY']
@@ -59,7 +63,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # Make sure it points to the templates folder
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,7 +146,7 @@ EMAIL_PORT          = 587
 EMAIL_USE_TLS       = True
 EMAIL_HOST_USER     = "kapatortas@gmail.com"
 EMAIL_HOST_PASSWORD = secret_data['EMAIL_PASSWORD']
-DEFAULT_FROM_EMAIL = 'kapatortas@gmail.com'  # El correo electrónico que se usará como remitente por defecto  
+DEFAULT_FROM_EMAIL = 'kapatortas@gmail.com'  # El correo electrónico que se usará como remitente por defecto
 
 # GOOGLE CLOUD
 
