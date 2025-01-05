@@ -14,9 +14,28 @@ class ProductoAPI {
     return ProductoAPI.instance;
   }
 
-  // Metodo para obtener el Producto
+  // Metodo para obtener productos excepto los de categoria especial
   public async obtenerListaProductos(): Promise<Producto[] | null> {
     const url = `http://localhost:8000/api/productos/all_productos/`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) throw new Error(`Error: ${response.status}`);
+
+    const data = await response.json();
+
+    return data.productos;
+  }
+
+  // Metodo para obtener todos los productos
+  public async obtenerTodosProductos(): Promise<Producto[] | null> {
+    const url = `http://localhost:8000/api/productos/todos/`;
 
     const response = await fetch(url, {
       method: "GET",
