@@ -90,12 +90,13 @@ export default function LoginForm() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
+                      id='email-input'
                       type='email'
                       placeholder='lmessi@gmail.com'
                       disabled={isPending}
                       {...field}
                     />
-                  </FormControl>
+                    </FormControl>
                   <FormMessage className='text-[0.8rem]' /> {/* Form error */}
                 </FormItem>
               )}
@@ -110,6 +111,7 @@ export default function LoginForm() {
                   <FormControl>
                     <div className='relative'>
                       <Input
+                        id='password-input'
                         type={showPassword ? 'text' : 'password'}
                         placeholder='********'
                         className='pr-10'
