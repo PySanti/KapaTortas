@@ -14,12 +14,12 @@ class PedidosManager(Manager):
     def get_pedidos_list_json(self, sorted):
         basic_query = self.all().order_by('-id')
         if sorted:
-            basic_query.order_by(  
+            basic_query = basic_query.order_by(  
             Case(  
-                When(status=EstadoEnum.EN_PROCESO, then=0),  
-                When(status=EstadoEnum.RECIBIDO, then=1),  
-                When(status=EstadoEnum.FINALIZADO, then=2),  
-                When(status=EstadoEnum.CANCELADO, then=3),  
+                When(estado=EstadoEnum.EN_PROCESO.value, then=0),  
+                When(estado=EstadoEnum.RECIBIDO.value, then=1),  
+                When(estado=EstadoEnum.FINALIZADO.value, then=2),  
+                When(estado=EstadoEnum.CANCELADO.value, then=3),  
                 output_field=IntegerField(),  
             )) 
 
