@@ -1,4 +1,5 @@
-import { Producto } from "@/app/models/Producto";
+import { Categoria, Producto } from "@/app/models/Producto";
+import { ModificarProductoAPIType } from "../lib/validations/modificar-producto";
 
 class ProductoAPI {
   private static instance: ProductoAPI;
@@ -55,6 +56,35 @@ class ProductoAPI {
       return data.producto;
     } catch (err) {
       console.error("Error en la petición del producto: ", err);
+      return null;
+    }
+  }
+
+  // Modificar producto by id
+  public async modificarProductoById(
+    id: number,
+    productoData: ModificarProductoAPIType
+  ): Promise<Producto | null> {
+    const url = `http://localhost:8000/api/productos/editar/${id}/`;
+
+    try {
+      const response: Response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productoData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error en la base de datos: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      return data.new_producto;
+    } catch (err) {
+      console.error("Error al modificar el producto: ", err);
       return null;
     }
   }
