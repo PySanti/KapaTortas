@@ -121,21 +121,20 @@ class EditarEstadoPedidoAPI(APIView):
         try:
             # Find the pedido by numero_de_orden
             if pedido := Pedidos.objects.filter(numero_de_orden=serialized_data['numero_orden']).first():
-                # Update the estado with the provided value
-                pedido.estado = serialized_data['estado']
-                pedido.save()
-
-                # Handle finalization logic
-                if pedido.estado == EstadoEnum.FINALIZADO.value:
-                    new_venta = Ventas.objects.create(pedido=pedido)
-                    new_factura = Facturas.objects.create(venta_asociada=new_venta)
-                    send_client_mail(
-                        subject=f"Factura {new_factura.fecha_emision_factura}",
-                        correo=pedido.cliente_asociado.perfil.correo,
-                        html_content=factura_mail_html_content(factura=new_factura)
-                    )
-
-                return JsonResponse({'modificado': True}, status=status.HTTP_200_OK)
+                if (serialized_data['estado'] == EstadoEnum.FINALIZADO.value) and (Ventas.objects.filter(pedido__id=pedido.id)):
+                    return JsonResponse({'error': "This pedido has a venta"}, status=status.HTTP_404_NOT_FOUND)
+                else:
+                    pedido.estado = serialized_data['estado']
+                    pedido.save()
+                    if pedido.estado == EstadoEnum.FINALIZADO.value:
+                        new_venta = Ventas.objects.create(pedido=pedido)
+                        new_factura = Facturas.objects.create(venta_asociada=new_venta)
+                        send_client_mail(
+                            subject=f"Factura {new_factura.fecha_emision_factura}",
+                            correo=pedido.cliente_asociado.perfil.correo,
+                            html_content=factura_mail_html_content(factura=new_factura)
+                        )
+                    return JsonResponse({'modificado': True}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({'error': 'pedido_not_found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
