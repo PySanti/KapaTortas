@@ -29,6 +29,24 @@ class ConsultarProductoAPI(APIView):
         except:
             return JsonResponse({'error' : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
 
+
+# Trae todos los productos (sin filtro de categoria)
+class ObtenerTodosProductosAPI(APIView):
+    serializer_class = ObtenerListaProductosSerializer 
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        from applications.Productos.models import Productos
+
+        try:
+            productos = Productos.objects.get_productos_list_json()
+            return JsonResponse({'productos' : productos}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({'error': "unexpected_error", 'details': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Trae todos los productos excepto los de categoria especial
 class ObtenerListaProductosAPI(APIView):
     serializer_class = ObtenerListaProductosSerializer
     authentication_classes = []
@@ -50,7 +68,6 @@ class ObtenerListaProductosAPI(APIView):
 
         except Exception as e:
             return JsonResponse({'error': "unexpected_error", 'details': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class ConsultarProductoEspecialAPI(APIView):
     serializer_class = ConsultarEspecialSerializer
@@ -121,3 +138,4 @@ class EditarProductoByIdAPI(APIView):
                 {'error': "unexpected_error", 'details': str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
