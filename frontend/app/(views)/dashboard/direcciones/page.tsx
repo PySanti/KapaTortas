@@ -21,7 +21,7 @@ export default async function DireccionesPage() {
         <>
           <DashboardHeader
             heading="Direcciones"
-            description="Edita, elimina o establece una dirección de envío predeterminada"
+            description="Agrega direcciones de envío para que tus pedidos lleguen a donde estés"
           />
           <DialogAgregarDireccion email={session?.user.email!} />
 
@@ -31,16 +31,16 @@ export default async function DireccionesPage() {
                 key={direccion.id}
                 badge={direccion.is_favorite ? "Dirección de envío preferida" : undefined}
                 idElement={direccion.id}
-                actions={{
-                  edit: {
-                    label: "Editar",
-                    action: editDireccion,
-                    // form: <FormAgregarDireccionEnvio />,
-                  },
-                  delete: {
-                    action: deleteDireccion,
-                  },
-                }}
+                // actions={{
+                //   edit: {
+                //     label: "Editar",
+                //     action: editDireccion,
+                //     // form: <FormAgregarDireccionEnvio />,
+                //   },
+                //   delete: {
+                //     action: deleteDireccion,
+                //   },
+                // }}
               >
                 <p>{session?.user.name}</p>
                 <p>{`${direccion.direccion}, ${direccion.referencia}, ${direccion.ciudad}, ${direccion.estado}, ${direccion.codigo_postal}`}</p>
