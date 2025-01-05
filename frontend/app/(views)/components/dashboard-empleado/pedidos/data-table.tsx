@@ -103,8 +103,8 @@ export function DataTablePedidos<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {cell.column.id === "estado" ? (
-                        <div className="flex items-center gap-2">
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        <div className="flex items-center justify-between">
+                          <div>{flexRender(cell.column.columnDef.cell, cell.getContext())}</div>
                           <DialogEditarEstadoPedido
                             orderId={Number(row.original.numero_de_orden)}
                             currentStatus={row.original.estado as EstadoEnum}
