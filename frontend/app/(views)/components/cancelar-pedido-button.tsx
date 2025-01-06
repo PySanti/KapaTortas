@@ -14,26 +14,29 @@ interface CancelarButtonProps {
 export default function CancelarPedidoButton({ pedido }: CancelarButtonProps) {
   const router = useRouter();
   const [pedidoEstado, setPedidoEstado] = useState(pedido.estado);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCancelarPedido = async () => {
+    setIsLoading(true);
     const cancelar = await pedidoApi.editarEstadoPedido(
       pedido.numero_de_orden,
-      EstadoEnum.CANCELADO,
+      EstadoEnum.CANCELADO
     );
     if (cancelar) {
-      // Update the local state to trigger a re-render
+      // Update page cuando el pedido cambia de estado a cancelado
       setPedidoEstado(EstadoEnum.CANCELADO);
+      setIsLoading(false);
       router.refresh();
     }
   };
 
-  return (
+  return pedidoEstado === EstadoEnum.RECIBIDO ? (
     <Button
-      className="h-8 w-8 rounded-full bg-red-500 hover:bg-red-300"
+      className="h-6 w-6 p-0 rounded-full bg-rose-700 hover:bg-red-600"
       onClick={handleCancelarPedido}
-      disabled={pedidoEstado !== EstadoEnum.RECIBIDO}
+      disabled={isLoading}
     >
-      <XIcon />
+      <XIcon className="h-6 w-6" />
     </Button>
-  );
+  ) : null;
 }
