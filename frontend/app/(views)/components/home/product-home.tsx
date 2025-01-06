@@ -1,6 +1,5 @@
 import { Categoria, Producto } from "@/app/models/Producto";
-import { LegacyRef } from "react";
-import ItemProducto from "./item-producto";
+import ItemProducto from "../item-producto";
 
 export default function ProductHome({
   sectionCatalogoRef,
@@ -9,7 +8,6 @@ export default function ProductHome({
   sectionCatalogoRef: React.RefObject<HTMLDivElement>;
   productos: Producto[];
 }) {
-
   return (
     <section ref={sectionCatalogoRef} className="w-full mb-20">
       <div className="relative ">

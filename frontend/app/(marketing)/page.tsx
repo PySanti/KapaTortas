@@ -1,4 +1,4 @@
-import HomePage from "../(views)/components/home-page";
+import HomePage from "../(views)/components/home/home-page";
 
 import getStaticProps from "@/lib/serverProps";
 
