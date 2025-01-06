@@ -26,16 +26,13 @@ export default function MainHome({ scrollToSection }: ScrollButtonProps) {
 
         {/* Contenido */}
         <div className="relative z-10 flex h-full flex-col justify-center pt-10 px-4 sm:px-6 lg:px-8">
-          <div
-            className="mr-auto p-7 md:p-4 lg:p-0 max-w-3xl lg:ml-56"
-            style={{ left: "60%" }}
-          >
+          <div className="mr-auto p-7 md:p-4 lg:p-0 max-w-3xl lg:ml-56" style={{ left: "60%" }}>
             <h1 className="mb-6 text-4xl text-center sm:text-5xl md:text-6xl md:text-left">
               Cada bocado está lleno de creatividad
             </h1>
             <p className="p-secondary mb-8 text-center md:text-left max-w-2xl">
-              Inicia el 2025 con un bocado lleno de sabor. Regalale un detalle a
-              tus seres queridos.
+              Inicia el 2025 con un bocado lleno de sabor. Regálale un detalle especial a tus seres
+              queridos. Ordena ahora y haz que cada momento cuente
             </p>
             <div className="text-center md:text-left">
               <MainButton variant="secondary" onClick={scrollToSection}>

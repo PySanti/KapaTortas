@@ -41,13 +41,10 @@ export default function ItemProducto({ product }: { product: Producto }) {
               {product.descripcion}
             </p>
             <div className="relative sm:flex items-center py-4">
-              <MainButton
-                variant="tertiary"
-                className="hidden text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6"
-              >
+              <MainButton variant="tertiary" className="hidden text-sm p-5 sm:text-lg md:p-6">
                 Saber Más
               </MainButton>
-              <MainButton className=" text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6">
+              <MainButton className="text-sm p-5 sm:text-lg md:p-6">
                 <Link href={`/products/${product.id}`}>Consultar Producto</Link>
               </MainButton>
             </div>
