@@ -28,4 +28,16 @@ class ClientesManager(Manager):
 
     def get_pedidos_json(self, cliente) -> list:
         from applications.Ventas.models import Pedidos
-        return [Pedidos.objects.get_pedido_json(p) for p in cliente.pedidos.all()]
+        from django.db.models import Case, When, IntegerField
+        from applications.Ventas.models import EstadoEnum
+
+        pedidos = cliente.pedidos.all().order_by(
+            Case(
+                When(estado=EstadoEnum.EN_PROCESO.value, then=0),
+                When(estado=EstadoEnum.RECIBIDO.value, then=1),
+                When(estado=EstadoEnum.FINALIZADO.value, then=2),
+                When(estado=EstadoEnum.CANCELADO.value, then=3),
+                output_field=IntegerField(),
+            )
+        )
+        return [Pedidos.objects.get_pedido_json(p) for p in pedidos]
