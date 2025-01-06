@@ -45,19 +45,15 @@ export default function DownloadFacturaButton({
     <Button
       onClick={() => pedidoFinalizado && handleDownloadFactura()}
       className={cn(
-        "flex items-center gap-x-2 px-4 py-2 text-sm text-gray-700 bg-white hover:bg-white",
+        "flex items-center gap-x-2 px-4 py-2 text-sm text-gray-700 bg-white hover:bg-white"
       )}
     >
       {!(pedidoFinalizado || pedidoRecibido) && (
-        <span
-          className={cn("inline-block h-2 w-2 rounded-full", statusColor)}
-        />
+        <span className={cn("inline-block h-2 w-2 rounded-full", statusColor)} />
       )}
 
       <span>{pedidoFinalizado ? "Ver Factura" : estado}</span>
-      {!isMobile && (
-        <span className="sr-only">para orden {pedido.numero_de_orden}</span>
-      )}
+      {!isMobile && <span className="sr-only">para orden {pedido.numero_de_orden}</span>}
     </Button>
   );
 }

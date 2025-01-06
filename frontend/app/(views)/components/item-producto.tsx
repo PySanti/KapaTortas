@@ -22,7 +22,7 @@ export default function ItemProducto({ product }: { product: Producto }) {
 
         <div className="text-center space-y-2">
           <div className="items-center space-x-2">
-            <div className="relative sm:flex items-center mx-4 min-w-36 max-w-sm md:max-w-md lg:max-w-lg">
+            <div className="relative sm:flex items-center min-w-36 max-w-sm md:max-w-md lg:max-w-lg">
               <h1 className="text-terciary text-3xl text-center md:text-5xl md:text-left lg:text-6xl">
                 {product.titulo}
               </h1>
@@ -40,14 +40,11 @@ export default function ItemProducto({ product }: { product: Producto }) {
             <p className="hidden text-sm text-terciary text-left md:flex lg:text-lg">
               {product.descripcion}
             </p>
-            <div className="relative sm:flex items-center p-4 space-x-4">
-              <MainButton
-                variant="tertiary"
-                className="hidden text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6"
-              >
+            <div className="relative sm:flex items-center py-4">
+              <MainButton variant="tertiary" className="hidden text-sm p-5 sm:text-lg md:p-6">
                 Saber Más
               </MainButton>
-              <MainButton className=" text-sm px-5 py-5 sm:text-lg md:px-6 md:py-6">
+              <MainButton className="text-sm p-5 sm:text-lg md:p-6">
                 <Link href={`/products/${product.id}`}>Consultar Producto</Link>
               </MainButton>
             </div>

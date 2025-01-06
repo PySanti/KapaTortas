@@ -20,7 +20,7 @@ class PedidoAPI {
   // Trae todos los pedidos del cliente iniciado
   public async obtenerPedidosCliente(email: string): Promise<Pedido[] | null> {
     const url = `http://localhost:8000/api/perfiles/buscar_pedidos_cliente/${encodeURIComponent(
-      email,
+      email
     )}`;
 
     try {
@@ -38,17 +38,14 @@ class PedidoAPI {
 
       return data.pedidos;
     } catch (err) {
-      console.error(
-        "Error en la peticion de consultar pedidos del cliente: ",
-        err,
-      );
+      console.error("Error en la peticion de consultar pedidos del cliente: ", err);
       return null;
     }
   }
 
   // Trae todos los pedidos de la db
   public async obtenerPedidos(): Promise<Pedido[] | null> {
-    const url = `http://localhost:8000/api/pedidos/all_pedidos/`;
+    const url = `http://localhost:8000/api/pedidos/all_pedidos/sorted`;
 
     try {
       const response = await fetch(url, {
@@ -105,7 +102,7 @@ class PedidoAPI {
     total: number,
     direccion_entrega_id: number,
     items: CartItem[],
-    nota: string,
+    nota: string
   ): Promise<Pedido | null> {
     const url = `http://localhost:8000/api/pedidos/crear/`;
 
@@ -149,10 +146,7 @@ class PedidoAPI {
   }
 
   // Editar el estado de un pedido en la db
-  public async editarEstadoPedido(
-    numeroOrden: number,
-    estado: EstadoEnum,
-  ): Promise<boolean> {
+  public async editarEstadoPedido(numeroOrden: number, estado: EstadoEnum): Promise<boolean> {
     const url = `http://localhost:8000/api/pedidos/editar_estado/`;
 
     try {

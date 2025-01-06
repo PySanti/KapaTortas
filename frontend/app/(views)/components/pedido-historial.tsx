@@ -5,8 +5,8 @@ import { Pedido } from "@/app/models/Pedido";
 import Image from "next/image";
 import Link from "next/link";
 import { transformMetodoPago } from "@/app/controladores/utilities/transform-metodo-pago";
-import DownloadFacturaButton from "./FacturaButton";
 import CancelarPedidoButton from "./cancelar-pedido-button";
+import DownloadFacturaButton from "./button-download-factura";
 
 interface PedidoHistorialProps extends React.HTMLAttributes<HTMLDivElement> {
   pedidos: Pedido[];
