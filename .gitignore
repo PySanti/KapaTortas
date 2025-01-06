@@ -6,3 +6,4 @@ __pycache__/
 backend/secrets.json
 frontend/env.local
 backend/media
+backend/dependencies
