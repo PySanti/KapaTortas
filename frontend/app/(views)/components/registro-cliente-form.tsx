@@ -303,6 +303,7 @@ export default function RegistroClienteForm() {
                           <FormControl>
                             <div className="relative">
                               <Input
+                                id="register-password-input"
                                 type={showPassword ? "text" : "password"}
                                 placeholder="********"
                                 className="pr-10"
@@ -337,6 +338,7 @@ export default function RegistroClienteForm() {
                           <FormControl>
                             <div className="relative">
                               <Input
+                                id="register-confirm-password-input"
                                 type={showPassword2 ? "text" : "password"}
                                 placeholder="********"
                                 className="pr-10"

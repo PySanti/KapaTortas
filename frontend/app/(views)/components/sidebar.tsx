@@ -41,6 +41,7 @@ export default function Sidebar({ className, items }: SidebarProps) {
                   )}
                 >
                   <Icon
+                    id="sidebar-icon"
                     className='mr-2'
                     size={20}
                     style={{ width: '1.25rem', height: '1.25rem' }}

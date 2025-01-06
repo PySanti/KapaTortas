@@ -147,9 +147,9 @@ export default function LoginForm() {
             {errorMsg && <p className='text-destructive text-xs mt-0'>{errorMsg}</p>}
             <FormSuccessMessage message={successMsg} />
             <div className='flex flex-col gap-6'>
-              <Button disabled={isPending} type='submit' className='w-full'>
+                <Button id='login-button' disabled={isPending} type='submit' className='w-full'>
                 Inicia sesión
-              </Button>
+                </Button>
               <div className='relative'>
                 <div className='absolute inset-0 flex items-center'>
                   <span className='w-full border-t' />
