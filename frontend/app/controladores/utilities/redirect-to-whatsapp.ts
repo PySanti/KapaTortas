@@ -50,8 +50,6 @@ export default function redirectToWhatsapp({
     💳 Método de pago: ${pedidoDetails?.metodo_pago}
     💰 Total: $${pedidoDetails?.monto_total.toFixed(2)}
 
-    Nota: ${pedidoDetails?.nota}
-
     ¡Al realizar tú pago pondremos el pedido en preparación! 🎉
       `.trim();
   } else {
