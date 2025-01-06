@@ -1,6 +1,6 @@
+import { marketingConfig } from "@/app/models/config/marketing";
 import Navbar from "../components/main-nav";
 import Footer from "../components/footer";
-import { marketingConfig } from "@/app/models/config/marketing";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 

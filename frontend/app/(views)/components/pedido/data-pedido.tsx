@@ -61,7 +61,7 @@ export default function DataPedido({
 
   const defaultValues: {
     direccion: string;
-    referencia?: string;
+    referencia: string;
     codigo_postal: string;
     nota: string;
   } = {
@@ -86,7 +86,7 @@ export default function DataPedido({
   const onSubmit = async (data: DireccionFormData) => {
     try {
       // Seteo nota rapidito
-      setNota(data?.nota);
+      setNota(data.nota || "");
       // Verificar si la dirección ya existe
       const checkDireccion = direcciones?.find(
         (direccion) => direccion.direccion === data.direccion,
@@ -105,9 +105,10 @@ export default function DataPedido({
       if (direccionId) {
         const pedido = await handleCrearPedido(
           direccionId,
-          setNota(data?.nota),
+          setNota(data.nota || ""),
         );
         redirectToWhatsapp({
+          variant: "pedido",
           pedidoDetails: pedido,
           name: session?.name || "Cliente",
         });

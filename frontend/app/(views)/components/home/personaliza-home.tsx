@@ -18,7 +18,7 @@ export default function PersonalizaHome() {
           </p>
           <Button
             asChild
-            className="text-lg hover:bg-[#A34D16] text-white rounded-full py-2"
+            className="text-lg hover:bg-[#A34D16] hover:cursor-pointer text-white rounded-full py-2"
             onClick={() => router.push("/products/personalizar")}
           >
             <p>Ver Especialidades</p>

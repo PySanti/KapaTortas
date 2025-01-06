@@ -16,6 +16,8 @@ import Logo from "@/app/(views)/components/images/Logo";
 import UserDropdown from "./user-dropdown";
 
 import { CartIcon } from "./cart-icon";
+import { Rol } from "@/app/models/RolEnum";
+import getCurrentUser from "@/app/controladores/utilities/get-current-user";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: MainNavItem[];
@@ -26,6 +28,7 @@ interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
 export default function Navbar({ className, items, user }: NavbarProps) {
   const pathname = usePathname();
   const isActive = (path: string) => path === pathname;
+  const rolUser = getCurrentUser()?.rol;
 
   return (
     <>
@@ -77,8 +80,9 @@ export default function Navbar({ className, items, user }: NavbarProps) {
                     </MainButton>
                   )}
 
-                  {/* Icon Carrito */}
-                  <CartIcon />
+                  {!(user?.rol === Rol.EMPLEADO || user?.rol === Rol.ADMIN) && (
+                    <CartIcon />
+                  )}
                 </div>
               </div>
             </div>

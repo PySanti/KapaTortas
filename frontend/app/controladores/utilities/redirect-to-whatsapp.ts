@@ -16,9 +16,10 @@ export default function redirectToWhatsapp({
   name,
 }: {
   variant?: OptionWhats;
-  pedidoDetails: Pedido | null;
+  pedidoDetails?: Pedido | null;
   name: string;
 }) {
+  let message;
   const phoneNumber = "584242185034";
 
   // Format item details for each item in the order
@@ -35,23 +36,29 @@ export default function redirectToWhatsapp({
       ? `📍 Dirección:\n🏠 ${pedidoDetails?.direccion_entrega.direccion}\n🔖 Referencia: ${pedidoDetails?.direccion_entrega.referencia}\n✉️ Código Postal: ${pedidoDetails?.direccion_entrega.codigo_postal}`
       : "🚶‍♂️ Recogeré en la tienda. 🏬";
 
-  // Create the WhatsApp message
-  const message = `
-${formatMessages[variant]}
-🙋‍♂️ Nombre del cliente: ${name}
+  // PEDIDO
+  if (variant === "pedido") {
+    message = `
+    ${formatMessages[variant]}
+    🙋‍♂️ Nombre del cliente: ${name}
 
-${itemDetails}
+    ${itemDetails}
 
-${pedidoDetails?.metodo_entrega === "delivery" ? addressDetails : ""}
+    ${pedidoDetails?.metodo_entrega === "delivery" ? addressDetails : ""}
 
-🚚 Método de entrega: ${pedidoDetails?.metodo_entrega}
-💳 Método de pago: ${pedidoDetails?.metodo_pago}
-💰 Total: $${pedidoDetails?.monto_total.toFixed(2)}
+    🚚 Método de entrega: ${pedidoDetails?.metodo_entrega}
+    💳 Método de pago: ${pedidoDetails?.metodo_pago}
+    💰 Total: $${pedidoDetails?.monto_total.toFixed(2)}
 
-Nota: ${pedidoDetails?.nota}
+    ¡Al realizar tú pago pondremos el pedido en preparación! 🎉
+      `.trim();
+  } else {
+    message = `
+          ${formatMessages[variant]}
 
-¡Al realizar tú pago pondremos el pedido en preparación! 🎉
-  `.trim();
+          🙋‍♂️ Mi nombre es: ${name}
+        `;
+  }
 
   // Encode the message to use in the WhatsApp URL
   const encodedMessage = encodeURIComponent(message);

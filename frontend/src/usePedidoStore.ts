@@ -107,6 +107,10 @@ export const usePedidoStore = create<PedidoState>()(
           .filter(Boolean)
           .join("\n");
 
+        if (message === "") {
+          return "no hay requerimientos especiales";
+        }
+
         return [message, formattedMessage].join("\n" + "\n");
       },
     }),
