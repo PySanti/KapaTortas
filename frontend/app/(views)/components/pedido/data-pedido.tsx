@@ -108,6 +108,7 @@ export default function DataPedido({
           setNota(data?.nota),
         );
         redirectToWhatsapp({
+          variant: "pedido",
           pedidoDetails: pedido,
           name: session?.name || "Cliente",
         });
