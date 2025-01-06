@@ -16,6 +16,7 @@ import Logo from "@/app/(views)/components/images/Logo";
 import UserDropdown from "./user-dropdown";
 
 import { CartIcon } from "./cart-icon";
+import { Rol } from "@/app/models/RolEnum";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: MainNavItem[];
@@ -77,8 +78,9 @@ export default function Navbar({ className, items, user }: NavbarProps) {
                     </MainButton>
                   )}
 
-                  {/* Icon Carrito */}
-                  <CartIcon />
+                  {!(user?.rol === Rol.EMPLEADO || Rol.EMPLEADO) && (
+                    <CartIcon />
+                  )}
                 </div>
               </div>
             </div>
