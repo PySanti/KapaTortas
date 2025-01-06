@@ -7,14 +7,15 @@ beforeEach(() => {
   cy.get('#email-input').type('juanitoalimanasiguioconjuana@gmail.com')
   cy.get('#password-input').type('123456')
   cy.get('#login-button').click()
-  //cy.url().should('include', 'http://localhost:3000/dashboard/ajustes')
+  
 })
 
 describe('Home page', () => { 
   it('Crear cuenta', () => {
-    /*cy.get('.relative > .flex').click();
+    cy.url().should('include', 'http://localhost:3000/dashboard/ajustes')
+    cy.get('.relative > .flex').click();
     cy.contains("Cerrar sesión").click()
-    cy.url().should('include', 'http://localhost:3000/login')*/
+    cy.url().should('include', 'http://localhost:3000/login')
     //cerraba sesion, ahora registro
     cy.contains("Regístrate").click()
     cy.contains("Regístrate con tu email").click()
@@ -44,7 +45,8 @@ describe('Home page', () => {
     cy.reload();
     cy.visit('http://localhost:3000/dashboard/ajustes')
     cy.get('.relative > .flex').click();
-    cy.contains("Cerrar sesión").click()
+    cy.contains("Cerrar sesión").click();
+    cy.url().should('include', 'http://localhost:3000/login')
 
   })
   
