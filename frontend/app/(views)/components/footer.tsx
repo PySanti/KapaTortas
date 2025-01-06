@@ -1,18 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { SendHorizontal } from "lucide-react";
 import { Button } from "@/app/(views)/components/ui/button";
-import { DatePicker } from "./date-picker";
-import { Input } from "@/app/(views)/components/ui/input";
 import redirectToWhatsapp from "@/app/controladores/utilities/redirect-to-whatsapp";
 import { FaWhatsapp } from "react-icons/fa";
 import getCurrentUser from "@/app/controladores/utilities/get-current-user";
 
 export default function Footer() {
-  const [correo, setCorreo] = useState<string>();
-  const [fecha, setFecha] = useState<Date | undefined>();
   const session = getCurrentUser();
 
   return (
@@ -23,37 +17,19 @@ export default function Footer() {
           <div className="text-left space-y-4 p-2">
             <h1 className="text-secondary text-3xl">Invítanos a tu Fiesta</h1>
             <p className="p-secondary">
-              Recibe descuentos especiales el día de tu cumpleaños.{" "}
+              Podemos visitarte en tu fiesta de cumpleaños.{" "}
             </p>
-            <div className="flex p-2">
-              <form className="flex flex-col sm:flex-row gap-3">
-                <Input
-                  variant="footer"
-                  type="text"
-                  placeholder="Tu Correo*"
-                  value={correo}
-                  onChange={(e) => {
-                    setCorreo(e.target.value);
-                  }}
-                  className="text-secondary-light"
-                />
-                <DatePicker date={fecha} setDate={setFecha} />
-                <Button className="rounded-full hover:bg-primary-light">
-                  <SendHorizontal />
-                </Button>
-              </form>
-            </div>
           </div>
           {/* Right */}
           <div className="space-y-4 text-left ml-4 mt-0 md:ml-0 lg:mt-4 md:text-right">
             <nav className="space-y-2">
-              <Link href="#" className="block hover:text-secondary-light">
-                <p className="p-secondary">Contacto</p>
+              <Link
+                href="/products/personalizar"
+                className="hover:text-secondary-light"
+              >
+                <p className="p-secondary">Crea tu Torta</p>
               </Link>
-              <Link href="#" className="block hover:text-secondary-light">
-                <p className="p-secondary">FAQ</p>
-              </Link>
-              <Link href="#" className="block hover:text-secondary-light">
+              <Link href="/nosotros" className="hover:text-secondary-light">
                 <p className="p-secondary">Nosotros</p>
               </Link>
               <Button
