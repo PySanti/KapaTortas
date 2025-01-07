@@ -1,22 +1,22 @@
-import { DashboardConfig } from '@/app/models';
+import { DashboardConfig } from "@/app/models";
 
 export const dashboardConfig: DashboardConfig = {
   mainNav: [
     {
-      title: 'Overview',
-      href: '/dashboard',
+      title: "Overview",
+      href: "/dashboard",
     },
   ],
   sidebarNav: [
     {
-      title: 'Pedidos',
-      href: '/dashboard/pedidos',
-      icon: 'paquete',
+      title: "Pedidos",
+      href: "/dashboard/pedidos",
+      icon: "paquete",
     },
     {
-      title: 'Direcciones',
-      href: '/dashboard/direcciones',
-      icon: 'direccion',
+      title: "Direcciones",
+      href: "/dashboard/direcciones",
+      icon: "direccion",
     },
     // {
     //   title: 'Pagos',
@@ -24,9 +24,9 @@ export const dashboardConfig: DashboardConfig = {
     //   icon: 'tarjeta',
     // },
     {
-      title: 'Perfil',
-      href: '/dashboard/ajustes',
-      icon: 'usuario',
+      title: "Perfil",
+      href: "/dashboard/ajustes",
+      icon: "usuario",
     },
   ],
 };
@@ -34,25 +34,46 @@ export const dashboardConfig: DashboardConfig = {
 export const dashboardConfigEmpleado: DashboardConfig = {
   mainNav: [
     {
-      title: 'Overview',
-      href: '/dashboard',
+      title: "Overview",
+      href: "/dashboard",
     },
   ],
   sidebarNav: [
     {
-      title: 'Ventas',
-      href: '/dashboard/ventas',
-      icon: 'wallet',
+      title: "Pedidos",
+      href: "/dashboard/ordenes",
+      icon: "paquete",
     },
     {
-      title: 'Pedidos',
-      href: '/dashboard/ordenes',
-      icon: 'paquete',
+      title: "Productos",
+      href: "/dashboard/items",
+      icon: "shoppingCart",
+    },
+  ],
+};
+
+export const dashboardConfigAdmin: DashboardConfig = {
+  mainNav: [
+    {
+      title: "Overview",
+      href: "/dashboard",
+    },
+  ],
+  sidebarNav: [
+    {
+      title: "Ventas",
+      href: "/dashboard/ventas",
+      icon: "wallet",
     },
     {
-      title: 'Productos',
-      href: '/dashboard/items',
-      icon: 'shoppingCart',
+      title: "Pedidos",
+      href: "/dashboard/ordenes",
+      icon: "paquete",
+    },
+    {
+      title: "Productos",
+      href: "/dashboard/items",
+      icon: "shoppingCart",
     },
   ],
 };
