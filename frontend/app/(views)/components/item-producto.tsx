@@ -10,7 +10,7 @@ export default function ItemProducto({ product }: { product: Producto }) {
       <div className="grid grid-cols-[2fr_3fr] xl:grid-cols-2 items-center">
         <div>
           <Torta
-            className="absolute top-[-6vw] md:top-[-6vw] lg:top-[-8vw]"
+            className="absolute top-[-6vw] md:top-[-6vw] lg:top-[-6vw]"
             path={
               product?.imagenes && product.imagenes.length > 0
                 ? product.imagenes[0]
@@ -41,7 +41,10 @@ export default function ItemProducto({ product }: { product: Producto }) {
               {product.descripcion}
             </p>
             <div className="relative sm:flex items-center py-4">
-              <MainButton variant="tertiary" className="hidden text-sm p-5 sm:text-lg md:p-6">
+              <MainButton
+                variant="tertiary"
+                className="hidden text-sm p-5 sm:text-lg md:p-6"
+              >
                 Saber Más
               </MainButton>
               <MainButton className="text-sm p-5 sm:text-lg md:p-6">

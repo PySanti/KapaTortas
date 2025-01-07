@@ -13,7 +13,7 @@ export default function GalleryImage({
 }) {
   return (
     <Image
-      src={miga || path}
+      src={path}
       alt={alt}
       width={150}
       height={150}
