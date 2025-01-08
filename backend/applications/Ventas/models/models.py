@@ -53,7 +53,10 @@ class DescripcionesPedido(models.Model):
 
     objects = DescripcionesPedidosManager()
     def __str__(self):
-        return f"{self.cantidad} : {self.presentacion_asociada.producto_asociado.titulo} : {self.presentacion_asociada.producto_asociado.categoria}"
+        if self.presentacion_asociada:
+            return f"{self.cantidad} : {self.presentacion_asociada.producto_asociado.titulo} : {self.presentacion_asociada.producto_asociado.categoria}"
+        else:
+            return f"{self.cantidad} : presentación desconocida"
     class Meta:
         verbose_name = 'Descripción de pedido'
         verbose_name_plural = 'Descripciones de pedidos'
