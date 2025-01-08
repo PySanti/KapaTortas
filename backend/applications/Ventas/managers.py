@@ -22,7 +22,6 @@ class PedidosManager(Manager):
                 When(estado=EstadoEnum.CANCELADO.value, then=3),  
                 output_field=IntegerField(),  
             )) 
-
         return [self.get_pedido_json(p) for p in basic_query]
 
 class DescripcionesPedidosManager(Manager):
