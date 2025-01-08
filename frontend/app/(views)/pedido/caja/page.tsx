@@ -13,7 +13,7 @@ export default async function PedidoServerPage() {
       <div className="p-8">
         <h2 className="text-terciary">Error de Acceso</h2>
         <p className="text-lg">
-          No puedes hacer un pedido ya que tienes cuenta de empleado.
+          No puedes hacer un pedido ya que tienes cuenta de staff.
         </p>
       </div>
     );

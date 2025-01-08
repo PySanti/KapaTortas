@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import miga from "../../../../public/images/miga-festival.png";
-
 export default function GalleryImage({
   path = "",
   alt,

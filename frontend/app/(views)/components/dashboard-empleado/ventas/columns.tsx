@@ -20,7 +20,8 @@ export const columnsVentas: ColumnDef<Venta>[] = [
     header: ({ table }) => (
       <Checkbox
         checked={
-          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Seleccionar todos"
@@ -43,7 +44,8 @@ export const columnsVentas: ColumnDef<Venta>[] = [
       const numeroOrden = row.original?.pedido_asociado?.numero_de_orden;
 
       // Ensure numeroOrden is a string for comparison
-      const value = typeof numeroOrden === "number" ? String(numeroOrden) : numeroOrden;
+      const value =
+        typeof numeroOrden === "number" ? String(numeroOrden) : numeroOrden;
 
       // Use startsWith for stricter matching
       return value?.toLowerCase().startsWith(search);
@@ -114,7 +116,11 @@ export const columnsVentas: ColumnDef<Venta>[] = [
     header: "Productos",
     cell: ({ row }) => {
       const descripciones = row.original?.pedido_asociado?.descripciones;
-      return <div>{descripciones?.map((d) => `${d.cantidad}x ${d.titulo}`).join(", ")}</div>;
+      return (
+        <div>
+          {descripciones?.map((d) => `${d.cantidad}x ${d.titulo}`).join(", ")}
+        </div>
+      );
     },
     meta: {
       headerClassName: "w-[200px]",
@@ -125,7 +131,9 @@ export const columnsVentas: ColumnDef<Venta>[] = [
     header: "Entrega",
     cell: ({ row }) => {
       // Capitalize first letter from metodoEntrega
-      const metodoEntrega = capitalizeFirstLetter(row.original?.pedido_asociado?.metodo_entrega);
+      const metodoEntrega = capitalizeFirstLetter(
+        row.original?.pedido_asociado?.metodo_entrega,
+      );
       return <div>{metodoEntrega}</div>;
     },
     meta: {
@@ -140,7 +148,7 @@ export const columnsVentas: ColumnDef<Venta>[] = [
       return (
         // <div>{`${direccion.direccion}, ${direccion.ciudad}, ${direccion.estado}, ${direccion.pais}`}</div>
         // Por ahora solo se maneja Venezuela
-        <div>{`${direccion.direccion}, ${direccion.ciudad}, ${direccion.estado}`}</div>
+        <div>{`${direccion?.direccion}, ${direccion?.ciudad}, ${direccion?.estado}`}</div>
       );
     },
     meta: {
@@ -171,7 +179,9 @@ export const columnsVentas: ColumnDef<Venta>[] = [
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(venta.pedido_asociado.numero_de_orden.toString())
+                navigator.clipboard.writeText(
+                  venta.pedido_asociado.numero_de_orden.toString(),
+                )
               }
             >
               Copiar ID de orden

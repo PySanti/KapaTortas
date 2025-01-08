@@ -7,7 +7,7 @@ import { TabGroup, TabList, TabPanels, TabPanel, Tab } from "@headlessui/react";
 import classNames from "@/app/controladores/utilities/classNames";
 
 export default function Gallery({ product }: { product: Producto }) {
-  const newProduct = product?.imagenes.filter((item) => item !== item[1]);
+  const newProduct = product?.imagenes.filter((_, index) => index !== 1);
 
   return (
     <TabGroup
