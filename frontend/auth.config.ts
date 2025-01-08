@@ -1,25 +1,25 @@
-import { type Session, type User } from 'next-auth';
-import type { NextAuthConfig } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import GoogleProvider from 'next-auth/providers/google';
-import type { JWT } from 'next-auth/jwt';
-import ClienteAPI from './app/controladores/api/cliente-api';
-import { stripe } from '@/app/controladores/lib/stripe';
-import passwordsMatch from './app/controladores/utilities/passwords-match';
-import crearStripeId from './app/controladores/utilities/crear-stripeid';
-import correoVerificado from './app/controladores/utilities/correo-verificado';
+import { type Session, type User } from "next-auth";
+import type { NextAuthConfig } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import type { JWT } from "next-auth/jwt";
+import ClienteAPI from "./app/controladores/api/cliente-api";
+import { stripe } from "@/app/controladores/lib/stripe";
+import passwordsMatch from "./app/controladores/utilities/passwords-match";
+import crearStripeId from "./app/controladores/utilities/crear-stripeid";
+import correoVerificado from "./app/controladores/utilities/correo-verificado";
 import {
   authRoutes,
   defaultLoginRedirectAdmin,
   defaultLoginRedirectCliente,
   defaultLoginRedirectEmpleado,
   publicRoutes,
-} from './app/models/config/routes';
-import { Rol } from './app/models/RolEnum';
+} from "./app/models/config/routes";
+import { Rol } from "./app/models/RolEnum";
 
 export default {
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   providers: [
     GoogleProvider({
@@ -27,14 +27,14 @@ export default {
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
     CredentialsProvider({
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
         email: {
-          label: 'Email',
-          type: 'email',
-          placeholder: 'jsmith@gmail.com',
+          label: "Email",
+          type: "email",
+          placeholder: "jsmith@gmail.com",
         },
-        password: { label: 'Password', type: 'password' },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         // If not credentials are provided, return null to indicate no user logged in
@@ -95,7 +95,7 @@ export default {
         // extend profile type and add auth_token
 
         return {
-          name: user.nombre_completo || 'google123',
+          name: user.nombre_completo || "google123",
           email: user.correo,
           image: user.link_foto,
           rol: user.rol,
@@ -130,7 +130,7 @@ export default {
   callbacks: {
     async signIn({ user, account }) {
       // Allow oauth users to sign in without verifying their email
-      if (account?.provider === 'google') {
+      if (account?.provider === "google") {
         if (user) {
           const idToken = account?.id_token;
 
@@ -138,15 +138,15 @@ export default {
 
           try {
             const response = await fetch(url, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 auth_token: idToken, // Send id token to backend
               }),
             });
 
             if (!response.ok) {
-              console.log('Error en llamado al endpoint de google (backend) django');
+              console.log("Error en llamado al endpoint de google (backend) django");
               return false;
             }
 
@@ -154,6 +154,7 @@ export default {
 
             // Assign the `tokens` field from the API response to `user.auth_token`
             user.auth_token = data.tokens;
+            user.rol = Rol.CLIENTE;
             return true;
           } catch (error) {
             return false;
@@ -172,7 +173,7 @@ export default {
       const isActive = cliente.perfil.is_active;
 
       if (!isActive) {
-        throw new Error('USER_NOT_ACTIVE');
+        throw new Error("USER_NOT_ACTIVE");
       }
 
       return true;
@@ -190,7 +191,7 @@ export default {
 
       //* Check if the user is on a public page
       const isOnUnprotectedPage =
-        pathname === '/' || publicRoutes.some((page) => pathname.startsWith(page));
+        pathname === "/" || publicRoutes.some((page) => pathname.startsWith(page));
       // console.log('Is on unprotected page:', isOnUnprotectedPage);
       const isProtectedPage = !isOnUnprotectedPage;
       // console.log('Is protected page:', isProtectedPage);
@@ -208,7 +209,7 @@ export default {
               ? defaultLoginRedirectAdmin
               : // No fallback, ensure one of the roles is matched
                 (() => {
-                  throw new Error('Rol de usuario inválido');
+                  throw new Error("Rol de usuario inválido");
                 })(); // Throws an error if no role matches
 
           // console.log('Redirecting to dashboard from auth page');
@@ -247,7 +248,7 @@ export default {
         return {
           ...token,
           rol: user.rol,
-          stripeCustomerId: user.stripeCustomerId || '', // If it's null, set it to an empty string
+          stripeCustomerId: user.stripeCustomerId || "", // If it's null, set it to an empty string
         };
       }
 

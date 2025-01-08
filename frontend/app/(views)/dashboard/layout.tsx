@@ -22,11 +22,7 @@ export default async function DashboardLayout({
     <SessionProvider session={session}>
       <div className="flex flex-col min-h-screen">
         <header className="sticky top-0 bg-gray-50 shadow inset-x-0 z-[50]">
-          <Navbar
-            className="max-w-none"
-            user={user}
-            items={marketingConfig.mainNav}
-          />
+          <Navbar className="max-w-none" user={user} items={marketingConfig.mainNav} />
         </header>
 
         <div className="container flex-1 items-start md:grid md:grid-cols-[160px_minmax(0,1fr)] md:gap-2 lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-4">
@@ -34,16 +30,10 @@ export default async function DashboardLayout({
             <div className="h-full pr-6">
               {/* Role based sidebar */}
               {/* Sidebar del cliente */}
-              {user?.rol !== Rol.EMPLEADO && user?.rol !== Rol.ADMIN && (
-                <Sidebar items={dashboardConfig.sidebarNav} />
-              )}
+              {user?.rol === Rol.CLIENTE && <Sidebar items={dashboardConfig.sidebarNav} />}
               {/* Sidebar de staff */}
-              {user?.rol === Rol.EMPLEADO && (
-                <Sidebar items={dashboardConfigEmpleado.sidebarNav} />
-              )}
-              {user?.rol === Rol.ADMIN && (
-                <Sidebar items={dashboardConfigAdmin.sidebarNav} />
-              )}
+              {user?.rol === Rol.EMPLEADO && <Sidebar items={dashboardConfigEmpleado.sidebarNav} />}
+              {user?.rol === Rol.ADMIN && <Sidebar items={dashboardConfigAdmin.sidebarNav} />}
             </div>
           </aside>
           <main className="flex-1 flex-col">{children}</main>
