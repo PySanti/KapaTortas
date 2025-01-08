@@ -32,11 +32,8 @@ export default async function DashboardLayout({
               {/* Sidebar del cliente */}
               {user?.rol === Rol.CLIENTE && <Sidebar items={dashboardConfig.sidebarNav} />}
               {/* Sidebar de staff */}
-              {user?.rol === Rol.EMPLEADO ? (
-                <Sidebar items={dashboardConfigEmpleado.sidebarNav} />
-              ) : (
-                <Sidebar items={dashboardConfigAdmin.sidebarNav} />
-              )}
+              {user?.rol === Rol.EMPLEADO && <Sidebar items={dashboardConfigEmpleado.sidebarNav} />}
+              {user?.rol === Rol.ADMIN && <Sidebar items={dashboardConfigAdmin.sidebarNav} />}
             </div>
           </aside>
           <main className="flex-1 flex-col">{children}</main>

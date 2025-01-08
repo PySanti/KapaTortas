@@ -2,7 +2,11 @@
 
 import { loginSchema, loginType } from '@/app/controladores/lib/validations/auth';
 import { signIn } from '@/auth';
-import { defaultLoginRedirectCliente, defaultLoginRedirectEmpleado } from '@/app/models/config/routes';
+import {
+  defaultLoginRedirectAdmin,
+  defaultLoginRedirectCliente,
+  defaultLoginRedirectEmpleado,
+} from '@/app/models/config/routes';
 import { AuthError } from 'next-auth';
 import ClienteAPI from '../api/cliente-api';
 import { Rol } from '@/app/models/RolEnum';
@@ -34,17 +38,23 @@ export const login = async (data: loginType) => {
   }
 
   try {
-   if(user.rol === Rol.CLIENTE) {
-    await signIn('credentials', {
-      email: data.email,
-      password: data.password,
+    if (user.rol === Rol.CLIENTE) {
+      await signIn('credentials', {
+        email: data.email,
+        password: data.password,
         redirectTo: defaultLoginRedirectCliente,
+      });
+    } else if (user.rol === Rol.EMPLEADO) {
+      await signIn('credentials', {
+        email: data.email,
+        password: data.password,
+        redirectTo: defaultLoginRedirectEmpleado,
       });
     } else {
       await signIn('credentials', {
         email: data.email,
         password: data.password,
-        redirectTo: defaultLoginRedirectEmpleado,
+        redirectTo: defaultLoginRedirectAdmin,
       });
     }
 

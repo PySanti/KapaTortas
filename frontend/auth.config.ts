@@ -8,7 +8,13 @@ import { stripe } from '@/app/controladores/lib/stripe';
 import passwordsMatch from './app/controladores/utilities/passwords-match';
 import crearStripeId from './app/controladores/utilities/crear-stripeid';
 import correoVerificado from './app/controladores/utilities/correo-verificado';
-import { authRoutes, defaultLoginRedirectCliente, defaultLoginRedirectEmpleado, publicRoutes } from './app/models/config/routes';
+import {
+  authRoutes,
+  defaultLoginRedirectAdmin,
+  defaultLoginRedirectCliente,
+  defaultLoginRedirectEmpleado,
+  publicRoutes,
+} from './app/models/config/routes';
 import { Rol } from './app/models/RolEnum';
 
 export default {
@@ -192,8 +198,19 @@ export default {
       if (isOnAuthPage) {
         //* Redirect to /dashboard if logged in and is on an auth page
         if (isLoggedIn) {
-          //* If its not cliente redirect to /dashboard/ventas, if not use the defaultLoginRedirect for clientes dashboard/ajustes
-          const redirectUrl = auth.user.rol !== Rol.CLIENTE ? defaultLoginRedirectEmpleado : defaultLoginRedirectCliente;
+          //* Depending on the user's role, redirect to the appropriate dashboard route (ajustes, pedidos, ventas)
+          const redirectUrl =
+            auth.user.rol === Rol.CLIENTE
+              ? defaultLoginRedirectCliente
+              : auth.user.rol === Rol.EMPLEADO
+              ? defaultLoginRedirectEmpleado
+              : auth.user.rol === Rol.ADMIN
+              ? defaultLoginRedirectAdmin
+              : // No fallback, ensure one of the roles is matched
+                (() => {
+                  throw new Error('Rol de usuario inválido');
+                })(); // Throws an error if no role matches
+
           // console.log('Redirecting to dashboard from auth page');
           return Response.redirect(new URL(redirectUrl, nextUrl));
         }
