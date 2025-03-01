@@ -81,7 +81,11 @@ export default function AjustesPage() {
           title={`Editar ${getFieldLabel(editingField)}`}
           email={user?.email!}
           field={editingField}
-          initialValue={editingField in user! ? user![editingField as keyof typeof user] : ""}
+          initialValue={
+            editingField in user!
+              ? user![editingField as keyof typeof user]
+              : ""
+          }
           onClose={closeEditModal}
         />
       )}

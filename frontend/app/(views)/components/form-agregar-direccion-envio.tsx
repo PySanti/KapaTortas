@@ -21,6 +21,7 @@ import clienteApi from "@/app/controladores/api/cliente-api";
 import FormErrorMessage from "./form-error-msg";
 import FormSuccessMessage from "./form-success-msg";
 import { useRouter } from "next/navigation";
+import NominatinAuto from "./directions/nominatin-auto";
 
 type FormAgregarDireccionEnvioProps = {
   email: string;
@@ -42,9 +43,6 @@ export default function FormAgregarDireccionEnvio({
   const form = useForm<DireccionEnvioType>({
     resolver: zodResolver(DireccionEnvioSchema),
     defaultValues: {
-      // pais: "VENEZUELA",
-      ciudad: "",
-      estado: "",
       direccion: "",
       referencia: "",
       // @ts-ignore (Zod coerce string to number)
@@ -108,41 +106,25 @@ export default function FormAgregarDireccionEnvio({
         <div className="flex space-x-4">
           <FormField
             control={form.control}
-            name="ciudad"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Ciudad</FormLabel>
-                <FormControl>
-                  <Input placeholder="Ciudad" {...field} />
-                </FormControl>
-                <FormMessage className="text-[0.8rem]" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="estado"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Estado</FormLabel>
-                <FormControl>
-                  <Input placeholder="Estado" {...field} />
-                </FormControl>
-                <FormMessage className="text-[0.8rem]" />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex space-x-4">
-          <FormField
-            control={form.control}
             name="direccion"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel>Dirección</FormLabel>
-                <FormControl>
-                  <Input placeholder="Dirección" {...field} />
-                </FormControl>
+                <NominatinAuto 
+                    onSelect={(suggestion) => {
+                      // Extract city from suggestion and update the form
+                      if (suggestion) {
+                        // Update ciudad field
+                        if (suggestion.name) {
+                          form.setValue("direccion", suggestion.name);
+                        };
+                        // You can also update other fields like postal code if available
+                        if (suggestion.address?.postcode) {
+                          form.setValue("codigo_postal", suggestion.address.postcode);
+                        }
+                      }
+                    }} 
+                  />
                 <FormMessage className="text-[0.8rem]" />
               </FormItem>
             )}
