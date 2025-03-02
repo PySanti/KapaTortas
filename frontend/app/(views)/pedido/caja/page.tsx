@@ -12,17 +12,13 @@ export default async function PedidoServerPage() {
     return (
       <div className="p-8">
         <h2 className="text-terciary">Error de Acceso</h2>
-        <p className="text-lg">
-          No puedes hacer un pedido ya que tienes cuenta de staff.
-        </p>
+        <p className="text-lg">No puedes hacer un pedido ya que tienes cuenta de staff.</p>
       </div>
     );
   }
 
   // Fetch direcciones only if the user is 'CLIENTE'
-  const direcciones = await ClienteAPI.obtenerDireccionesEnvio(
-    session?.user.email || "",
-  );
+  const direcciones = await ClienteAPI.obtenerDireccionesEnvio(session?.user.email || "");
 
   return <CajaPage direcciones={direcciones} />;
 }

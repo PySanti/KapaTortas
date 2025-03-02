@@ -17,9 +17,15 @@ type FormAgregarDireccionEnvioProps = {
   email: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  onDireccionCreada?: () => void;
 };
 
-export default function FormAgregarDireccionEnvio({ email, isOpen, setIsOpen }: FormAgregarDireccionEnvioProps) {
+export default function FormAgregarDireccionEnvio({
+  email,
+  isOpen,
+  setIsOpen,
+  onDireccionCreada,
+}: FormAgregarDireccionEnvioProps) {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [successMsg, setSuccessMsg] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -74,6 +80,9 @@ export default function FormAgregarDireccionEnvio({ email, isOpen, setIsOpen }: 
         setTimeout(() => {
           setIsLoading(false);
           setIsOpen(false);
+          if (onDireccionCreada) {
+            onDireccionCreada();
+          }
         }, 2000);
         router.refresh(); // Refresh page cuando se agrega una dirección
         // const responseData: DireccionEnvioType = await res.json(); // Parse the JSON if needed

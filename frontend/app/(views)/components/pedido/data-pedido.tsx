@@ -23,6 +23,10 @@ import ClienteAPI from "@/app/controladores/api/cliente-api";
 import pedidoApi from "@/app/controladores/api/pedido-api";
 import redirectToWhatsapp from "@/app/controladores/utilities/redirect-to-whatsapp";
 
+import { CarouselSelector } from "./data/carousel-selector";
+import { DialogAgregarDireccionEnvio } from "@/app/(views)/components/dialog-agregar-direccion-envio";
+import { useRouter } from "next/navigation";
+
 // Default values
 const deliveryMetodosList = [
   { metodo: "pickup", precio: 0 },
@@ -74,6 +78,19 @@ export default function DataPedido({
     resolver: zodResolver(direccionSchema),
     defaultValues,
   });
+
+  const router = useRouter();
+
+  // Estado para controlar el diálogo de nueva dirección
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  // Función para manejar cuando se agrega una nueva dirección
+  const handleNuevaDireccionCreada = () => {
+    // Refrescar la página para obtener las direcciones actualizadas
+    router.refresh();
+    // Cerrar el diálogo
+    setIsDialogOpen(false);
+  };
 
   const onSubmit = async (data: DireccionFormData) => {
     try {
@@ -157,7 +174,33 @@ export default function DataPedido({
   return (
     <section className="py-16 px-8">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <ShippingSelector register={register} errors={errors} setValue={setValue} control={control} />
+        {/* Mostrar el selector de carrusel solo si hay direcciones disponibles */}
+        {direcciones && direcciones.length > 0 && (
+          <CarouselSelector
+            direcciones={direcciones}
+            setValue={setValue}
+            onNewAddressClick={() => setIsDialogOpen(true)}
+          />
+        )}
+
+        {/* Si no hay direcciones, mostrar un mensaje y botón para agregar */}
+        {(!direcciones || direcciones.length === 0) && (
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-medium text-[#5f5a7f]">Dirección de entrega</h2>
+              <Button
+                variant="link"
+                onClick={() => setIsDialogOpen(true)}
+                className="text-[#8a84a8] hover:text-[#5f5a7f]"
+              >
+                Agregar dirección
+              </Button>
+            </div>
+            <div className="p-6 border-2 border-dashed border-gray-300 rounded-lg text-center">
+              <p className="text-gray-500">No tienes direcciones guardadas. Agrega una para continuar.</p>
+            </div>
+          </div>
+        )}
 
         {/* Metodo Delivery */}
         <div className="mt-10 border-t border-primary-light pt-10">
@@ -226,6 +269,14 @@ export default function DataPedido({
             </span>
           )}
         </div>
+
+        {/* Diálogo para agregar nueva dirección */}
+        <DialogAgregarDireccionEnvio
+          email={session?.email || ""}
+          isOpen={isDialogOpen}
+          setIsOpen={setIsDialogOpen}
+          onDireccionCreada={handleNuevaDireccionCreada}
+        />
       </form>
     </section>
   );
