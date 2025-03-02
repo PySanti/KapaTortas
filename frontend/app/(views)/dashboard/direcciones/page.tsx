@@ -1,13 +1,9 @@
-import { DireccionEnvio } from "@/app/models/Cliente";
 import DashboardContainer from "../../components/dashboard-container";
 import { DashboardHeader } from "../../components/dashboard-header";
 import DashboardCard from "../../components/dashboard-card";
 import { auth } from "@/auth";
 import ClienteAPI from "@/app/controladores/api/cliente-api";
 import { Rol } from "@/app/models/RolEnum";
-import { deleteDireccion } from "@/app/controladores/actions/delete-direccion";
-import { editDireccion } from "@/app/controladores/actions/edit-direccion";
-import FormAgregarDireccionEnvio from "../../components/form-agregar-direccion-envio";
 import DialogAgregarDireccion from "../../components/dialog-agregar-direccion-envio";
 
 export default async function DireccionesPage() {

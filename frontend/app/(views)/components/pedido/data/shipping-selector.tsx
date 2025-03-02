@@ -2,44 +2,63 @@
 
 import { Input } from "../../ui/input";
 import { Textarea } from "../../ui/textarea";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister, UseFormSetValue, Controller, Control } from "react-hook-form";
 import { DireccionFormData } from "@/app/controladores/lib/validations/direccion-schema";
+import NominatinAuto from "../../directions/nominatin-auto";
 
 export function ShippingSelector({
   register,
   errors,
+  setValue,
+  control,
 }: {
   register: UseFormRegister<DireccionFormData>;
   errors: FieldErrors<DireccionFormData>;
+  setValue: UseFormSetValue<DireccionFormData>;
+  control: Control<DireccionFormData>;
 }) {
   return (
     <div className="mt-6 grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-3">
       {/* Dirección */}
       <div className="sm:col-span-3">
-        <label
-          htmlFor="direccion"
-          className="block text-sm font-medium text-terciary"
-        >
+        <label htmlFor="direccion" className="block text-sm font-medium text-terciary">
           Dirección
         </label>
         <div className="mt-1">
-          <Input
-            {...register("direccion")}
-            placeholder="Dirección"
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          <Controller
+            name="direccion"
+            control={control}
+            render={({ field }) => (
+              <NominatinAuto
+                value={field.value}
+                onChange={field.onChange}
+                onSelect={(suggestion) => {
+                  if (suggestion) {
+                    // Actualizar dirección
+                    if (suggestion.name) {
+                      setValue("direccion", suggestion.name);
+                    }
+
+                    if (suggestion.display_name) {
+                      setValue("referencia", suggestion.display_name);
+                    }
+
+                    // Actualizar código postal
+                    if (suggestion.address?.postcode) {
+                      setValue("codigo_postal", suggestion.address.postcode);
+                    }
+                  }
+                }}
+              />
+            )}
           />
-          {errors.direccion && (
-            <span className="text-opacity-40">{errors.direccion.message}</span>
-          )}
+          {errors.direccion && <span className="text-opacity-40">{errors.direccion.message}</span>}
         </div>
       </div>
 
       {/* Referencia */}
       <div className="sm:col-span-3">
-        <label
-          htmlFor="referencia"
-          className="block text-sm font-medium text-terciary"
-        >
+        <label htmlFor="referencia" className="block text-sm font-medium text-terciary">
           Referencia
         </label>
         <div className="mt-1">
@@ -48,18 +67,13 @@ export function ShippingSelector({
             placeholder="Referencia"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           />
-          {errors.referencia && (
-            <span className="text-opacity-40">{errors.referencia.message}</span>
-          )}
+          {errors.referencia && <span className="text-opacity-40">{errors.referencia.message}</span>}
         </div>
       </div>
 
       {/* Código Postal */}
       <div>
-        <label
-          htmlFor="codigo_postal"
-          className="block text-sm font-medium text-terciary"
-        >
+        <label htmlFor="codigo_postal" className="block text-sm font-medium text-terciary">
           Código Postal
         </label>
         <div className="mt-1">
@@ -68,20 +82,13 @@ export function ShippingSelector({
             placeholder="Código Postal"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           />
-          {errors.codigo_postal && (
-            <span className="text-opacity-40">
-              {errors.codigo_postal.message}
-            </span>
-          )}
+          {errors.codigo_postal && <span className="text-opacity-40">{errors.codigo_postal.message}</span>}
         </div>
       </div>
 
-      {/* Referencia */}
+      {/* Nota */}
       <div className="sm:col-span-3">
-        <label
-          htmlFor="nota"
-          className="block text-sm font-medium text-terciary"
-        >
+        <label htmlFor="nota" className="block text-sm font-medium text-terciary">
           Nota
         </label>
         <div className="mt-1">
@@ -90,9 +97,7 @@ export function ShippingSelector({
             placeholder="Nota (Algún requerimiento especial que quieres en tú pedido o entrega)"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           />
-          {errors.nota && (
-            <span className="text-opacity-40">{errors.nota.message}</span>
-          )}
+          {errors.nota && <span className="text-opacity-40">{errors.nota.message}</span>}
         </div>
       </div>
     </div>

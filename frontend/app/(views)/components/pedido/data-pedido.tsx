@@ -3,17 +3,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  direccionSchema,
-  DireccionFormData,
-} from "@/app/controladores/lib/validations/direccion-schema";
+import { direccionSchema, DireccionFormData } from "@/app/controladores/lib/validations/direccion-schema";
 
-import {
-  DireccionEntrega,
-  ItemFormat,
-  Pedido,
-  Precios,
-} from "@/app/models/Pedido";
+import { DireccionEntrega, ItemFormat, Pedido, Precios } from "@/app/models/Pedido";
 import { Button } from "../ui/button";
 import { RadioGroup, Label, Description, Radio } from "@headlessui/react";
 import { CheckCircleIcon } from "lucide-react";
@@ -62,14 +54,12 @@ export default function DataPedido({
   const defaultValues: {
     direccion: string;
     referencia: string;
-    codigo_postal: string;
+    codigo_postal: number;
     nota: string;
   } = {
     direccion: direccionPreferida?.direccion || "",
     referencia: direccionPreferida?.referencia || "",
-    codigo_postal: direccionPreferida?.codigo_postal
-      ? direccionPreferida.codigo_postal.toString()
-      : "1000",
+    codigo_postal: direccionPreferida?.codigo_postal || Number("1000"),
     nota: "",
   };
 
@@ -78,6 +68,8 @@ export default function DataPedido({
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    control,
   } = useForm<DireccionFormData>({
     resolver: zodResolver(direccionSchema),
     defaultValues,
@@ -88,9 +80,7 @@ export default function DataPedido({
       // Seteo nota rapidito
       setNota(data.nota || "");
       // Verificar si la dirección ya existe
-      const checkDireccion = direcciones?.find(
-        (direccion) => direccion.direccion === data.direccion,
-      );
+      const checkDireccion = direcciones?.find((direccion) => direccion.direccion === data.direccion);
 
       let direccionId: number | null = null;
 
@@ -103,10 +93,7 @@ export default function DataPedido({
 
       // Si tenemos un ID de dirección, proceder a crear el pedido
       if (direccionId) {
-        const pedido = await handleCrearPedido(
-          direccionId,
-          setNota(data.nota || ""),
-        );
+        const pedido = await handleCrearPedido(direccionId, setNota(data.nota || ""));
         redirectToWhatsapp({
           variant: "pedido",
           pedidoDetails: pedido,
@@ -122,41 +109,30 @@ export default function DataPedido({
   };
 
   // Manejar la creación de una nueva dirección
-  const handleNuevaDireccion = async (
-    data: DireccionFormData,
-  ): Promise<number | null> => {
+  const handleNuevaDireccion = async (data: DireccionFormData): Promise<number | null> => {
     try {
       const direccionNueva = await ClienteAPI.crearDireccionCliente(
         session?.email || "",
         data.direccion,
         data.codigo_postal,
-        data?.referencia,
+        data?.referencia
       );
 
       if (direccionNueva) {
         console.log("Nueva dirección creada:", direccionNueva);
         return direccionNueva;
       } else {
-        console.error(
-          "Error: La dirección creada no tiene un ID válido.",
-          direccionNueva,
-        );
+        console.error("Error: La dirección creada no tiene un ID válido.", direccionNueva);
         return null;
       }
     } catch (error) {
-      console.error(
-        "Error al manejar la creación de una nueva dirección:",
-        error,
-      );
+      console.error("Error al manejar la creación de una nueva dirección:", error);
       return null;
     }
   };
 
   // Manejar la creación del pedido
-  const handleCrearPedido = async (
-    direccionId: number,
-    nota: string,
-  ): Promise<Pedido | null> => {
+  const handleCrearPedido = async (direccionId: number, nota: string): Promise<Pedido | null> => {
     const cliente = await ClienteAPI.obtenerCliente(session?.email || "");
 
     if (cliente) {
@@ -168,7 +144,7 @@ export default function DataPedido({
         precios.total,
         direccionId,
         cartItems,
-        nota,
+        nota
       );
       console.log("Pedido creado con éxito.");
       return pedido;
@@ -181,7 +157,7 @@ export default function DataPedido({
   return (
     <section className="py-16 px-8">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <ShippingSelector register={register} errors={errors} />
+        <ShippingSelector register={register} errors={errors} setValue={setValue} control={control} />
 
         {/* Metodo Delivery */}
         <div className="mt-10 border-t border-primary-light pt-10">
@@ -189,17 +165,13 @@ export default function DataPedido({
             value={delivery}
             onChange={(value) => {
               setDelivery(value);
-              const selectedOption = deliveryMetodosList.find(
-                (option) => option.metodo === value,
-              );
+              const selectedOption = deliveryMetodosList.find((option) => option.metodo === value);
               if (selectedOption) {
                 deliveryPriceHandler(selectedOption.precio);
               }
             }}
           >
-            <h3 className="text-xl font-medium text-terciary">
-              Método de Entrega
-            </h3>
+            <h3 className="text-xl font-medium text-terciary">Método de Entrega</h3>
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
               {deliveryMetodosList.map((option, index) => (
                 <Radio
@@ -209,7 +181,7 @@ export default function DataPedido({
                     classNames(
                       checked ? "border-transparent" : "border-gray-300",
                       disabled ? "ring-2 ring-primary-light" : "",
-                      "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none",
+                      "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
                     )
                   }
                 >
@@ -217,29 +189,19 @@ export default function DataPedido({
                     <>
                       <span className="flex flex-1">
                         <span className="flex flex-col">
-                          <Label
-                            as="span"
-                            className="block text-base font-medium text-terciary"
-                          >
+                          <Label as="span" className="block text-base font-medium text-terciary">
                             {option.metodo}
                           </Label>
-                          <Description
-                            as="span"
-                            className="mt-1 flex items-center text-lg text-terciary"
-                          >
+                          <Description as="span" className="mt-1 flex items-center text-lg text-terciary">
                             ${option.precio}
                           </Description>
                         </span>
                       </span>
-                      {checked ? (
-                        <CheckCircleIcon className="h-5 w-5 text-terciary-muted" />
-                      ) : null}
+                      {checked ? <CheckCircleIcon className="h-5 w-5 text-terciary-muted" /> : null}
                       <span
                         className={classNames(
                           "pointer-events-none absolute -inset-px rounded-lg",
-                          checked
-                            ? "border-2 border-indigo-500"
-                            : "border border-transparent",
+                          checked ? "border-2 border-indigo-500" : "border border-transparent"
                         )}
                         aria-hidden="true"
                       />
@@ -255,11 +217,7 @@ export default function DataPedido({
 
         <div className="flex flex-col items-center">
           {" "}
-          <Button
-            type="submit"
-            className="mt-8 text-xl text-center ml-4"
-            disabled={!session || cartItems.length <= 0}
-          >
+          <Button type="submit" className="mt-8 text-xl text-center ml-4" disabled={!session || cartItems.length <= 0}>
             Procesar Pedido
           </Button>
           {!session && (

@@ -4,19 +4,9 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/app/(views)/components/ui/button";
 import { Input } from "@/app/(views)/components/ui/input";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/app/(views)/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/(views)/components/ui/form";
 import { useForm } from "react-hook-form";
-import {
-  DireccionEnvioSchema,
-  DireccionEnvioType,
-} from "@/app/controladores/lib/validations/direccion-envio";
+import { DireccionEnvioSchema, DireccionEnvioType } from "@/app/controladores/lib/validations/direccion-envio";
 import clienteApi from "@/app/controladores/api/cliente-api";
 import FormErrorMessage from "./form-error-msg";
 import FormSuccessMessage from "./form-success-msg";
@@ -29,11 +19,7 @@ type FormAgregarDireccionEnvioProps = {
   setIsOpen: (isOpen: boolean) => void;
 };
 
-export default function FormAgregarDireccionEnvio({
-  email,
-  isOpen,
-  setIsOpen,
-}: FormAgregarDireccionEnvioProps) {
+export default function FormAgregarDireccionEnvio({ email, isOpen, setIsOpen }: FormAgregarDireccionEnvioProps) {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [successMsg, setSuccessMsg] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -68,9 +54,7 @@ export default function FormAgregarDireccionEnvio({
       // Check if address already exists
       const direccionesCliente = await clienteApi.obtenerDireccionesEnvio(email);
 
-      const existingAddress = direccionesCliente?.find(
-        (address) => address.direccion === formData.direccion
-      );
+      const existingAddress = direccionesCliente?.find((address) => address.direccion === formData.direccion);
 
       if (existingAddress) {
         setErrorMsg("Esta dirección ya existe");
@@ -110,21 +94,57 @@ export default function FormAgregarDireccionEnvio({
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel>Dirección</FormLabel>
-                <NominatinAuto 
-                    onSelect={(suggestion) => {
-                      // Extract city from suggestion and update the form
-                      if (suggestion) {
-                        // Update ciudad field
-                        if (suggestion.name) {
-                          form.setValue("direccion", suggestion.name);
-                        };
-                        // You can also update other fields like postal code if available
-                        if (suggestion.address?.postcode) {
-                          form.setValue("codigo_postal", suggestion.address.postcode);
-                        }
+                <NominatinAuto
+                  onSelect={(suggestion) => {
+                    // Extract city from suggestion and update the form
+                    if (suggestion) {
+                      // Update ciudad field
+                      if (suggestion.name) {
+                        form.setValue("direccion", suggestion.name);
                       }
-                    }} 
-                  />
+
+                      if (suggestion.address?.city) {
+                        form.setValue("ciudad", suggestion.address.city);
+                      }
+
+                      if (suggestion.address?.state) {
+                        form.setValue("estado", suggestion.address.state);
+                      }
+
+                      if (suggestion.address?.postcode) {
+                        form.setValue("codigo_postal", suggestion.address.postcode);
+                      }
+                    }
+                  }}
+                />
+                <FormMessage className="text-[0.8rem]" />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex space-x-4">
+          <FormField
+            control={form.control}
+            name="ciudad"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Ciudad</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ciudad" {...field} />
+                </FormControl>
+                <FormMessage className="text-[0.8rem]" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="estado"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Estado</FormLabel>
+                <FormControl>
+                  <Input placeholder="Estado" {...field} />
+                </FormControl>
                 <FormMessage className="text-[0.8rem]" />
               </FormItem>
             )}
