@@ -7,14 +7,16 @@ import { direccionSchema, DireccionFormData } from "@/app/controladores/lib/vali
 
 import { DireccionEntrega, ItemFormat, Pedido, Precios } from "@/app/models/Pedido";
 import { Button } from "../ui/button";
-import { RadioGroup, Label, Description, Radio } from "@headlessui/react";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { RadioGroup, Description, Radio } from "@headlessui/react";
 import { CheckCircleIcon } from "lucide-react";
 import classNames from "@/app/controladores/utilities/classNames";
 
 import { ShippingSelector } from "./data/shipping-selector";
 import { PaymentSelector } from "./data/payment-selector";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MetodoEntrega, MetodoPago } from "@/app/models/Pedido";
 
 import { usePedidoStore } from "@/src/usePedidoStore";
@@ -32,6 +34,14 @@ const deliveryMetodosList = [
   { metodo: "pickup", precio: 0 },
   { metodo: "delivery", precio: 3 },
 ];
+
+// Dirección por defecto para pickup
+const DEFAULT_PICKUP_ADDRESS = {
+  direccion: "Tienda Principal",
+  referencia: "Retiro en tienda",
+  codigo_postal: 1010,
+  nota: "",
+};
 
 export default function DataPedido({
   direcciones,
@@ -55,18 +65,6 @@ export default function DataPedido({
   // Direccion Preferida
   const direccionPreferida = direcciones?.find((item) => item.is_favorite);
 
-  const defaultValues: {
-    direccion: string;
-    referencia: string;
-    codigo_postal: number;
-    nota: string;
-  } = {
-    direccion: direccionPreferida?.direccion || "",
-    referencia: direccionPreferida?.referencia || "",
-    codigo_postal: direccionPreferida?.codigo_postal || Number("1000"),
-    nota: "",
-  };
-
   // Schema
   const {
     register,
@@ -74,10 +72,33 @@ export default function DataPedido({
     formState: { errors },
     setValue,
     control,
+    reset,
   } = useForm<DireccionFormData>({
     resolver: zodResolver(direccionSchema),
-    defaultValues,
+    defaultValues:
+      delivery === MetodoEntrega.PICKUP
+        ? DEFAULT_PICKUP_ADDRESS
+        : {
+            direccion: direccionPreferida?.direccion || "",
+            referencia: direccionPreferida?.referencia || "",
+            codigo_postal: direccionPreferida?.codigo_postal || 1000,
+            nota: "",
+          },
   });
+
+  // Actualizar los valores del formulario cuando cambia el método de entrega
+  useEffect(() => {
+    if (delivery === MetodoEntrega.PICKUP) {
+      reset(DEFAULT_PICKUP_ADDRESS);
+    } else if (direccionPreferida) {
+      reset({
+        direccion: direccionPreferida.direccion,
+        referencia: direccionPreferida.referencia || "",
+        codigo_postal: direccionPreferida.codigo_postal,
+        nota: "",
+      });
+    }
+  }, [delivery, direccionPreferida, reset]);
 
   const router = useRouter();
 
@@ -93,35 +114,72 @@ export default function DataPedido({
   };
 
   const onSubmit = async (data: DireccionFormData) => {
+    console.log("Formulario enviado", data);
     try {
       // Seteo nota rapidito
       setNota(data.nota || "");
-      // Verificar si la dirección ya existe
-      const checkDireccion = direcciones?.find((direccion) => direccion.direccion === data.direccion);
 
       let direccionId: number | null = null;
 
-      // Si no existe, crear una nueva dirección
-      if (!checkDireccion) {
-        direccionId = await handleNuevaDireccion(data);
+      // Si es pickup, no necesitamos crear/verificar dirección
+      if (delivery === MetodoEntrega.PICKUP) {
+        // Usar una dirección predeterminada para pickup o crear una si es necesario
+        direccionId = await handlePickupDireccion();
       } else {
-        direccionId = checkDireccion.id;
+        // Verificar si la dirección ya existe
+        const checkDireccion = direcciones?.find((direccion) => direccion.direccion === data.direccion);
+
+        // Si no existe, crear una nueva dirección
+        if (!checkDireccion) {
+          console.log("Nueva dirección creada");
+          direccionId = await handleNuevaDireccion(data);
+        } else {
+          console.log("Dirección existente encontrada");
+          direccionId = checkDireccion.id;
+        }
       }
 
       // Si tenemos un ID de dirección, proceder a crear el pedido
       if (direccionId) {
-        const pedido = await handleCrearPedido(direccionId, setNota(data.nota || ""));
+        const pedido = await handleCrearPedido(direccionId, data.nota || "");
         redirectToWhatsapp({
           variant: "pedido",
           pedidoDetails: pedido,
           name: session?.name || "Cliente",
         });
-        clearCart();
+        // No limpiar el carrito hasta que el usuario confirme
+        // clearCart();
       } else {
         console.error("No se pudo obtener un ID de dirección.");
       }
     } catch (error) {
       console.error("Error al procesar el formulario:", error);
+    }
+  };
+
+  // Manejar la dirección para pickup
+  const handlePickupDireccion = async (): Promise<number | null> => {
+    try {
+      // Verificar si ya existe una dirección de pickup
+      const direccionesCliente = await ClienteAPI.obtenerDireccionesEnvio(session?.email || "");
+      const pickupDireccion = direccionesCliente?.find((dir) => dir.direccion === DEFAULT_PICKUP_ADDRESS.direccion);
+
+      if (pickupDireccion) {
+        return pickupDireccion.id;
+      }
+
+      // Si no existe, crear una dirección de pickup
+      const nuevaDireccionId = await ClienteAPI.crearDireccionCliente(
+        session?.email || "",
+        DEFAULT_PICKUP_ADDRESS.direccion,
+        DEFAULT_PICKUP_ADDRESS.codigo_postal,
+        DEFAULT_PICKUP_ADDRESS.referencia
+      );
+
+      return nuevaDireccionId;
+    } catch (error) {
+      console.error("Error al manejar la dirección de pickup:", error);
+      return null;
     }
   };
 
@@ -173,94 +231,103 @@ export default function DataPedido({
 
   return (
     <section className="py-16 px-8">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Mostrar el selector de carrusel solo si hay direcciones disponibles */}
-        {direcciones && direcciones.length > 0 && (
-          <CarouselSelector
-            direcciones={direcciones}
-            setValue={setValue}
-            onNewAddressClick={() => setIsDialogOpen(true)}
-          />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
+        {/* Metodo Delivery - PRIMERO */}
+        <h3 className="text-2xl font-medium text-[#5f5a7f] mb-6">Método de Entrega</h3>
+        <RadioGroup
+          value={delivery}
+          onChange={(value) => {
+            setDelivery(value);
+            const selectedOption = deliveryMetodosList.find((option) => option.metodo === value);
+            if (selectedOption) {
+              deliveryPriceHandler(selectedOption.precio);
+            }
+          }}
+        >
+          <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+            {deliveryMetodosList.map((option, index) => (
+              <Radio
+                key={index}
+                value={option.metodo}
+                className={({ checked, disabled }) =>
+                  classNames(
+                    checked ? "border-transparent" : "border-gray-300",
+                    disabled ? "ring-2 ring-primary-light" : "",
+                    "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                  )
+                }
+              >
+                {({ checked }) => (
+                  <>
+                    <span className="flex flex-1">
+                      <span className="flex flex-col">
+                        <Label className="block text-base font-medium text-terciary">
+                          {option.metodo === "pickup" ? "Retirar en tienda" : "Entrega a domicilio"}
+                        </Label>
+                        <Description className="mt-1 flex items-center text-lg text-terciary">
+                          ${option.precio}
+                        </Description>
+                      </span>
+                    </span>
+                    {checked ? <CheckCircleIcon className="h-5 w-5 text-terciary-muted" /> : null}
+                    <span
+                      className={classNames(
+                        "pointer-events-none absolute -inset-px rounded-lg",
+                        checked ? "border-2 border-indigo-500" : "border border-transparent"
+                      )}
+                      aria-hidden="true"
+                    />
+                  </>
+                )}
+              </Radio>
+            ))}
+          </div>
+        </RadioGroup>
+
+        {/* Sección de dirección - SOLO SI ES DELIVERY */}
+        {delivery === MetodoEntrega.DELIVERY && (
+          <div className="pt-6">
+            {/* Mostrar el selector de carrusel solo si hay direcciones disponibles */}
+            {direcciones && direcciones.length > 0 && (
+              <CarouselSelector
+                direcciones={direcciones}
+                setValue={setValue}
+                onNewAddressClick={() => setIsDialogOpen(true)}
+              />
+            )}
+          </div>
         )}
 
-        {/* Si no hay direcciones, mostrar un mensaje y botón para agregar */}
-        {(!direcciones || direcciones.length === 0) && (
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-medium text-[#5f5a7f]">Dirección de entrega</h2>
-              <Button
-                variant="link"
-                onClick={() => setIsDialogOpen(true)}
-                className="text-[#8a84a8] hover:text-[#5f5a7f]"
-              >
-                Agregar dirección
-              </Button>
-            </div>
-            <div className="p-6 border-2 border-dashed border-gray-300 rounded-lg text-center">
-              <p className="text-gray-500">No tienes direcciones guardadas. Agrega una para continuar.</p>
+        <PaymentSelector pago={pago} setPago={setPago} />
+
+        {/* Notas (siempre visible) */}
+        {delivery === MetodoEntrega.DELIVERY && (
+          <div className="pt-6">
+            <Label htmlFor="nota" className="block text-sm font-medium text-terciary">
+              Notas adicionales
+            </Label>
+            <div className="mt-1">
+              <Textarea
+                {...register("nota")}
+                rows={3}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="Instrucciones especiales para la entrega..."
+              />
             </div>
           </div>
         )}
 
-        {/* Metodo Delivery */}
-        <div className="mt-10 border-t border-primary-light pt-10">
-          <RadioGroup
-            value={delivery}
-            onChange={(value) => {
-              setDelivery(value);
-              const selectedOption = deliveryMetodosList.find((option) => option.metodo === value);
-              if (selectedOption) {
-                deliveryPriceHandler(selectedOption.precio);
-              }
-            }}
+        {/* Botón de envío */}
+        <div className="flex flex-col items-center pt-6">
+          <Button
+            type="submit"
+            className="mt-8 text-xl text-center ml-4 bg-primary-light hover:bg-primary-dark text-white"
+            disabled={
+              !session ||
+              cartItems.length <= 0 ||
+              (delivery === MetodoEntrega.DELIVERY && (!direcciones || direcciones.length === 0))
+            }
           >
-            <h3 className="text-xl font-medium text-terciary">Método de Entrega</h3>
-            <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-              {deliveryMetodosList.map((option, index) => (
-                <Radio
-                  key={index}
-                  value={option.metodo}
-                  className={({ checked, disabled }) =>
-                    classNames(
-                      checked ? "border-transparent" : "border-gray-300",
-                      disabled ? "ring-2 ring-primary-light" : "",
-                      "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
-                    )
-                  }
-                >
-                  {({ checked }) => (
-                    <>
-                      <span className="flex flex-1">
-                        <span className="flex flex-col">
-                          <Label as="span" className="block text-base font-medium text-terciary">
-                            {option.metodo}
-                          </Label>
-                          <Description as="span" className="mt-1 flex items-center text-lg text-terciary">
-                            ${option.precio}
-                          </Description>
-                        </span>
-                      </span>
-                      {checked ? <CheckCircleIcon className="h-5 w-5 text-terciary-muted" /> : null}
-                      <span
-                        className={classNames(
-                          "pointer-events-none absolute -inset-px rounded-lg",
-                          checked ? "border-2 border-indigo-500" : "border border-transparent"
-                        )}
-                        aria-hidden="true"
-                      />
-                    </>
-                  )}
-                </Radio>
-              ))}
-            </div>
-          </RadioGroup>
-        </div>
-
-        <PaymentSelector pago={pago} setPago={setPago} />
-
-        <div className="flex flex-col items-center">
-          {" "}
-          <Button type="submit" className="mt-8 text-xl text-center ml-4" disabled={!session || cartItems.length <= 0}>
             Procesar Pedido
           </Button>
           {!session && (
@@ -268,15 +335,15 @@ export default function DataPedido({
               No puedes realizar un pedido sin una sesión activa
             </span>
           )}
+          {Object.keys(errors).length > 0 && (
+            <span className="text-red-400 text-sm font-medium ml-4 mt-2">
+              Por favor, completa todos los campos requeridos correctamente
+            </span>
+          )}
+          {delivery === MetodoEntrega.DELIVERY && (!direcciones || direcciones.length === 0) && (
+            <span className="text-red-400 text-sm font-medium ml-4 mt-2">Debes agregar una dirección de entrega</span>
+          )}
         </div>
-
-        {/* Diálogo para agregar nueva dirección */}
-        <DialogAgregarDireccionEnvio
-          email={session?.email || ""}
-          isOpen={isDialogOpen}
-          setIsOpen={setIsDialogOpen}
-          onDireccionCreada={handleNuevaDireccionCreada}
-        />
       </form>
     </section>
   );

@@ -1,15 +1,9 @@
 import { z } from "zod";
 
 export const direccionSchema = z.object({
-  direccion: z.string().min(1, "La dirección es requerida"),
-  referencia: z.string().min(1, "La referencia es requerida"),
-  codigo_postal: z
-    .string()
-    .min(1, "El código postal es requerido")
-    .transform((val) => parseInt(val, 10))
-    .refine((val) => !isNaN(val) && val >= 999 && val <= 99999, {
-      message: "Código postal inválido",
-    }),
+  direccion: z.string().min(3, { message: "Por favor, ingresa una dirección válida" }),
+  referencia: z.string().min(3, { message: "Por favor, ingresa una referencia válida" }),
+  codigo_postal: z.coerce.number().min(3, { message: "Por favor, ingresa un código postal válido" }),
   nota: z.string().optional(),
 });
 

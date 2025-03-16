@@ -22,6 +22,8 @@ export default function redirectToWhatsapp({
   let message;
   const phoneNumber = "584242185034";
 
+  console.log("pedidoDetails", pedidoDetails?.nota);
+
   // Format item details for each item in the order
   const itemDetails = pedidoDetails?.descripciones
     .map(
@@ -49,6 +51,8 @@ export default function redirectToWhatsapp({
     🚚 Método de entrega: ${pedidoDetails?.metodo_entrega}
     💳 Método de pago: ${pedidoDetails?.metodo_pago}
     💰 Total: $${pedidoDetails?.monto_total.toFixed(2)}
+
+    ${pedidoDetails?.nota ? `💬 Notas adicionales: "${pedidoDetails?.nota}"` : ""}
 
     ¡Al realizar tú pago pondremos el pedido en preparación! 🎉
       `.trim();
