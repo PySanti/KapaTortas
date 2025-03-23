@@ -34,7 +34,9 @@ class CrearDireccionEnvioAPI(APIView):
                     estado=serialized_data["estado"].upper(),
                     direccion = serialized_data["direccion"],
                     referencia= serialized_data['referencia'],
-                    codigo_postal = serialized_data['codigo_postal']
+                    codigo_postal = serialized_data['codigo_postal'],
+                    latitud = serialized_data['latitud'],
+                    longitud = serialized_data['longitud']
                     )
                 cliente.direcciones.add(new_direccion)
                 cliente.save()
@@ -86,6 +88,10 @@ class EditarDireccionEnvioAPI(APIView):
                     direccion.referencia = serialized_data["new_referencia"]
                 if serialized_data["new_codigo_postal"]:
                     direccion.codigo_postal = serialized_data["new_codigo_postal"]
+                if serialized_data["new_latitud"]:
+                    direccion.latitud = serialized_data["new_latitud"]
+                if serialized_data["new_longitud"]:
+                    direccion.longitud = serialized_data["new_longitud"]
                 direccion.save()
                 return JsonResponse({"editado": True}, status=status.HTTP_200_OK)
             else:

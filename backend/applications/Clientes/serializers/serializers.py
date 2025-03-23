@@ -8,6 +8,8 @@ class CrearDireccionEnvioSerializer(serializers.Serializer):
     direccion = serializers.CharField()
     referencia = serializers.CharField()
     codigo_postal = serializers.IntegerField()
+    latitud = serializers.FloatField(required=False)
+    longitud = serializers.FloatField(required=False)
 
 
 class EliminarDireccionEnvioSerializer(serializers.Serializer):
@@ -23,6 +25,8 @@ class EditarDireccionEnvioSerializer(serializers.Serializer):
     new_direccion       = serializers.CharField(allow_null=True)
     new_referencia      = serializers.CharField(allow_null=True)
     new_codigo_postal   = serializers.IntegerField(allow_null=True)
+    new_latitud         = serializers.FloatField(allow_null=True)
+    new_longitud        = serializers.FloatField(allow_null=True)
 
 
 

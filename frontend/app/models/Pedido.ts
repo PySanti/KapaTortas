@@ -61,6 +61,8 @@ export interface DireccionEntrega {
   direccion: string;
   referencia: string;
   codigo_postal: number;
+  latitud: number;
+  longitud: number;
   is_favorite?: boolean;
 }
 

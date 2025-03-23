@@ -22,7 +22,7 @@ export default function redirectToWhatsapp({
   let message;
   const phoneNumber = "584242185034";
 
-  console.log("pedidoDetails", pedidoDetails?.nota);
+
 
   // Format item details for each item in the order
   const itemDetails = pedidoDetails?.descripciones
@@ -35,7 +35,11 @@ export default function redirectToWhatsapp({
   // Address information for delivery (if applicable)
   const addressDetails =
     pedidoDetails?.metodo_entrega === "delivery"
-      ? `📍 Dirección:\n🏠 ${pedidoDetails?.direccion_entrega.direccion}\n🔖 Referencia: ${pedidoDetails?.direccion_entrega.referencia}\n✉️ Código Postal: ${pedidoDetails?.direccion_entrega.codigo_postal}`
+      ? `📍 Dirección:\n🏠 ${pedidoDetails?.direccion_entrega.direccion}\n🔖 Referencia: ${pedidoDetails?.direccion_entrega.referencia}\n✉️ Código Postal: ${pedidoDetails?.direccion_entrega.codigo_postal}${
+          pedidoDetails?.direccion_entrega.latitud && pedidoDetails?.direccion_entrega.longitud
+            ? `\n📌 Ubicación: https://www.google.com/maps/search/?api=1&query=${pedidoDetails.direccion_entrega.latitud},${pedidoDetails.direccion_entrega.longitud}`
+            : ""
+        }`
       : "🚶‍♂️ Recogeré en la tienda. 🏬";
 
   // PEDIDO

@@ -26,6 +26,8 @@ class DireccionesEnvio(models.Model):
     direccion       = models.CharField()
     referencia      = models.CharField(null=True, blank=True)
     codigo_postal   = models.IntegerField()
+    latitud         = models.FloatField(null=True, blank=True)
+    longitud        = models.FloatField(null=True, blank=True)
 
 
     def __str__(self):

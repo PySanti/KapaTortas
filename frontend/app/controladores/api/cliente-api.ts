@@ -161,7 +161,9 @@ class ClienteAPI {
                 direccion: direccion.direccion,
                 referencia: direccion.referencia,
                 codigo_postal: direccion.codigo_postal,
-                correo_cliente: direccion.correo_cliente
+                correo_cliente: direccion.correo_cliente,
+                latitud: direccion.latitud,
+                longitud: direccion.longitud
             }),
         });
 

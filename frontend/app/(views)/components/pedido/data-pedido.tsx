@@ -288,7 +288,7 @@ export default function DataPedido({
         {delivery === MetodoEntrega.DELIVERY && (
           <div className="pt-6">
             {/* Mostrar el selector de carrusel solo si hay direcciones disponibles */}
-            {direcciones && direcciones.length > 0 && (
+            {direcciones && (
               <CarouselSelector
                 direcciones={direcciones}
                 setValue={setValue}

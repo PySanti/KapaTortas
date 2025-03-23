@@ -15,7 +15,9 @@ export const DireccionEnvioSchema = z.object({
             invalid_type_error: "Por favor, ingresa un código postal válido"
         })
         .min(3, { message: "Por favor, ingresa un código postal válido" })
-    )
+    ),
+    latitud: z.number().nullable(),
+    longitud: z.number().nullable(),
 });
 
 export type DireccionEnvioType = z.infer<typeof DireccionEnvioSchema>;
@@ -27,7 +29,9 @@ export const EditarDireccionEnvioSchema = z.object({
     estado: z.string().min(3, { message: "Por favor, ingresa un estado válido" }).nullable(),
     direccion: z.string().min(3, { message: "Por favor, ingresa una dirección válida" }).nullable(),
     referencia: z.string().min(3, { message: "Por favor, ingresa una referencia válida" }).nullable(),
-    codigo_postal: z.coerce.number().min(3, { message: "Por favor, ingresa un código postal válido" }).nullable()
+    codigo_postal: z.coerce.number().min(3, { message: "Por favor, ingresa un código postal válido" }).nullable(),
+    latitud: z.number().nullable(),
+    longitud: z.number().nullable(),
 });
 
 export type EditarDireccionEnvioType = z.infer<typeof EditarDireccionEnvioSchema>;

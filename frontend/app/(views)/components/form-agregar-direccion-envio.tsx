@@ -39,6 +39,8 @@ export default function FormAgregarDireccionEnvio({
       referencia: "",
       // @ts-ignore (Zod coerce string to number)
       codigo_postal: "",
+      latitud: null,
+      longitud: null,
     },
     mode: "onChange",
   });
@@ -122,6 +124,12 @@ export default function FormAgregarDireccionEnvio({
 
                       if (suggestion.address?.postcode) {
                         form.setValue("codigo_postal", suggestion.address.postcode);
+                      }
+                      if (suggestion.lat) {
+                        form.setValue("latitud", Number(suggestion.lat));
+                      }
+                      if (suggestion.lon) {
+                        form.setValue("longitud", Number(suggestion.lon));
                       }
                     }
                   }}
