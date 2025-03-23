@@ -16,6 +16,7 @@ import { Separator } from "@/app/(views)/components/ui/separator";
 type DialogAgregarDireccionEnvioProps = {
   email: string;
   isOpen?: boolean;
+  showButton?: boolean;
   setIsOpen?: (isOpen: boolean) => void;
   onDireccionCreada?: () => void;
 };
@@ -23,14 +24,17 @@ type DialogAgregarDireccionEnvioProps = {
 export function DialogAgregarDireccionEnvio({
   email,
   isOpen = false,
+  showButton = true,
   setIsOpen = () => {},
   onDireccionCreada,
 }: DialogAgregarDireccionEnvioProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">Agregar Dirección</Button>
-      </DialogTrigger>
+      {showButton && (
+        <DialogTrigger asChild>
+          <Button variant="outline">Agregar Dirección</Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[620px]">
         <DialogHeader className="gap-y-2">
           <DialogTitle className="text-2xl text-terciary">Agregar nueva dirección</DialogTitle>

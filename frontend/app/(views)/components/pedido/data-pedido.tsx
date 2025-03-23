@@ -345,6 +345,15 @@ export default function DataPedido({
           )}
         </div>
       </form>
+
+      {/* Add the Dialog component here at the bottom of the component, outside the form */}
+      <DialogAgregarDireccionEnvio
+        email={session?.email || ""}
+        isOpen={isDialogOpen}
+        showButton={false}
+        setIsOpen={setIsDialogOpen}
+        onDireccionCreada={handleNuevaDireccionCreada}
+      />
     </section>
   );
 }

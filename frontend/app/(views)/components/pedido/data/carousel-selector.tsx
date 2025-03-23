@@ -97,7 +97,12 @@ export function CarouselSelector({ direcciones, setValue, onNewAddressClick }: C
     <div className="w-full mb-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-medium text-[#5f5a7f]">Dirección de entrega</h2>
-        <Button variant="link" onClick={onNewAddressClick} className="text-[#8a84a8] hover:text-[#5f5a7f]">
+        <Button
+          variant="link"
+          onClick={onNewAddressClick}
+          className="text-[#8a84a8] hover:text-[#5f5a7f]"
+          type="button"
+        >
           Nueva dirección
         </Button>
       </div>
@@ -114,6 +119,7 @@ export function CarouselSelector({ direcciones, setValue, onNewAddressClick }: C
               }`}
               onClick={scrollLeft}
               disabled={!canScrollLeft}
+              type="button"
             >
               <ChevronLeftIcon className="h-5 w-5" />
             </Button>
@@ -126,6 +132,7 @@ export function CarouselSelector({ direcciones, setValue, onNewAddressClick }: C
               }`}
               onClick={scrollRight}
               disabled={!canScrollRight}
+              type="button"
             >
               <ChevronRightIcon className="h-5 w-5" />
             </Button>
