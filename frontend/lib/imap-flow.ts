@@ -1,3 +1,5 @@
+import { PagoMovilRef, ZelleRef } from '../app/models/pago';
+
 const { ImapFlow } = require('imapflow');
 const { simpleParser } = require('mailparser');
 
@@ -12,10 +14,13 @@ const client = new ImapFlow({
     }
 });
 
-export default async function searchEmails(senderEmail: string) {
+
+export default async function searchPagoMovil(ref: number): Promise<PagoMovilRef | null> {
     try {
         // Connect to the server
         await client.connect();
+
+        const senderEmail = process.env.SENDER_EMAIL;
 
         // Select and lock the INBOX
         const lock = await client.getMailboxLock('INBOX');
@@ -23,7 +28,7 @@ export default async function searchEmails(senderEmail: string) {
         try {
             // Calculate the date for one week ago
             const oneWeekAgo = new Date();
-            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 1);
 
             // Search for messages from specific sender received within the last week
             const searchCriteria = {
@@ -34,13 +39,6 @@ export default async function searchEmails(senderEmail: string) {
             // Get UIDs of matching messages
             const uids = await client.search(searchCriteria, { uid: true });
             
-            if (uids.length === 0) {
-                console.log(`No emails found from ${senderEmail} in the last week`);
-                return;
-            }
-            
-            console.log(`Found ${uids.length} matching emails from ${senderEmail} in the last week`);
-            
             // Fetch only the matching messages
             for await (let message of client.fetch(uids, { 
                 envelope: true,
@@ -48,12 +46,36 @@ export default async function searchEmails(senderEmail: string) {
             }, { uid: true })) {
                 // Parse the message source to get the body
                 const { text, html } = await simpleParser(message.source);
-                
-                console.log(`From: ${message.envelope.from[0].address}`);
-                console.log(`Subject: ${message.envelope.subject}`);
-                console.log(`Date: ${message.envelope.date}`);
-                console.log('Body:', text || html); // Prefer text, fallback to HTML
-                console.log('------------------------');
+                const bodyText = text || html;
+
+                // Extract time (HH:mm format)
+                const timeMatch = bodyText.match(/(\d{2}:\d{2})/);
+                const time = timeMatch ? timeMatch[1] : null;
+
+                // Extract date (DD/MM/YYYY format)
+                const dateMatch = bodyText.match(/(\d{2}\/\d{2}\/\d{4})/);
+                const date = dateMatch ? dateMatch[1] : null;
+
+                // Check if contains "Pago recibido"
+                const hasPagoRecibido = bodyText.includes('Pago recibido');
+
+                // Extract reference number (last 6 digits)
+                const refMatch = bodyText.match(/REF:(\d{12})/);
+                const lastSixDigits = refMatch ? refMatch[1].slice(-6) : null;
+
+                // Extract monto transferido
+                const montoTransferidoMatch = bodyText.match(/Bs\.(\d+\.\d{2})/);
+                const montoTransferido = montoTransferidoMatch ? montoTransferidoMatch[1] : null;
+
+                if (Number(lastSixDigits) === ref) {
+                    return {
+                        has_pago_recibido: hasPagoRecibido,
+                        referencia: Number(lastSixDigits),
+                        monto_transferido: parseFloat(montoTransferido),
+                        fecha: date,
+                        hora: time
+                    };
+                }
             }
         } finally {
             // Release the lock
@@ -62,7 +84,12 @@ export default async function searchEmails(senderEmail: string) {
 
         // Logout and close connection
         await client.logout();
+
+        // If no matching message is found, return null
+        console.log('No se encontró el pago');
+        return null;
     } catch (error) {
         console.error('Error:', error);
+        return null;
     }
 };
