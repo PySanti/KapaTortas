@@ -15,9 +15,8 @@ export interface PagoMovilRef {
 }
 
 export interface ZelleRef {
-    has_pago_recibido: boolean;
-    referencia: string;
-    monto_transferido: number;
-    fecha: string;
-    hora: string;
+    sender_name: string;
+    amount: number;
+    fecha: string | null;
+    hora: string | null;
 }
