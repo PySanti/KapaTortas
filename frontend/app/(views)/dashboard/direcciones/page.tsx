@@ -1,19 +1,25 @@
-import { DireccionEnvio } from "@/app/models/Cliente";
 import DashboardContainer from "../../components/dashboard-container";
 import { DashboardHeader } from "../../components/dashboard-header";
-import DashboardCard from "../../components/dashboard-card";
 import { auth } from "@/auth";
 import ClienteAPI from "@/app/controladores/api/cliente-api";
 import { Rol } from "@/app/models/RolEnum";
-import { deleteDireccion } from "@/app/controladores/actions/delete-direccion";
-import { editDireccion } from "@/app/controladores/actions/edit-direccion";
-import FormAgregarDireccionEnvio from "../../components/form-agregar-direccion-envio";
 import DialogAgregarDireccion from "../../components/dialog-agregar-direccion-envio";
+import DireccionCard from "../../components/direccion-card";
 
 export default async function DireccionesPage() {
   const session = await auth();
 
   const direcciones = await ClienteAPI.obtenerDireccionesEnvio(session?.user.email!);
+
+  // Sort addresses: preferred address first
+  const direccionesOrdenadas = direcciones
+    ? [...direcciones].sort((a, b) => {
+        // Preferred addresses (is_favorite === true) come first
+        if (a.is_favorite && !b.is_favorite) return -1;
+        if (!a.is_favorite && b.is_favorite) return 1;
+        return 0; // Keep original order for non-preferred addresses
+      })
+    : null;
 
   return (
     <DashboardContainer>
@@ -25,26 +31,14 @@ export default async function DireccionesPage() {
           />
           <DialogAgregarDireccion email={session?.user.email!} />
 
-          {direcciones && direcciones.length > 0 ? (
-            direcciones.map((direccion) => (
-              <DashboardCard
+          {direccionesOrdenadas && direccionesOrdenadas.length > 0 ? (
+            direccionesOrdenadas.map((direccion) => (
+              <DireccionCard
                 key={direccion.id}
-                badge={direccion.is_favorite ? "Dirección de envío preferida" : undefined}
-                idElement={direccion.id}
-                // actions={{
-                //   edit: {
-                //     label: "Editar",
-                //     action: editDireccion,
-                //     // form: <FormAgregarDireccionEnvio />,
-                //   },
-                //   delete: {
-                //     action: deleteDireccion,
-                //   },
-                // }}
-              >
-                <p>{session?.user.name}</p>
-                <p>{`${direccion.direccion}, ${direccion.referencia}, ${direccion.ciudad}, ${direccion.estado}, ${direccion.codigo_postal}`}</p>
-              </DashboardCard>
+                direccion={direccion}
+                userName={session?.user.name || ""}
+                email={session?.user.email!}
+              />
             ))
           ) : (
             <p>No se encontraron direcciones registradas.</p>

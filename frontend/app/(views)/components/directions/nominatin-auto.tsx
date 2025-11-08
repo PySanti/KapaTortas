@@ -5,13 +5,24 @@ import { Loader2 } from "lucide-react";
 
 interface NominatinAutoProps {
   onSelect?: (suggestion: any) => void;
+  defaultValue?: string;
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
-export default function NominatinAuto({ onSelect }: NominatinAutoProps) {
-    const [query, setQuery] = useState("");
+export default function NominatinAuto({ onSelect, defaultValue, value, onChange }: NominatinAutoProps) {
+    const [query, setQuery] = useState(value || defaultValue || "");
     const [suggestions, setSuggestions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        if (value !== undefined && query !== value) {
+            setQuery(value);
+        } else if (defaultValue && query !== defaultValue) {
+            setQuery(defaultValue);
+        }
+    }, [value, defaultValue]);
 
     useEffect(() => {
         const delayDebouceFn = setTimeout(() => {
@@ -42,9 +53,14 @@ export default function NominatinAuto({ onSelect }: NominatinAutoProps) {
     };
 
     const handleSuggestionClick = (suggestion: any) => {
-        setQuery(suggestion.name);
+        const displayValue = suggestion.display_name || suggestion.name || "";
+        setQuery(displayValue);
         setSuggestions([]);
         setOpen(false);
+        
+        if (onChange) {
+            onChange(displayValue);
+        }
         
         if (onSelect) {
             onSelect(suggestion);
@@ -57,7 +73,13 @@ export default function NominatinAuto({ onSelect }: NominatinAutoProps) {
                 <Input 
                     type="text" 
                     value={query} 
-                    onChange={(e) => setQuery(e.target.value)} 
+                    onChange={(e) => {
+                        const newValue = e.target.value;
+                        setQuery(newValue);
+                        if (onChange) {
+                            onChange(newValue);
+                        }
+                    }} 
                     placeholder="Buscar dirección..."
                     className="w-full"
                 />

@@ -2,10 +2,16 @@ import CajaPage from "./caja-page";
 import { auth } from "@/auth";
 import ClienteAPI from "@/app/controladores/api/cliente-api";
 import { Rol } from "@/app/models/RolEnum";
+import SinSesionModal from "./sin-sesion-modal";
 
 export default async function PedidoServerPage() {
   // Fetch the session to get the user info
   const session = await auth();
+
+  // Check if the user is not authenticated
+  if (!session || !session.user) {
+    return <SinSesionModal />;
+  }
 
   // Check if the user is authenticated and has the role 'CLIENTE'
   if (session?.user?.rol === Rol.ADMIN || session?.user?.rol === Rol.EMPLEADO) {
@@ -21,7 +27,7 @@ export default async function PedidoServerPage() {
 
   // Fetch direcciones only if the user is 'CLIENTE'
   const direcciones = await ClienteAPI.obtenerDireccionesEnvio(
-    session?.user.email || "",
+    session?.user?.email || "",
   );
 
   return <CajaPage direcciones={direcciones} />;

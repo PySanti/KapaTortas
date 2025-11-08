@@ -25,6 +25,11 @@ class EditarDireccionEnvioSerializer(serializers.Serializer):
     new_codigo_postal   = serializers.IntegerField(allow_null=True)
 
 
+class EstablecerDireccionPreferidaSerializer(serializers.Serializer):
+    correo_cliente = serializers.EmailField()
+    direccion_id = serializers.IntegerField(required=False, allow_null=True)
+
+
 
 
 

@@ -25,7 +25,21 @@ export default function PersonalizarProduct({
   const [capas, setCapas] = useState<Capa[]>([]);
   const [selectedSabor, setSelectedSabor] = useState(sabores[0]);
 
-  const present = product?.presentaciones[0];
+  const present = product?.presentaciones?.[0];
+
+  // Si no hay presentaciones, mostrar mensaje de error
+  if (!present) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <h1 className="text-xl font-bold text-red-500">
+          Producto sin presentaciones disponibles
+        </h1>
+        <p className="text-gray-600">
+          Este producto no tiene presentaciones configuradas. Por favor, contacta al administrador.
+        </p>
+      </div>
+    );
+  }
 
   const tortaId = () => {
     return capas.map((capa) => capa.sabor).join(" + ");
@@ -82,7 +96,7 @@ export default function PersonalizarProduct({
         <div className="space-y-4 sm:space-y-6">
           <div>
             <h1 className="text-terciary mb-4">
-              Precio: ${product?.presentaciones[0].precio}
+              Precio: ${present?.precio || 0}
             </h1>
             <Label className="text-base sm:text-lg mb-2 sm:mb-4">
               Selecciona el sabor (3 sabores)

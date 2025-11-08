@@ -146,9 +146,12 @@ export const columnsVentas: ColumnDef<Venta>[] = [
     cell: ({ row }) => {
       const direccion = row.original?.pedido_asociado?.direccion_entrega;
       return (
-        // <div>{`${direccion.direccion}, ${direccion.ciudad}, ${direccion.estado}, ${direccion.pais}`}</div>
         // Por ahora solo se maneja Venezuela
-        <div>{`${direccion?.direccion}, ${direccion?.ciudad}, ${direccion?.estado}`}</div>
+        // direccion.direccion already contains the full address from Nominatim
+        <div>
+          {direccion?.direccion}
+          {direccion?.referencia && `, ${direccion.referencia}`}
+        </div>
       );
     },
     meta: {

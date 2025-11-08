@@ -62,8 +62,7 @@ export default function PedidoHistorial({
                         mainInfo={nombreUsuario || "Nombre no disponible"}
                         extraInfo={[
                           pedido.direccion_entrega.direccion,
-                          pedido.direccion_entrega.referencia,
-                          pedido.direccion_entrega.ciudad,
+                          ...(pedido.direccion_entrega.referencia ? [pedido.direccion_entrega.referencia] : []),
                         ]}
                       />
                     </div>

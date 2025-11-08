@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/app/(views)/components/ui/button";
 import { Input } from "@/app/(views)/components/ui/input";
+import { Checkbox } from "@/app/(views)/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -22,53 +23,57 @@ import FormErrorMessage from "./form-error-msg";
 import FormSuccessMessage from "./form-success-msg";
 import { useRouter } from "next/navigation";
 import NominatinAuto from "./directions/nominatin-auto";
+import { DireccionEntrega } from "@/app/models/Pedido";
 
-type FormAgregarDireccionEnvioProps = {
+type FormEditarDireccionEnvioProps = {
   email: string;
+  direccion: DireccionEntrega;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 };
 
-export default function FormAgregarDireccionEnvio({
+export default function FormEditarDireccionEnvio({
   email,
+  direccion,
   isOpen,
   setIsOpen,
-}: FormAgregarDireccionEnvioProps) {
+}: FormEditarDireccionEnvioProps) {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [successMsg, setSuccessMsg] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPreferred, setIsPreferred] = useState<boolean>(direccion.is_favorite || false);
 
   const router = useRouter();
 
   const form = useForm<DireccionEnvioType>({
     resolver: zodResolver(DireccionEnvioSchema),
     defaultValues: {
-      direccion: "",
-      referencia: "",
-      ciudad: "",
-      estado: "",
+      direccion: direccion.direccion || "",
+      referencia: direccion.referencia || "",
+      ciudad: direccion.ciudad || "",
+      estado: direccion.estado || "",
       // @ts-ignore (Zod coerce string to number)
-      codigo_postal: "",
+      codigo_postal: direccion.codigo_postal?.toString() || "",
     },
     mode: "onChange",
   });
 
-  // Reset form when dialog opens/closes
+  // Reset form when dialog opens/closes or direccion changes
   useEffect(() => {
-    if (!isOpen) {
-      // Reset form and messages when dialog closes
+    if (isOpen && direccion) {
       form.reset({
-        direccion: "",
-        referencia: "",
-        ciudad: "",
-        estado: "",
-        codigo_postal: "",
+        direccion: direccion.direccion || "",
+        referencia: direccion.referencia || "",
+        ciudad: direccion.ciudad || "",
+        estado: direccion.estado || "",
+        codigo_postal: direccion.codigo_postal?.toString() || "",
       });
+      setIsPreferred(direccion.is_favorite || false);
       setErrorMsg("");
       setSuccessMsg("");
       setIsLoading(false);
     }
-  }, [isOpen, form]);
+  }, [isOpen, direccion, form]);
 
   const {
     handleSubmit,
@@ -76,60 +81,57 @@ export default function FormAgregarDireccionEnvio({
   } = form;
 
   const onSubmit = async (data: DireccionEnvioType) => {
-    const formData = {
-      ...data,
-      pais: "VENEZUELA",
-      correo_cliente: email,
-    };
-
     try {
       setIsLoading(true);
       setErrorMsg("");
       setSuccessMsg("");
 
-      // Check if address already exists
-      const direccionesCliente = await clienteApi.obtenerDireccionesEnvio(email);
-
-      const existingAddress = direccionesCliente?.find(
-        (address) => address.direccion === formData.direccion
+      // Edit the address
+      const editResponse = await clienteApi.editarDireccionEnvio(
+        direccion.id,
+        "VENEZUELA", // pais
+        data.ciudad,
+        data.estado,
+        data.direccion,
+        data.referencia,
+        parseInt(data.codigo_postal),
       );
 
-      if (existingAddress) {
-        setErrorMsg("Esta dirección ya existe");
+      if (!editResponse.ok) {
+        const errorData = await editResponse.json().catch(() => ({}));
+        setErrorMsg(errorData.error || "Error al editar dirección");
         setIsLoading(false);
         return;
       }
 
-      const res = await clienteApi.agregarDireccionEnvio(formData);
+      // Set or clear preferred address based on checkbox
+      const wasPreferred = direccion.is_favorite || false;
+      if (isPreferred !== wasPreferred) {
+        const preferredResponse = await clienteApi.establecerDireccionPreferida(
+          email,
+          isPreferred ? direccion.id : null,
+        );
 
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        setErrorMsg(errorData.error || "Error al agregar dirección");
-        setSuccessMsg("");
-        setIsLoading(false);
-      } else {
-        setSuccessMsg("Dirección agregada correctamente");
-        setErrorMsg("");
-        
-        // Reset form after successful submission
-        form.reset({
-          direccion: "",
-          referencia: "",
-          ciudad: "",
-          estado: "",
-          codigo_postal: "",
-        });
-
-        // Close dialog and refresh after delay
-        setTimeout(() => {
+        if (!preferredResponse.ok) {
+          const errorData = await preferredResponse.json().catch(() => ({}));
+          setErrorMsg(errorData.error || "Error al establecer dirección preferida");
           setIsLoading(false);
-          setIsOpen(false);
-          router.refresh(); // Refresh page cuando se agrega una dirección
-        }, 1500);
+          return;
+        }
       }
+
+      setSuccessMsg("Dirección editada correctamente");
+      setErrorMsg("");
+
+      // Close dialog and refresh after delay
+      setTimeout(() => {
+        setIsLoading(false);
+        setIsOpen(false);
+        router.refresh(); // Refresh page cuando se edita una dirección
+      }, 1500);
     } catch (error) {
-      console.error("Error al agregar dirección:", error);
-      setErrorMsg("Error al agregar dirección. Por favor, intenta de nuevo.");
+      console.error("Error al editar dirección:", error);
+      setErrorMsg("Error al editar dirección. Por favor, intenta de nuevo.");
       setSuccessMsg("");
       setIsLoading(false);
     }
@@ -235,14 +237,28 @@ export default function FormAgregarDireccionEnvio({
             )}
           />
         </div>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="preferred"
+            checked={isPreferred}
+            onCheckedChange={(checked) => setIsPreferred(checked === true)}
+          />
+          <label
+            htmlFor="preferred"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Establecer como dirección preferida
+          </label>
+        </div>
         <FormErrorMessage message={errorMsg} />
         <FormSuccessMessage message={successMsg} />
         <div className="flex justify-end">
           <Button type="submit" disabled={isLoading} variant={"terciary"}>
-            Agregar Dirección
+            Guardar Cambios
           </Button>
         </div>
       </form>
     </Form>
   );
 }
+

@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.permissions import (
     AllowAny
 )
-from ..serializers.serializers import CrearDireccionEnvioSerializer, EliminarDireccionEnvioSerializer,EditarDireccionEnvioSerializer
+from ..serializers.serializers import CrearDireccionEnvioSerializer, EliminarDireccionEnvioSerializer,EditarDireccionEnvioSerializer, EstablecerDireccionPreferidaSerializer
 
 from backend.utils.base_serializercheck_decorator import (base_serializercheck_decorator)
 from ..models import DireccionesEnvio
@@ -90,6 +90,44 @@ class EditarDireccionEnvioAPI(APIView):
                 return JsonResponse({"editado": True}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({"error": "direccion_not_found"}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EstablecerDireccionPreferidaAPI(APIView):
+    serializer_class        = EstablecerDireccionPreferidaSerializer
+    authentication_classes  = []
+    permission_classes      = [AllowAny]
+
+    @base_serializercheck_decorator
+    def patch(self, request, *args, **kwargs):
+        from applications.Clientes.models import Clientes
+        serialized_data = kwargs['serialized_data']
+        try:
+            if cliente := Clientes.objects.filter(perfil__correo=serialized_data['correo_cliente']):
+                cliente = cliente[0]
+                direccion_id = serialized_data.get('direccion_id')
+                
+                # If direccion_id is None, clear the preferred address
+                if direccion_id is None:
+                    cliente.direccion_preferida = None
+                    cliente.save()
+                    return JsonResponse({"establecida": True, "cleared": True}, status=status.HTTP_200_OK)
+                
+                # Otherwise, set the preferred address
+                if direccion := DireccionesEnvio.objects.filter(id=direccion_id):
+                    direccion = direccion[0]
+                    # Verify that the address belongs to this client
+                    if direccion in cliente.direcciones.all():
+                        cliente.direccion_preferida = direccion
+                        cliente.save()
+                        return JsonResponse({"establecida": True}, status=status.HTTP_200_OK)
+                    else:
+                        return JsonResponse({"error": "direccion_not_belongs_to_client"}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return JsonResponse({"error": "direccion_not_found"}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                return JsonResponse({"error": "cliente_with_email_not_found"}, status=status.HTTP_404_NOT_FOUND)
         except:
             return JsonResponse({"error" : "unexpected_error"}, status=status.HTTP_400_BAD_REQUEST)
 

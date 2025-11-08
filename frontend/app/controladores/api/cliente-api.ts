@@ -212,6 +212,76 @@ class ClienteAPI {
       return null;
     }
   }
+
+  // Metodo para editar una dirección de envío
+  public async editarDireccionEnvio(
+    direccionId: number,
+    newPais?: string | null,
+    newCiudad?: string | null,
+    newEstado?: string | null,
+    newDireccion?: string | null,
+    newReferencia?: string | null,
+    newCodigoPostal?: number | null,
+  ): Promise<Response> {
+    const url = "http://localhost:8000/api/clientes/editar_direccion/";
+
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          direccion_id: direccionId,
+          new_pais: newPais,
+          new_ciudad: newCiudad,
+          new_estado: newEstado,
+          new_direccion: newDireccion,
+          new_referencia: newReferencia,
+          new_codigo_postal: newCodigoPostal,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      return response;
+    } catch (error) {
+      console.error("Error al editar dirección:", error);
+      throw error;
+    }
+  }
+
+  // Metodo para establecer una dirección como preferida o limpiarla
+  public async establecerDireccionPreferida(
+    email: string,
+    direccionId: number | null,
+  ): Promise<Response> {
+    const url = "http://localhost:8000/api/clientes/establecer_direccion_preferida/";
+
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          correo_cliente: email,
+          direccion_id: direccionId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, Status: ${response.status}`);
+      }
+
+      return response;
+    } catch (error) {
+      console.error("Error al establecer dirección preferida:", error);
+      throw error;
+    }
+  }
 }
 
 export default ClienteAPI.getInstance();

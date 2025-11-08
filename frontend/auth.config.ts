@@ -18,6 +18,7 @@ import {
 import { Rol } from "./app/models/RolEnum";
 
 export default {
+  secret: process.env.AUTH_SECRET,
   pages: {
     signIn: "/login",
   },
@@ -79,17 +80,23 @@ export default {
           user.nombre_completo &&
           user.correo &&
           user.rol === Rol.CLIENTE &&
-          !user.stripeCustomerId
+          !user.stripeCustomerId &&
+          stripe // Only create Stripe customer if Stripe is properly configured
         ) {
-          const customer = await stripe.customers.create({
-            email: user.correo,
-            name: user.nombre_completo,
-          });
+          try {
+            const customer = await stripe.customers.create({
+              email: user.correo,
+              name: user.nombre_completo,
+            });
 
-          // 2. Actualizar el usuario con su id de cliente en Stripe
-          await crearStripeId(user.correo, customer.id);
+            // 2. Actualizar el usuario con su id de cliente en Stripe
+            await crearStripeId(user.correo, customer.id);
 
-          // console.log('Usuario creado en stripe');
+            // console.log('Usuario creado en stripe');
+          } catch (error) {
+            // Log error but don't block login if Stripe creation fails
+            console.error('Error creating Stripe customer:', error);
+          }
         }
 
         // extend profile type and add auth_token
@@ -110,16 +117,21 @@ export default {
     //* Create a customer in stripe for the user. This works only for the google provider
     createUser: async ({ user }) => {
       // 1. Create a customer in Stripe
-      if (user.name && user.email && user.rol === Rol.CLIENTE) {
-        const customer = await stripe.customers.create({
-          email: user.email,
-          name: user.name,
-        });
+      if (user.name && user.email && user.rol === Rol.CLIENTE && stripe) {
+        try {
+          const customer = await stripe.customers.create({
+            email: user.email,
+            name: user.name,
+          });
 
-        // console.log('User created in stripe');
+          // console.log('User created in stripe');
 
-        // 2. Actualizar el usuario con su id de cliente en Stripe
-        await crearStripeId(user.email, customer.id);
+          // 2. Actualizar el usuario con su id de cliente en Stripe
+          await crearStripeId(user.email, customer.id);
+        } catch (error) {
+          // Log error but don't block user creation if Stripe creation fails
+          console.error('Error creating Stripe customer:', error);
+        }
       }
     },
     //* Set true emailVerified if the user is created using the google provider
@@ -252,7 +264,12 @@ export default {
         };
       }
 
-      return token;
+      // On subsequent requests, ensure rol is included from the existing user profile
+      return {
+        ...token,
+        rol: token.rol || existingUser.perfil.rol,
+        stripeCustomerId: token.stripeCustomerId || existingUser.perfil.stripeCustomerId || "",
+      };
     },
     async session({ session, token, user }: { session: Session; token?: JWT; user?: User }) {
       // console.log('session callback', { session, token, user });

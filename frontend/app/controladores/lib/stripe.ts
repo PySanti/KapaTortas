@@ -1,6 +1,11 @@
 import { Stripe } from 'stripe';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2024-06-20',
-  typescript: true,
-});
+// Only initialize Stripe if the secret key is available
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+
+export const stripe = stripeSecretKey
+  ? new Stripe(stripeSecretKey, {
+      apiVersion: '2024-06-20',
+      typescript: true,
+    })
+  : null;
