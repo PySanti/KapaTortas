@@ -14,12 +14,17 @@ MEDIA_URL = '/media/'  # URL para servir los archivos subidos
 
 
 SECRET_KEY = secret_data['SECRET_KEY']
+
+# ⚠️ OPTIMIZACIÓN: Cambiar a False en producción
 DEBUG = True
-CORS_ALLOW_ALL_ORIGINS = True
-ALLOWED_HOSTS = ["*"]
+
+# ⚠️ SEGURIDAD: Restringir CORS en producción
+CORS_ALLOW_ALL_ORIGINS = True  # Cambiar a False en producción
+ALLOWED_HOSTS = ["*"]  # Especificar dominios en producción
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # dominio de tu frontend en desarrollo
+    "http://127.0.0.1:3000",
 ]
 
 #modelo para usuarios
@@ -91,6 +96,14 @@ DATABASES = {
         'PASSWORD': secret_data['DATABASE_PASSWORD'],
         'HOST': 'localhost',  # o la dirección IP del servidor
         'PORT': '5432',       # por defecto, PostgreSQL usa el puerto 5432
+
+        # 🚀 OPTIMIZACIÓN: Persistent connections (reduce overhead de crear/destruir conexiones)
+        'CONN_MAX_AGE': 600,  # 10 minutos - mantiene conexiones abiertas
+
+        # 🚀 OPTIMIZACIÓN: Timeout de conexión
+        'OPTIONS': {
+            'connect_timeout': 10,  # 10 segundos timeout
+        }
     }
 }
 
@@ -153,3 +166,63 @@ DEFAULT_FROM_EMAIL = 'kapatortas@gmail.com'  # El correo electrónico que se usa
 GOOGLE_CLIENT_ID = secret_data['GOOGLE_CLOUD_ID']
 SOCIAL_SECRET = secret_data["AUTH_SECRET"]
 AUTH_GOOGLE_SECRET =  secret_data["AUTH_GOOGLE_SECRET"]
+
+# 🚀 OPTIMIZACIÓN: Logging para pruebas de carga
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{levelname}] {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'performance.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        # Log de queries SQL (solo activar para debugging)
+        # 'django.db.backends': {
+        #     'handlers': ['console'],
+        #     'level': 'DEBUG',
+        # },
+        'performance': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+# 🚀 OPTIMIZACIÓN: Caché (descomentar cuando se instale Redis)
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+#         'LOCATION': 'redis://127.0.0.1:6379/1',
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#         },
+#         'KEY_PREFIX': 'kapatortas',
+#         'TIMEOUT': 300,  # 5 minutos por defecto
+#     }
+# }
+
+# 🚀 OPTIMIZACIÓN: Celery (descomentar cuando se configure)
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = TIME_ZONE

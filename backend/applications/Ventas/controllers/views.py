@@ -23,6 +23,12 @@ from backend.utils.send_client_mail import send_client_mail
 from backend.utils.factura_mail_html_content import factura_mail_html_content
 from backend.utils.crear_pdf import crear_pdf
 from django.http import FileResponse
+# 🚀 OPTIMIZACIÓN: Importar transaction para operaciones atómicas
+from django.db import transaction
+import logging
+
+# Logger para performance
+performance_logger = logging.getLogger('performance')
 
 
 # Create your views here.
@@ -32,8 +38,13 @@ class CrearPedidoAPI(APIView):
     permission_classes      = [AllowAny]
 
     @base_serializercheck_decorator
+    # 🚀 OPTIMIZACIÓN: Usar transacciones atómicas para evitar race conditions
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         from applications.Productos.models import (Productos,Presentaciones)
+        import time
+        start_time = time.time()
+
         try:
             serialized_data = kwargs['serialized_data']
             if cliente:=Clientes.objects.filter(perfil__correo=serialized_data["correo_cliente"]):
@@ -57,9 +68,28 @@ class CrearPedidoAPI(APIView):
                     precio_delivery = 3
 
                 for d in serialized_data["descripciones"]:
+                    # 🚀 OPTIMIZACIÓN: select_for_update() para evitar race conditions en stock
+                    # Bloquea la fila de presentación hasta que termine la transacción
+                    presentacion = Presentaciones.objects.select_for_update().get(id=d["id_presentacion"])
+
+                    # Verificar stock disponible
+                    if presentacion.stock < d["cantidad"]:
+                        # Si no hay stock suficiente, hacer rollback (automático por @transaction.atomic)
+                        return JsonResponse(
+                            {
+                                'error': 'stock_insuficiente',
+                                'detail': f'Stock insuficiente para {presentacion.ref}. Disponible: {presentacion.stock}, Solicitado: {d["cantidad"]}'
+                            },
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+
+                    # Decrementar stock
+                    presentacion.stock -= d["cantidad"]
+                    presentacion.save()
+
                     new_descripcion = DescripcionesPedido.objects.create(
                         cantidad=d["cantidad"],
-                        presentacion_asociada=Presentaciones.objects.get(id=d["id_presentacion"]),
+                        presentacion_asociada=presentacion,
                         pedido_asociado=new_pedido,
                         sabor = d["sabor"]
                     )
@@ -68,10 +98,17 @@ class CrearPedidoAPI(APIView):
                 new_pedido.precio_delivery = precio_delivery
                 new_pedido.save()
 
+                # Log de performance
+                elapsed = time.time() - start_time
+                performance_logger.info(f"Pedido #{new_pedido.numero_de_orden} creado en {elapsed:.3f}s")
+
                 return JsonResponse({'pedido' : Pedidos.objects.get_pedido_json(new_pedido)}, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({'error' : "no_cliente_found"}, status=status.HTTP_400_BAD_REQUEST)
+        except Presentaciones.DoesNotExist:
+            return JsonResponse({"error" : "presentacion_not_found"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            performance_logger.error(f"Error creando pedido: {str(e)}")
             return JsonResponse({"error" : "unexpedted_error", "detail" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class ObtenerListaVentasAPI(APIView):

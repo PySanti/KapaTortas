@@ -1,0 +1,27 @@
+# Resultados de pruebas de Locust
+results_*.csv
+*.csv
+
+# Logs
+*.log
+
+# Gráficas generadas
+*.png
+*.jpg
+*.jpeg
+
+# Cache de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
